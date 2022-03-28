@@ -16,14 +16,5 @@
       <description>单域名跨域 1 2 3 4 5 6 7 8 9 10 11 location /{ #add_header Access-Control-Allow-Origin *; #允许所有域名不安全 add_header &amp;#39;Access-Control-Allow-Origin&amp;#39; &amp;#39;https://www.sundayle.com&amp;#39;; add_header &amp;#39;Access-Control-Allow-Credentials&amp;#39; &amp;#39;true&amp;#39;; add_header &amp;#39;Access-Control-Allow-Methods&amp;#39; &amp;#39;GET,POST,OPTIONS&amp;#39;; add_header &amp;#39;Access-Control-Allow-Headers&amp;#39; &amp;#39;Authorization,Content-Type,Accept,Origin,User-Agent,DNT,Cache-Control,X-Mx-ReqToken,X-Requested-With&amp;#39;; if ($request_method = &amp;#39;OPTIONS&amp;#39;) { return 204; } ... } 允许多域名跨域 方法一 if 1 2 3 4 5 6</description>
     </item>
     
-    <item>
-      <title>My First Post</title>
-      <link>https://devops.alongparty.cn/post/my-first-post/</link>
-      <pubDate>Mon, 28 Mar 2022 14:31:01 +0800</pubDate>
-      
-      <guid>https://devops.alongparty.cn/post/my-first-post/</guid>
-      <description>单域名跨域 1 2 3 4 5 6 7 8 9 10 11 location /{ #add_header Access-Control-Allow-Origin *; #允许所有域名不安全 add_header &amp;#39;Access-Control-Allow-Origin&amp;#39; &amp;#39;https://www.sundayle.com&amp;#39;; add_header &amp;#39;Access-Control-Allow-Credentials&amp;#39; &amp;#39;true&amp;#39;; add_header &amp;#39;Access-Control-Allow-Methods&amp;#39; &amp;#39;GET,POST,OPTIONS&amp;#39;; add_header &amp;#39;Access-Control-Allow-Headers&amp;#39; &amp;#39;Authorization,Content-Type,Accept,Origin,User-Agent,DNT,Cache-Control,X-Mx-ReqToken,X-Requested-With&amp;#39;; if ($request_method = &amp;#39;OPTIONS&amp;#39;) { return 204; } ... } 允许多域名跨域 方法一 if 1 2 3 4 5 6</description>
-    </item>
-    
   </channel>
 </rss>
