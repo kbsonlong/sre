@@ -2,21 +2,19 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>https://devops.alongparty.cn/archives/</loc>
+  </url>
+  
+  <url>
     <loc>https://devops.alongparty.cn/categories/</loc>
-    <changefreq>weekly</changefreq>
-    <priority>0.5</priority>
   </url>
   
   <url>
     <loc>https://devops.alongparty.cn/tags/</loc>
-    <changefreq>weekly</changefreq>
-    <priority>0.5</priority>
   </url>
   
   <url>
     <loc>https://devops.alongparty.cn/</loc>
-    <changefreq>weekly</changefreq>
-    <priority>0.5</priority>
   </url>
   
 </urlset>

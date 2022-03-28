@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Posts on 蜷缩的蜗牛</title>
+    <link>https://devops.alongparty.cn/post/</link>
+    <description>Recent content in Posts on 蜷缩的蜗牛</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-cn</language>
+    <lastBuildDate>Mon, 28 Mar 2022 15:38:35 +0800</lastBuildDate><atom:link href="https://devops.alongparty.cn/post/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Ningx Mutil Core Setting</title>
+      <link>https://devops.alongparty.cn/post/ningx-mutil-core-setting/</link>
+      <pubDate>Mon, 28 Mar 2022 15:38:35 +0800</pubDate>
+      
+      <guid>https://devops.alongparty.cn/post/ningx-mutil-core-setting/</guid>
+      <description>单域名跨域 1 2 3 4 5 6 7 8 9 10 11 location /{ #add_header Access-Control-Allow-Origin *; #允许所有域名不安全 add_header &amp;#39;Access-Control-Allow-Origin&amp;#39; &amp;#39;https://www.sundayle.com&amp;#39;; add_header &amp;#39;Access-Control-Allow-Credentials&amp;#39; &amp;#39;true&amp;#39;; add_header &amp;#39;Access-Control-Allow-Methods&amp;#39; &amp;#39;GET,POST,OPTIONS&amp;#39;; add_header &amp;#39;Access-Control-Allow-Headers&amp;#39; &amp;#39;Authorization,Content-Type,Accept,Origin,User-Agent,DNT,Cache-Control,X-Mx-ReqToken,X-Requested-With&amp;#39;; if ($request_method = &amp;#39;OPTIONS&amp;#39;) { return 204; } ... } 允许多域名跨域 方法一 if 1 2 3 4 5 6</description>
+    </item>
+    
+  </channel>
+</rss>
