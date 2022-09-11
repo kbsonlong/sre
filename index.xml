@@ -1,0 +1,137 @@
+<rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title>蜷缩的蜗牛</title><link>http://devops.alongparty.cn/</link><description>云原生时代运维</description><generator>Hugo -- gohugo.io</generator><language>zh-CN</language><managingEditor>kbsonlong@gmail.com (kbsonlong)</managingEditor><webMaster>kbsonlong@gmail.com (kbsonlong)</webMaster><copyright>This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.</copyright><lastBuildDate>Sun, 11 Sep 2022 10:34:10 +0800</lastBuildDate><atom:link href="http://devops.alongparty.cn/index.xml" rel="self" type="application/rss+xml"/><item><title>VSCode 配置Markdown模板</title><link>http://devops.alongparty.cn/post/4faa15/</link><pubDate>Sun, 11 Sep 2022 10:34:10 +0800</pubDate><author>kbsonlong</author><guid>http://devops.alongparty.cn/post/4faa15/</guid><description><![CDATA[<div class="featured-image">
+        <img src="https://imgapi.cn/api.php?zd=zsy&amp;fl=meizi&amp;random=762334" referrerpolicy="no-referrer">
+      </div><h3 id="打开settingjson">打开setting.json</h3>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-json" data-lang="json"><span class="line"><span class="cl"><span class="s2">&#34;[markdown]&#34;</span><span class="err">:</span>  <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">&#34;editor.quickSuggestions&#34;</span><span class="p">:</span> <span class="kc">true</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div>]]></description></item><item><title>S2I自定义构建器和模板</title><link>http://devops.alongparty.cn/post/d83d7d/</link><pubDate>Sun, 11 Sep 2022 10:31:24 +0800</pubDate><author>kbsonlong</author><guid>http://devops.alongparty.cn/post/d83d7d/</guid><description><![CDATA[<div class="featured-image">
+        <img src="https://imgapi.cn/api.php?zd=zsy&amp;fl=meizi&amp;random=129254" referrerpolicy="no-referrer">
+      </div>准备工作 S2I自定义镜像构建器 ● assemble（必需）：从源代码构建应用程序制品的脚本 assemble。 ● run（必需）：用于运行应用程序]]></description></item><item><title>Gin中间件执行顺序</title><link>http://devops.alongparty.cn/post/97ba92/</link><pubDate>Sun, 11 Sep 2022 10:30:09 +0800</pubDate><author>kbsonlong</author><guid>http://devops.alongparty.cn/post/97ba92/</guid><description><![CDATA[<div class="featured-image">
+        <img src="https://imgapi.cn/api.php?zd=zsy&amp;fl=meizi&amp;random=981602" referrerpolicy="no-referrer">
+      </div><h3 id="初始化demo项目">初始化demo项目</h3>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">mkdir -p gin-middleware-demo
+</span></span><span class="line"><span class="cl"><span class="nb">cd</span> gin-middleware-demo
+</span></span><span class="line"><span class="cl">go mod init github.com/kbsonlong/gin-middleware-demo
+</span></span></code></pre></td></tr></table>
+</div>
+</div>]]></description></item><item><title>深入了解Istio Sicader自动注入</title><link>http://devops.alongparty.cn/post/dd0bd7/</link><pubDate>Sun, 11 Sep 2022 10:29:36 +0800</pubDate><author>kbsonlong</author><guid>http://devops.alongparty.cn/post/dd0bd7/</guid><description><![CDATA[<div class="featured-image">
+        <img src="https://imgapi.cn/api.php?zd=zsy&amp;fl=meizi&amp;random=156918" referrerpolicy="no-referrer">
+      </div><ul>
+<li>
+<p>Sidecar 自动注入机制是将 sidecar 代理自动添加到用户创建的 pod。</p>
+</li>
+<li>
+<p>它使用 MutatingWebhook 机制在 pod 创建的时候将 sidecar 的容器和卷添加到每个 pod 的模版里。</p>
+</li>
+<li>
+<p>用户可以通过 webhooks namespaceSelector 机制来限定需要启动自动注入的范围，也可以通过注解的方式针对每个 pod 来单独启用和禁用自动注入功能。</p>
+</li>
+</ul>
+<p>Sidecar 是否会被自动注入取决于下面 3 条配置和 2 条安全规则：</p>]]></description></item><item><title>Istio性能测试</title><link>http://devops.alongparty.cn/post/129682/</link><pubDate>Sun, 11 Sep 2022 10:29:02 +0800</pubDate><author>kbsonlong</author><guid>http://devops.alongparty.cn/post/129682/</guid><description><![CDATA[<div class="featured-image">
+        <img src="https://imgapi.cn/api.php?zd=zsy&amp;fl=meizi&amp;random=053904" referrerpolicy="no-referrer">
+      </div><h1 id="压测大纲">压测大纲</h1>
+<p></p>]]></description></item><item><title>利用IstioOpertor安装Istio</title><link>http://devops.alongparty.cn/post/bf667a/</link><pubDate>Sun, 11 Sep 2022 10:27:29 +0800</pubDate><author>kbsonlong</author><guid>http://devops.alongparty.cn/post/bf667a/</guid><description><![CDATA[<div class="featured-image">
+        <img src="https://imgapi.cn/api.php?zd=zsy&amp;fl=meizi&amp;random=352447" referrerpolicy="no-referrer">
+      </div><h2 id="istio-operator安装">Istio-operator安装</h2>
+<h3 id="创建-istio-operator-名称空间">创建 istio-operator 名称空间</h3>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="line"><span class="cl"><span class="l">kubectl apply -f - &lt;&lt;EOF</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nn">---</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l">v1</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l">Namespace</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">metadata</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">istio-operator</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="l">EOF</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div>]]></description></item><item><title>openconnect双因素认证</title><link>http://devops.alongparty.cn/post/e96811/</link><pubDate>Sun, 11 Sep 2022 10:20:57 +0800</pubDate><author>kbsonlong</author><guid>http://devops.alongparty.cn/post/e96811/</guid><description><![CDATA[<div class="featured-image">
+        <img src="https://imgapi.cn/api.php?zd=zsy&amp;fl=meizi&amp;random=068629" referrerpolicy="no-referrer">
+      </div><h3 id="修改认证方式">修改认证方式</h3>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="c1"># vim /etc/ocserv/ocserv.conf</span>
+</span></span><span class="line"><span class="cl"><span class="nv">auth</span> <span class="o">=</span> <span class="s2">&#34;plain[passwd=/etc/ocserv/ocpasswd,otp=/etc/ocserv/ocserv.otp]&#34;</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="配置pam">配置pam</h3>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="nb">echo</span> <span class="s2">&#34;auth requisite pam_oath.so debug usersfile=/etc/ocserv/ocserv.otp window=20&#34;</span> &gt;&gt; /etc/pam.d/ocserv
+</span></span></code></pre></td></tr></table>
+</div>
+</div>]]></description></item><item><title>openconnect设置用户组实现多路由</title><link>http://devops.alongparty.cn/post/bf9138/</link><pubDate>Sun, 11 Sep 2022 10:17:09 +0800</pubDate><author>kbsonlong</author><guid>http://devops.alongparty.cn/post/bf9138/</guid><description><![CDATA[<div class="featured-image">
+        <img src="https://imgapi.cn/api.php?zd=zsy&amp;fl=meizi&amp;random=919538" referrerpolicy="no-referrer">
+      </div><h3 id="1首先添加两个带分组的用户">1.首先添加两个带分组的用户</h3>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">ocpasswd -c /etc/ocserv/ocpasswd -g gruop1 user1 
+</span></span><span class="line"><span class="cl">ocpasswd -c /etc/ocserv/ocpasswd -g gruop2 user2
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="2添加创建路由表组">2.添加创建路由表组</h3>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">mkdir /etc/ocserv/group 
+</span></span><span class="line"><span class="cl"><span class="nb">echo</span> -e <span class="s2">&#34;route = 10.10.0.0/255.255.255.0&#34;</span> &gt;&gt; /etc/ocserv/group/group1 
+</span></span><span class="line"><span class="cl"><span class="nb">echo</span> -e <span class="s2">&#34;no-route = 211.80.0.0/255.240.0.0&#34;</span> &gt;&gt; /etc/ocserv/group/group2
+</span></span></code></pre></td></tr></table>
+</div>
+</div><blockquote>
+<p>以上连个路由表是演示group1和group2随便写的 请自行添加路由规则
+此外路由表里还可以写DNS 短线时间的参数</p>
+</blockquote>]]></description></item><item><title>GitHub Api接口</title><link>http://devops.alongparty.cn/post/5d7029/</link><pubDate>Thu, 11 Aug 2022 09:45:43 +0800</pubDate><author>kbsonlong</author><guid>http://devops.alongparty.cn/post/5d7029/</guid><description><![CDATA[<div class="featured-image">
+        <img src="https://img.xjh.me/random_img.php?type=bg&amp;ctype=nature&amp;return=302" referrerpolicy="no-referrer">
+      </div>获取仓库信息 1 2 3 4 curl --request GET \ --url &#34;https://api.github.com/repos/kbsonlong/kubernetes-guide&#34; \ --header &#34;Accept: application/vnd.github.v3+json&#34; \ --header &#34;Authorization: Bearer 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&#34; 删除仓库]]></description></item><item><title>[转载]企业级弹性伸缩和优化建设</title><link>http://devops.alongparty.cn/post/%E8%BD%AC%E8%BD%BD%E4%BC%81%E4%B8%9A%E7%BA%A7%E5%BC%B9%E6%80%A7%E4%BC%B8%E7%BC%A9%E5%92%8C%E4%BC%98%E5%8C%96%E5%BB%BA%E8%AE%BE/</link><pubDate>Mon, 01 Aug 2022 09:54:52 +0800</pubDate><author>kbsonlong</author><guid>http://devops.alongparty.cn/post/%E8%BD%AC%E8%BD%BD%E4%BC%81%E4%B8%9A%E7%BA%A7%E5%BC%B9%E6%80%A7%E4%BC%B8%E7%BC%A9%E5%92%8C%E4%BC%98%E5%8C%96%E5%BB%BA%E8%AE%BE/</guid><description><![CDATA[<p>什么是弹性伸缩？弹性伸缩和成本优化是何关系？ 应该如何做好企业级弹性伸缩与成本优化建设？</p>
+<h2 id="一-背景">一 背景</h2>
+<p>传统意义上来讲，弹性伸缩主要解决的问题是容量规划与实际负载的矛盾, 这矛盾通常因为资源使用普遍具有以下几个问题导致：</p>
+<blockquote>
+<p>（1）在线服务申请资源时考虑到突发流量和服务稳定性，预留大量的 buffer 资源，造成资源申请量普遍远超实际使用量。</p>
+</blockquote>
+<blockquote>
+<p>（2）大部分在线服务的潮汐现象、波峰波谷特征非常明显，保留过多常态资源造成巨大浪费。</p>
+</blockquote>
+<blockquote>
+<p>（3）开发和运维评估和配置的资源规格不合理，并且动态更新不及时。</p>
+</blockquote>]]></description></item></channel></rss>
