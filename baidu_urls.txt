@@ -10,7 +10,7 @@ http://devops.alongparty.cn/posts/bf9138/
 http://devops.alongparty.cn/about/
 http://devops.alongparty.cn/friends/
 http://devops.alongparty.cn/posts/5d7029/
-http://devops.alongparty.cn/posts/%E8%BD%AC%E8%BD%BD%E4%BC%81%E4%B8%9A%E7%BA%A7%E5%BC%B9%E6%80%A7%E4%BC%B8%E7%BC%A9%E5%92%8C%E4%BC%98%E5%8C%96%E5%BB%BA%E8%AE%BE/
+http://devops.alongparty.cn/posts/6ac5f6/
 http://devops.alongparty.cn/posts/%E9%80%9A%E8%BF%87gateway-api%E4%B8%8D%E6%96%AD%E6%BC%94%E5%8F%98%E7%9A%84kubernetes%E7%BD%91%E7%BB%9C/
 http://devops.alongparty.cn/posts/da6323/
 http://devops.alongparty.cn/posts/90ef46/
@@ -30,4 +30,3 @@ http://devops.alongparty.cn/posts/git%E5%B7%A5%E5%85%B7-%E9%87%8D%E7%BD%AE%E6%8F
 http://devops.alongparty.cn/posts/git%E5%9F%BA%E7%A1%80%E4%B8%8E%E5%91%BD%E4%BB%A4/
 http://devops.alongparty.cn/posts/%E5%B8%B8%E7%94%A8git%E5%91%BD%E4%BB%A4%E6%B8%85%E5%8D%95/
 http://devops.alongparty.cn/offline/
-http://devops.alongparty.cn/posts/

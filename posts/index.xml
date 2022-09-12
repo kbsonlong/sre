@@ -123,7 +123,9 @@
 此外路由表里还可以写DNS 短线时间的参数</p>
 </blockquote>]]></description></item><item><title>GitHub Api接口</title><link>http://devops.alongparty.cn/posts/5d7029/</link><pubDate>Thu, 11 Aug 2022 09:45:43 +0800</pubDate><author>kbsonlong</author><guid>http://devops.alongparty.cn/posts/5d7029/</guid><description><![CDATA[<div class="featured-image">
         <img src="https://img.xjh.me/random_img.php?type=bg&amp;ctype=nature&amp;return=302" referrerpolicy="no-referrer">
-      </div>获取仓库信息 1 2 3 4 curl --request GET \ --url &#34;https://api.github.com/repos/kbsonlong/kubernetes-guide&#34; \ --header &#34;Accept: application/vnd.github.v3+json&#34; \ --header &#34;Authorization: Bearer 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&#34; 删除仓库]]></description></item><item><title>[转载]企业级弹性伸缩和优化建设</title><link>http://devops.alongparty.cn/posts/%E8%BD%AC%E8%BD%BD%E4%BC%81%E4%B8%9A%E7%BA%A7%E5%BC%B9%E6%80%A7%E4%BC%B8%E7%BC%A9%E5%92%8C%E4%BC%98%E5%8C%96%E5%BB%BA%E8%AE%BE/</link><pubDate>Mon, 01 Aug 2022 09:54:52 +0800</pubDate><author>kbsonlong</author><guid>http://devops.alongparty.cn/posts/%E8%BD%AC%E8%BD%BD%E4%BC%81%E4%B8%9A%E7%BA%A7%E5%BC%B9%E6%80%A7%E4%BC%B8%E7%BC%A9%E5%92%8C%E4%BC%98%E5%8C%96%E5%BB%BA%E8%AE%BE/</guid><description><![CDATA[<p>什么是弹性伸缩？弹性伸缩和成本优化是何关系？ 应该如何做好企业级弹性伸缩与成本优化建设？</p>
+      </div>获取仓库信息 1 2 3 4 curl --request GET \ --url &#34;https://api.github.com/repos/kbsonlong/kubernetes-guide&#34; \ --header &#34;Accept: application/vnd.github.v3+json&#34; \ --header &#34;Authorization: Bearer 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&#34; 删除仓库]]></description></item><item><title>企业级弹性伸缩和优化建设</title><link>http://devops.alongparty.cn/posts/6ac5f6/</link><pubDate>Mon, 01 Aug 2022 09:54:52 +0800</pubDate><author>kbsonlong</author><guid>http://devops.alongparty.cn/posts/6ac5f6/</guid><description><![CDATA[<div class="featured-image">
+        <img src="https://imgapi.cn/api.php?zd=zsy&amp;fl=meizi&amp;random=774614" referrerpolicy="no-referrer">
+      </div><p>什么是弹性伸缩？弹性伸缩和成本优化是何关系？ 应该如何做好企业级弹性伸缩与成本优化建设？</p>
 <h2 id="一-背景">一 背景</h2>
 <p>传统意义上来讲，弹性伸缩主要解决的问题是容量规划与实际负载的矛盾, 这矛盾通常因为资源使用普遍具有以下几个问题导致：</p>
 <blockquote>
