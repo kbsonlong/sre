@@ -1,5 +1,38 @@
-<rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title>蜷缩的蜗牛</title><link>http://devops.alongparty.cn/</link><description>云原生时代运维</description><generator>Hugo -- gohugo.io</generator><language>zh-CN</language><managingEditor>kbsonlong@gmail.com (kbsonlong)</managingEditor><webMaster>kbsonlong@gmail.com (kbsonlong)</webMaster><copyright>This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.</copyright><lastBuildDate>Sun, 11 Sep 2022 10:34:10 +0800</lastBuildDate><atom:link href="http://devops.alongparty.cn/index.xml" rel="self" type="application/rss+xml"/><item><title>VSCode 配置Markdown模板</title><link>http://devops.alongparty.cn/posts/4faa15/</link><pubDate>Sun, 11 Sep 2022 10:34:10 +0800</pubDate><author>kbsonlong</author><guid>http://devops.alongparty.cn/posts/4faa15/</guid><description><![CDATA[<div class="featured-image">
-        <img src="https://imgapi.cn/api.php?zd=zsy&amp;fl=meizi&amp;random=762334" referrerpolicy="no-referrer">
+<rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title>蜷缩的蜗牛</title><link>http://devops.alongparty.cn/</link><description>云原生时代运维</description><generator>Hugo -- gohugo.io</generator><language>zh-CN</language><managingEditor>kbsonlong@gmail.com (kbsonlong)</managingEditor><webMaster>kbsonlong@gmail.com (kbsonlong)</webMaster><copyright>This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.</copyright><lastBuildDate>Tue, 13 Sep 2022 10:56:21 +0800</lastBuildDate><atom:link href="http://devops.alongparty.cn/index.xml" rel="self" type="application/rss+xml"/><item><title>Istio性能指标</title><link>http://devops.alongparty.cn/posts/6899d1/</link><pubDate>Tue, 13 Sep 2022 10:56:21 +0800</pubDate><author>kbsonlong</author><guid>http://devops.alongparty.cn/posts/6899d1/</guid><description><![CDATA[<div class="featured-image">
+        <img src="https://imgapi.cn/api.php?zd=zsy&amp;fl=fengjing&amp;random=813275" referrerpolicy="no-referrer">
+      </div><h1 id="istio-指标">Istio 指标</h1>
+<h2 id="istio-自己的-metrics">Istio 自己的 Metrics</h2>
+<h3 id="标准指标说明">标准指标说明</h3>
+<blockquote>
+<p>参考：https://istio.io/latest/docs/reference/config/metrics/</p>
+</blockquote>
+<h4 id="metrics">Metrics</h4>
+<p>对于 HTTP、HTTP/2 和 GRPC 流量，Istio 默认生成以下指标：</p>
+<ul>
+<li><strong>Request Count</strong> (<code>istio_requests_total</code>): This is a <code>COUNTER</code> incremented for every request handled by an Istio proxy.</li>
+<li><strong>Request Duration</strong> (<code>istio_request_duration_milliseconds</code>): This is a <code>DISTRIBUTION</code> which measures the duration of requests.</li>
+<li><strong>Request Size</strong> (<code>istio_request_bytes</code>): This is a <code>DISTRIBUTION</code> which measures HTTP request body sizes.</li>
+<li><strong>Response Size</strong> (<code>istio_response_bytes</code>): This is a <code>DISTRIBUTION</code> which measures HTTP response body sizes.</li>
+<li><strong>gRPC Request Message Count</strong> (<code>istio_request_messages_total</code>): This is a <code>COUNTER</code> incremented for every gRPC message sent from a client.</li>
+<li><strong>gRPC Response Message Count</strong> (<code>istio_response_messages_total</code>): This is a <code>COUNTER</code> incremented for every gRPC message sent from a server.</li>
+</ul>]]></description></item><item><title>Envoy性能指标</title><link>http://devops.alongparty.cn/posts/0affe7/</link><pubDate>Tue, 13 Sep 2022 10:46:39 +0800</pubDate><author>kbsonlong</author><guid>http://devops.alongparty.cn/posts/0affe7/</guid><description><![CDATA[<div class="featured-image">
+        <img src="https://imgapi.cn/api.php?zd=zsy&amp;fl=fengjing&amp;random=611892" referrerpolicy="no-referrer">
+      </div><h1 id="envoy-指标">Envoy 指标</h1>
+<h2 id="envoy-指标概述">Envoy 指标概述</h2>
+<p>Envoy 的主要目标之一是使网络易于理解。 Envoy 会根据其配置方式产生大量统计信息。一般来说，统计数据(指标)分为三类：</p>
+<ul>
+<li><strong>Downstream</strong>：Downstream 指标与外来的连接/请求有关。它们由 <code>listener</code>、<code>HTTP connection manager(HCM)</code>、<code>TCP proxy filter</code> 等产生。</li>
+<li><strong>Upstream</strong>：Upstream 指标与外向的连接/请求有关。它们由 <code>connection pool</code>、<code>router filter</code>、<code>tcp proxy filter</code>等产生。</li>
+<li><strong>Server</strong>：<code>Server</code> 指标信息描述 Envoy 服务器实例的运作情况。服务器正常运行时间或分配的内存量等统计信息。</li>
+</ul>
+<p>在最简单场景下，单个 Envoy Proxy 通常涉及 <code>Downstream</code> 和 <code>Upstream</code> 统计数据。这两种指标反映了取该 <code>网络节点</code> 的运行情况。来自整个网格的统计数据提供了每个<code> 网络节点</code> 和整体网络健康状况的非常详细的汇总信息。Envoy 的文档对这些指标有一些简单的说明。</p>]]></description></item><item><title>Istio组件详解</title><link>http://devops.alongparty.cn/posts/6be15f/</link><pubDate>Mon, 12 Sep 2022 08:19:28 +0800</pubDate><author>kbsonlong</author><guid>http://devops.alongparty.cn/posts/6be15f/</guid><description><![CDATA[<div class="featured-image">
+        <img src="https://imgapi.cn/api.php?zd=zsy&amp;fl=fengjing&amp;random=081643" referrerpolicy="no-referrer">
+      </div>在我的前两篇博客中： Istio 中的 Sidecar 注入、透明流量劫持及流量路由过程详解 Sidecar 中的流量类型及 iptables 规则详解 我向你详细介绍了 Istio 数据平面中的流量，但数据平面并不]]></description></item><item><title>Sidecar 中的流量类型及 iptables 规则详解</title><link>http://devops.alongparty.cn/posts/61aaaf/</link><pubDate>Sun, 11 Sep 2022 14:56:39 +0800</pubDate><author>kbsonlong</author><guid>http://devops.alongparty.cn/posts/61aaaf/</guid><description><![CDATA[<div class="featured-image">
+        <img src="https://imgapi.cn/api.php?zd=zsy&amp;fl=fengjing&amp;random=664184" referrerpolicy="no-referrer">
+      </div>我在之前的一篇博客中讲解过 Istio 中 sidecar 的注入、使用 iptables 进行透明流量拦截及流量路由的详细过程，并以 Bookinfo 示例中的 productpage 服务访问 reviews 服务，和 reviews 服务访问 ratings 服务为例绘]]></description></item><item><title>Istio 中的 Sidecar 注入、透明流量劫持及流量路由过程详解</title><link>http://devops.alongparty.cn/posts/fe0ba1/</link><pubDate>Sun, 11 Sep 2022 14:26:02 +0800</pubDate><author>kbsonlong</author><guid>http://devops.alongparty.cn/posts/fe0ba1/</guid><description><![CDATA[<div class="featured-image">
+        <img src="https://imgapi.cn/api.php?zd=zsy&amp;fl=fengjing&amp;random=954022" referrerpolicy="no-referrer">
+      </div>本文最早是基于 Istio 1.11 撰写，之后随着 Istio 的版本陆续更新，最新更新时间为 2022 年 5 月 12 日，关于本文历史版本的更新说明请见文章最后。本文记录了详细的实践过]]></description></item><item><title>VSCode 配置Markdown模板</title><link>http://devops.alongparty.cn/posts/4faa15/</link><pubDate>Sun, 11 Sep 2022 10:34:10 +0800</pubDate><author>kbsonlong</author><guid>http://devops.alongparty.cn/posts/4faa15/</guid><description><![CDATA[<div class="featured-image">
+        <img src="https://imgapi.cn/api.php?zd=zsy&amp;fl=fengjing&amp;random=762334" referrerpolicy="no-referrer">
       </div><h3 id="打开settingjson">打开setting.json</h3>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
@@ -14,9 +47,9 @@
 </span></span></code></pre></td></tr></table>
 </div>
 </div>]]></description></item><item><title>S2I自定义构建器和模板</title><link>http://devops.alongparty.cn/posts/d83d7d/</link><pubDate>Sun, 11 Sep 2022 10:31:24 +0800</pubDate><author>kbsonlong</author><guid>http://devops.alongparty.cn/posts/d83d7d/</guid><description><![CDATA[<div class="featured-image">
-        <img src="https://imgapi.cn/api.php?zd=zsy&amp;fl=meizi&amp;random=129254" referrerpolicy="no-referrer">
+        <img src="https://imgapi.cn/api.php?zd=zsy&amp;fl=fengjing&amp;random=129254" referrerpolicy="no-referrer">
       </div>准备工作 S2I自定义镜像构建器 ● assemble（必需）：从源代码构建应用程序制品的脚本 assemble。 ● run（必需）：用于运行应用程序]]></description></item><item><title>Gin中间件执行顺序</title><link>http://devops.alongparty.cn/posts/97ba92/</link><pubDate>Sun, 11 Sep 2022 10:30:09 +0800</pubDate><author>kbsonlong</author><guid>http://devops.alongparty.cn/posts/97ba92/</guid><description><![CDATA[<div class="featured-image">
-        <img src="https://imgapi.cn/api.php?zd=zsy&amp;fl=meizi&amp;random=981602" referrerpolicy="no-referrer">
+        <img src="https://imgapi.cn/api.php?zd=zsy&amp;fl=fengjing&amp;random=981602" referrerpolicy="no-referrer">
       </div><h3 id="初始化demo项目">初始化demo项目</h3>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
@@ -31,7 +64,7 @@
 </span></span></code></pre></td></tr></table>
 </div>
 </div>]]></description></item><item><title>深入了解Istio Sicader自动注入</title><link>http://devops.alongparty.cn/posts/dd0bd7/</link><pubDate>Sun, 11 Sep 2022 10:29:36 +0800</pubDate><author>kbsonlong</author><guid>http://devops.alongparty.cn/posts/dd0bd7/</guid><description><![CDATA[<div class="featured-image">
-        <img src="https://imgapi.cn/api.php?zd=zsy&amp;fl=meizi&amp;random=156918" referrerpolicy="no-referrer">
+        <img src="https://imgapi.cn/api.php?zd=zsy&amp;fl=fengjing&amp;random=156918" referrerpolicy="no-referrer">
       </div><ul>
 <li>
 <p>Sidecar 自动注入机制是将 sidecar 代理自动添加到用户创建的 pod。</p>
@@ -44,96 +77,6 @@
 </li>
 </ul>
 <p>Sidecar 是否会被自动注入取决于下面 3 条配置和 2 条安全规则：</p>]]></description></item><item><title>Istio性能测试</title><link>http://devops.alongparty.cn/posts/129682/</link><pubDate>Sun, 11 Sep 2022 10:29:02 +0800</pubDate><author>kbsonlong</author><guid>http://devops.alongparty.cn/posts/129682/</guid><description><![CDATA[<div class="featured-image">
-        <img src="https://imgapi.cn/api.php?zd=zsy&amp;fl=meizi&amp;random=053904" referrerpolicy="no-referrer">
+        <img src="https://imgapi.cn/api.php?zd=zsy&amp;fl=fengjing&amp;random=053904" referrerpolicy="no-referrer">
       </div><h1 id="压测大纲">压测大纲</h1>
-<p></p>]]></description></item><item><title>利用IstioOpertor安装Istio</title><link>http://devops.alongparty.cn/posts/bf667a/</link><pubDate>Sun, 11 Sep 2022 10:27:29 +0800</pubDate><author>kbsonlong</author><guid>http://devops.alongparty.cn/posts/bf667a/</guid><description><![CDATA[<div class="featured-image">
-        <img src="https://imgapi.cn/api.php?zd=zsy&amp;fl=meizi&amp;random=352447" referrerpolicy="no-referrer">
-      </div><h2 id="istio-operator安装">Istio-operator安装</h2>
-<h3 id="创建-istio-operator-名称空间">创建 istio-operator 名称空间</h3>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt">1
-</span><span class="lnt">2
-</span><span class="lnt">3
-</span><span class="lnt">4
-</span><span class="lnt">5
-</span><span class="lnt">6
-</span><span class="lnt">7
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="line"><span class="cl"><span class="l">kubectl apply -f - &lt;&lt;EOF</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nn">---</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l">v1</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l">Namespace</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">metadata</span><span class="p">:</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">istio-operator</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="l">EOF</span><span class="w">
-</span></span></span></code></pre></td></tr></table>
-</div>
-</div>]]></description></item><item><title>openconnect双因素认证</title><link>http://devops.alongparty.cn/posts/e96811/</link><pubDate>Sun, 11 Sep 2022 10:20:57 +0800</pubDate><author>kbsonlong</author><guid>http://devops.alongparty.cn/posts/e96811/</guid><description><![CDATA[<div class="featured-image">
-        <img src="https://imgapi.cn/api.php?zd=zsy&amp;fl=meizi&amp;random=068629" referrerpolicy="no-referrer">
-      </div><h3 id="修改认证方式">修改认证方式</h3>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt">1
-</span><span class="lnt">2
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="c1"># vim /etc/ocserv/ocserv.conf</span>
-</span></span><span class="line"><span class="cl"><span class="nv">auth</span> <span class="o">=</span> <span class="s2">&#34;plain[passwd=/etc/ocserv/ocpasswd,otp=/etc/ocserv/ocserv.otp]&#34;</span>
-</span></span></code></pre></td></tr></table>
-</div>
-</div><h3 id="配置pam">配置pam</h3>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt">1
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="nb">echo</span> <span class="s2">&#34;auth requisite pam_oath.so debug usersfile=/etc/ocserv/ocserv.otp window=20&#34;</span> &gt;&gt; /etc/pam.d/ocserv
-</span></span></code></pre></td></tr></table>
-</div>
-</div>]]></description></item><item><title>openconnect设置用户组实现多路由</title><link>http://devops.alongparty.cn/posts/bf9138/</link><pubDate>Sun, 11 Sep 2022 10:17:09 +0800</pubDate><author>kbsonlong</author><guid>http://devops.alongparty.cn/posts/bf9138/</guid><description><![CDATA[<div class="featured-image">
-        <img src="https://imgapi.cn/api.php?zd=zsy&amp;fl=meizi&amp;random=919538" referrerpolicy="no-referrer">
-      </div><h3 id="1首先添加两个带分组的用户">1.首先添加两个带分组的用户</h3>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt">1
-</span><span class="lnt">2
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">ocpasswd -c /etc/ocserv/ocpasswd -g gruop1 user1 
-</span></span><span class="line"><span class="cl">ocpasswd -c /etc/ocserv/ocpasswd -g gruop2 user2
-</span></span></code></pre></td></tr></table>
-</div>
-</div><h3 id="2添加创建路由表组">2.添加创建路由表组</h3>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt">1
-</span><span class="lnt">2
-</span><span class="lnt">3
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">mkdir /etc/ocserv/group 
-</span></span><span class="line"><span class="cl"><span class="nb">echo</span> -e <span class="s2">&#34;route = 10.10.0.0/255.255.255.0&#34;</span> &gt;&gt; /etc/ocserv/group/group1 
-</span></span><span class="line"><span class="cl"><span class="nb">echo</span> -e <span class="s2">&#34;no-route = 211.80.0.0/255.240.0.0&#34;</span> &gt;&gt; /etc/ocserv/group/group2
-</span></span></code></pre></td></tr></table>
-</div>
-</div><blockquote>
-<p>以上连个路由表是演示group1和group2随便写的 请自行添加路由规则
-此外路由表里还可以写DNS 短线时间的参数</p>
-</blockquote>]]></description></item><item><title>GitHub Api接口</title><link>http://devops.alongparty.cn/posts/5d7029/</link><pubDate>Thu, 11 Aug 2022 09:45:43 +0800</pubDate><author>kbsonlong</author><guid>http://devops.alongparty.cn/posts/5d7029/</guid><description><![CDATA[<div class="featured-image">
-        <img src="https://img.xjh.me/random_img.php?type=bg&amp;ctype=nature&amp;return=302" referrerpolicy="no-referrer">
-      </div>获取仓库信息 1 2 3 4 curl --request GET \ --url &#34;https://api.github.com/repos/kbsonlong/kubernetes-guide&#34; \ --header &#34;Accept: application/vnd.github.v3+json&#34; \ --header &#34;Authorization: Bearer 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&#34; 删除仓库]]></description></item><item><title>企业级弹性伸缩和优化建设</title><link>http://devops.alongparty.cn/posts/6ac5f6/</link><pubDate>Mon, 01 Aug 2022 09:54:52 +0800</pubDate><author>kbsonlong</author><guid>http://devops.alongparty.cn/posts/6ac5f6/</guid><description><![CDATA[<div class="featured-image">
-        <img src="https://imgapi.cn/api.php?zd=zsy&amp;fl=meizi&amp;random=774614" referrerpolicy="no-referrer">
-      </div><p>什么是弹性伸缩？弹性伸缩和成本优化是何关系？ 应该如何做好企业级弹性伸缩与成本优化建设？</p>
-<h2 id="一-背景">一 背景</h2>
-<p>传统意义上来讲，弹性伸缩主要解决的问题是容量规划与实际负载的矛盾, 这矛盾通常因为资源使用普遍具有以下几个问题导致：</p>
-<blockquote>
-<p>（1）在线服务申请资源时考虑到突发流量和服务稳定性，预留大量的 buffer 资源，造成资源申请量普遍远超实际使用量。</p>
-</blockquote>
-<blockquote>
-<p>（2）大部分在线服务的潮汐现象、波峰波谷特征非常明显，保留过多常态资源造成巨大浪费。</p>
-</blockquote>
-<blockquote>
-<p>（3）开发和运维评估和配置的资源规格不合理，并且动态更新不及时。</p>
-</blockquote>]]></description></item></channel></rss>
+<p></p>]]></description></item></channel></rss>
