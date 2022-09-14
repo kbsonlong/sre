@@ -1,4 +1,55 @@
-<rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title>蜷缩的蜗牛</title><link>http://devops.alongparty.cn/</link><description>云原生时代运维</description><generator>Hugo -- gohugo.io</generator><language>zh-CN</language><managingEditor>kbsonlong@gmail.com (kbsonlong)</managingEditor><webMaster>kbsonlong@gmail.com (kbsonlong)</webMaster><copyright>This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.</copyright><lastBuildDate>Tue, 13 Sep 2022 17:53:07 +0800</lastBuildDate><atom:link href="http://devops.alongparty.cn/index.xml" rel="self" type="application/rss+xml"/><item><title>Prometheus Operator 常用指标</title><link>http://devops.alongparty.cn/posts/adb863/</link><pubDate>Tue, 13 Sep 2022 17:53:07 +0800</pubDate><author>kbsonlong</author><guid>http://devops.alongparty.cn/posts/adb863/</guid><description><![CDATA[<div class="featured-image">
+<rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title>蜷缩的蜗牛</title><link>http://devops.alongparty.cn/</link><description>云原生时代运维</description><generator>Hugo -- gohugo.io</generator><language>zh-CN</language><managingEditor>kbsonlong@gmail.com (kbsonlong)</managingEditor><webMaster>kbsonlong@gmail.com (kbsonlong)</webMaster><copyright>This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.</copyright><lastBuildDate>Wed, 14 Sep 2022 10:13:20 +0800</lastBuildDate><atom:link href="http://devops.alongparty.cn/index.xml" rel="self" type="application/rss+xml"/><item><title>Iptable的概念</title><link>http://devops.alongparty.cn/posts/d2d1d6/</link><pubDate>Wed, 14 Sep 2022 10:13:20 +0800</pubDate><author>kbsonlong</author><guid>http://devops.alongparty.cn/posts/d2d1d6/</guid><description><![CDATA[<div class="featured-image">
+        <img src="https://imgapi.cn/api.php?zd=zsy&amp;fl=fengjing&amp;random=358256" referrerpolicy="no-referrer">
+      </div><h2 id="iptales四表五链">Iptales四表五链</h2>
+<h3 id="四表五链关系概览">四表五链关系概览</h3>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>raw 表</th>
+<th>mangle 表</th>
+<th>nat 表</th>
+<th>filter 表</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>PREROUTING 链</td>
+<td>✅</td>
+<td>✅</td>
+<td>✅</td>
+<td>❌</td>
+</tr>
+<tr>
+<td>INPUT 链</td>
+<td>❌</td>
+<td>✅</td>
+<td>✅</td>
+<td>✔</td>
+</tr>
+<tr>
+<td>FORWARD 链</td>
+<td>❌</td>
+<td>✅</td>
+<td>❌</td>
+<td>✅</td>
+</tr>
+<tr>
+<td>OUTPUT 链</td>
+<td>✅</td>
+<td>✅</td>
+<td>✅</td>
+<td>✅</td>
+</tr>
+<tr>
+<td>POSTROUTING 链</td>
+<td>❌</td>
+<td>✅</td>
+<td>✅</td>
+<td>❌</td>
+</tr>
+</tbody>
+</table>]]></description></item><item><title>Prometheus Operator 常用指标</title><link>http://devops.alongparty.cn/posts/adb863/</link><pubDate>Tue, 13 Sep 2022 17:53:07 +0800</pubDate><author>kbsonlong</author><guid>http://devops.alongparty.cn/posts/adb863/</guid><description><![CDATA[<div class="featured-image">
         <img src="https://imgapi.cn/api.php?zd=zsy&amp;fl=fengjing&amp;random=960376" referrerpolicy="no-referrer">
       </div><p>Prometheus Operator 安装完成后会有很多默认的监控指标，一不注意就大量的报警产生，所以我们非常有必要了解下这些常用的监控指标，有部分指标很有可能对于我们自己的业务可有可无，所以可以适当的进行修改，这里我们就来对常用的几个指标进行简单的说明。</p>
 <h2 id="1-kubernetes-资源相关">1. Kubernetes 资源相关</h2>
@@ -91,17 +142,4 @@
 </span></span><span class="line"><span class="cl">go mod init github.com/kbsonlong/gin-middleware-demo
 </span></span></code></pre></td></tr></table>
 </div>
-</div>]]></description></item><item><title>深入了解Istio Sicader自动注入</title><link>http://devops.alongparty.cn/posts/dd0bd7/</link><pubDate>Sun, 11 Sep 2022 10:29:36 +0800</pubDate><author>kbsonlong</author><guid>http://devops.alongparty.cn/posts/dd0bd7/</guid><description><![CDATA[<div class="featured-image">
-        <img src="https://imgapi.cn/api.php?zd=zsy&amp;fl=fengjing&amp;random=156918" referrerpolicy="no-referrer">
-      </div><ul>
-<li>
-<p>Sidecar 自动注入机制是将 sidecar 代理自动添加到用户创建的 pod。</p>
-</li>
-<li>
-<p>它使用 MutatingWebhook 机制在 pod 创建的时候将 sidecar 的容器和卷添加到每个 pod 的模版里。</p>
-</li>
-<li>
-<p>用户可以通过 webhooks namespaceSelector 机制来限定需要启动自动注入的范围，也可以通过注解的方式针对每个 pod 来单独启用和禁用自动注入功能。</p>
-</li>
-</ul>
-<p>Sidecar 是否会被自动注入取决于下面 3 条配置和 2 条安全规则：</p>]]></description></item></channel></rss>
+</div>]]></description></item></channel></rss>
