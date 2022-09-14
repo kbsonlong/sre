@@ -1,4 +1,6 @@
-<rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title>所有文章 - 蜷缩的蜗牛</title><link>http://devops.alongparty.cn/posts/</link><description>所有文章 | 蜷缩的蜗牛</description><generator>Hugo -- gohugo.io</generator><language>zh-CN</language><managingEditor>kbsonlong@gmail.com (kbsonlong)</managingEditor><webMaster>kbsonlong@gmail.com (kbsonlong)</webMaster><copyright>This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.</copyright><lastBuildDate>Wed, 14 Sep 2022 10:13:20 +0800</lastBuildDate><atom:link href="http://devops.alongparty.cn/posts/" rel="self" type="application/rss+xml"/><item><title>Iptable的概念</title><link>http://devops.alongparty.cn/posts/d2d1d6/</link><pubDate>Wed, 14 Sep 2022 10:13:20 +0800</pubDate><author>kbsonlong</author><guid>http://devops.alongparty.cn/posts/d2d1d6/</guid><description><![CDATA[<div class="featured-image">
+<rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title>所有文章 - 蜷缩的蜗牛</title><link>http://devops.alongparty.cn/posts/</link><description>所有文章 | 蜷缩的蜗牛</description><generator>Hugo -- gohugo.io</generator><language>zh-CN</language><managingEditor>kbsonlong@gmail.com (kbsonlong)</managingEditor><webMaster>kbsonlong@gmail.com (kbsonlong)</webMaster><copyright>This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.</copyright><lastBuildDate>Wed, 14 Sep 2022 12:20:51 +0800</lastBuildDate><atom:link href="http://devops.alongparty.cn/posts/" rel="self" type="application/rss+xml"/><item><title>Grafana Mimir 和 VictoriaMetrics 之间的性能测试</title><link>http://devops.alongparty.cn/posts/6650ff/</link><pubDate>Wed, 14 Sep 2022 12:20:51 +0800</pubDate><author>kbsonlong</author><guid>http://devops.alongparty.cn/posts/6650ff/</guid><description><![CDATA[<div class="featured-image">
+        <img src="https://imgapi.cn/api.php?zd=zsy&amp;fl=fengjing&amp;random=362101" referrerpolicy="no-referrer">
+      </div>Grafana 实验室的 Mimir 是一个在 AGPLv3 许可下新的时间序列数据库，该工程团队从 Cortex TSDB 中汲取精华，同时降低了复杂性并提高了可扩展性。 根据 Grafana 实验室的测试，Mimir]]></description></item><item><title>Iptable的概念</title><link>http://devops.alongparty.cn/posts/d2d1d6/</link><pubDate>Wed, 14 Sep 2022 10:13:20 +0800</pubDate><author>kbsonlong</author><guid>http://devops.alongparty.cn/posts/d2d1d6/</guid><description><![CDATA[<div class="featured-image">
         <img src="https://imgapi.cn/api.php?zd=zsy&amp;fl=fengjing&amp;random=358256" referrerpolicy="no-referrer">
       </div><h2 id="iptales四表五链">Iptales四表五链</h2>
 <h3 id="四表五链关系概览">四表五链关系概览</h3>
@@ -127,19 +129,4 @@
 </div>
 </div>]]></description></item><item><title>S2I自定义构建器和模板</title><link>http://devops.alongparty.cn/posts/d83d7d/</link><pubDate>Sun, 11 Sep 2022 10:31:24 +0800</pubDate><author>kbsonlong</author><guid>http://devops.alongparty.cn/posts/d83d7d/</guid><description><![CDATA[<div class="featured-image">
         <img src="https://imgapi.cn/api.php?zd=zsy&amp;fl=fengjing&amp;random=129254" referrerpolicy="no-referrer">
-      </div>准备工作 S2I自定义镜像构建器 ● assemble（必需）：从源代码构建应用程序制品的脚本 assemble。 ● run（必需）：用于运行应用程序]]></description></item><item><title>Gin中间件执行顺序</title><link>http://devops.alongparty.cn/posts/97ba92/</link><pubDate>Sun, 11 Sep 2022 10:30:09 +0800</pubDate><author>kbsonlong</author><guid>http://devops.alongparty.cn/posts/97ba92/</guid><description><![CDATA[<div class="featured-image">
-        <img src="https://imgapi.cn/api.php?zd=zsy&amp;fl=fengjing&amp;random=981602" referrerpolicy="no-referrer">
-      </div><h3 id="初始化demo项目">初始化demo项目</h3>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt">1
-</span><span class="lnt">2
-</span><span class="lnt">3
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">mkdir -p gin-middleware-demo
-</span></span><span class="line"><span class="cl"><span class="nb">cd</span> gin-middleware-demo
-</span></span><span class="line"><span class="cl">go mod init github.com/kbsonlong/gin-middleware-demo
-</span></span></code></pre></td></tr></table>
-</div>
-</div>]]></description></item></channel></rss>
+      </div>准备工作 S2I自定义镜像构建器 ● assemble（必需）：从源代码构建应用程序制品的脚本 assemble。 ● run（必需）：用于运行应用程序]]></description></item></channel></rss>
