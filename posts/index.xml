@@ -1,4 +1,130 @@
-<rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title>所有文章 - 蜷缩的蜗牛</title><link>http://devops.alongparty.cn/posts/</link><description>所有文章 | 蜷缩的蜗牛</description><generator>Hugo -- gohugo.io</generator><language>zh-CN</language><managingEditor>kbsonlong@gmail.com (kbsonlong)</managingEditor><webMaster>kbsonlong@gmail.com (kbsonlong)</webMaster><copyright>This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.</copyright><lastBuildDate>Wed, 14 Sep 2022 12:20:51 +0800</lastBuildDate><atom:link href="http://devops.alongparty.cn/posts/" rel="self" type="application/rss+xml"/><item><title>Grafana Mimir 和 VictoriaMetrics 之间的性能测试</title><link>http://devops.alongparty.cn/posts/6650ff/</link><pubDate>Wed, 14 Sep 2022 12:20:51 +0800</pubDate><author>kbsonlong</author><guid>http://devops.alongparty.cn/posts/6650ff/</guid><description><![CDATA[<div class="featured-image">
+<rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title>所有文章 - 蜷缩的蜗牛</title><link>http://devops.alongparty.cn/posts/</link><description>所有文章 | 蜷缩的蜗牛</description><generator>Hugo -- gohugo.io</generator><language>zh-CN</language><managingEditor>kbsonlong@gmail.com (kbsonlong)</managingEditor><webMaster>kbsonlong@gmail.com (kbsonlong)</webMaster><copyright>This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.</copyright><lastBuildDate>Fri, 16 Sep 2022 17:25:59 +0800</lastBuildDate><atom:link href="http://devops.alongparty.cn/posts/" rel="self" type="application/rss+xml"/><item><title>深入Istio系列-Pilot agent</title><link>http://devops.alongparty.cn/posts/3d18d6/</link><pubDate>Fri, 16 Sep 2022 17:25:59 +0800</pubDate><author>kbsonlong</author><guid>http://devops.alongparty.cn/posts/3d18d6/</guid><description><![CDATA[<div class="featured-image">
+        <img src="https://imgapi.cn/api.php?zd=zsy&amp;fl=fengjing&amp;random=760948" referrerpolicy="no-referrer">
+      </div><h3 id="查看监听端口和进程">查看监听端口和进程</h3>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">istio-proxy@istio-ingressgateway-799bbc9474-hf7kv:/$ ss -ntlp
+</span></span><span class="line"><span class="cl">State           Recv-Q          Send-Q                     Local Address:Port                      Peer Address:Port          Process                                       
+</span></span><span class="line"><span class="cl">LISTEN          <span class="m">0</span>               <span class="m">128</span>                            127.0.0.1:15000                          0.0.0.0:*              users:<span class="o">((</span><span class="s2">&#34;envoy&#34;</span>,pid<span class="o">=</span>16,fd<span class="o">=</span>18<span class="o">))</span>               
+</span></span><span class="line"><span class="cl">LISTEN          <span class="m">0</span>               <span class="m">128</span>                            127.0.0.1:15004                          0.0.0.0:*              users:<span class="o">((</span><span class="s2">&#34;pilot-agent&#34;</span>,pid<span class="o">=</span>1,fd<span class="o">=</span>15<span class="o">))</span>          
+</span></span><span class="line"><span class="cl">LISTEN          <span class="m">0</span>               <span class="m">128</span>                              0.0.0.0:15021                          0.0.0.0:*              users:<span class="o">((</span><span class="s2">&#34;envoy&#34;</span>,pid<span class="o">=</span>16,fd<span class="o">=</span>24<span class="o">))</span>               
+</span></span><span class="line"><span class="cl">LISTEN          <span class="m">0</span>               <span class="m">128</span>                              0.0.0.0:15021                          0.0.0.0:*              users:<span class="o">((</span><span class="s2">&#34;envoy&#34;</span>,pid<span class="o">=</span>16,fd<span class="o">=</span>23<span class="o">))</span>               
+</span></span><span class="line"><span class="cl">LISTEN          <span class="m">0</span>               <span class="m">128</span>                              0.0.0.0:8080                           0.0.0.0:*              users:<span class="o">((</span><span class="s2">&#34;envoy&#34;</span>,pid<span class="o">=</span>16,fd<span class="o">=</span>40<span class="o">))</span>               
+</span></span><span class="line"><span class="cl">LISTEN          <span class="m">0</span>               <span class="m">128</span>                              0.0.0.0:8080                           0.0.0.0:*              users:<span class="o">((</span><span class="s2">&#34;envoy&#34;</span>,pid<span class="o">=</span>16,fd<span class="o">=</span>39<span class="o">))</span>               
+</span></span><span class="line"><span class="cl">LISTEN          <span class="m">0</span>               <span class="m">128</span>                              0.0.0.0:15090                          0.0.0.0:*              users:<span class="o">((</span><span class="s2">&#34;envoy&#34;</span>,pid<span class="o">=</span>16,fd<span class="o">=</span>22<span class="o">))</span>               
+</span></span><span class="line"><span class="cl">LISTEN          <span class="m">0</span>               <span class="m">128</span>                              0.0.0.0:15090                          0.0.0.0:*              users:<span class="o">((</span><span class="s2">&#34;envoy&#34;</span>,pid<span class="o">=</span>16,fd<span class="o">=</span>21<span class="o">))</span>               
+</span></span><span class="line"><span class="cl">LISTEN          <span class="m">0</span>               <span class="m">128</span>                                    *:15020                                *:*              users:<span class="o">((</span><span class="s2">&#34;pilot-agent&#34;</span>,pid<span class="o">=</span>1,fd<span class="o">=</span>12<span class="o">))</span>          
+</span></span><span class="line"><span class="cl">istio-proxy@istio-ingressgateway-799bbc9474-hf7kv:/$ ps -ef <span class="p">|</span>grep pilot-agent
+</span></span><span class="line"><span class="cl">istio-p+     <span class="m">1</span>     <span class="m">0</span>  <span class="m">0</span> Sep14 ?        00:01:27 /usr/local/bin/pilot-agent proxy router --domain istio-system.svc.cluster.local --proxyLogLevel<span class="o">=</span>warning --proxyComponentLogLevel<span class="o">=</span>misc:error --log_output_level<span class="o">=</span>default:info
+</span></span><span class="line"><span class="cl">istio-p+    <span class="m">74</span>    <span class="m">30</span>  <span class="m">0</span> 09:37 pts/0    00:00:00 grep --color<span class="o">=</span>auto pilot-agent
+</span></span></code></pre></td></tr></table>
+</div>
+</div><figure><figcaption>
+            <h4>20220916173915</h4>
+        </figcaption>
+</figure>]]></description></item><item><title>Ingress Controller源码解析</title><link>http://devops.alongparty.cn/posts/2da521/</link><pubDate>Fri, 16 Sep 2022 12:08:40 +0800</pubDate><author>kbsonlong</author><guid>http://devops.alongparty.cn/posts/2da521/</guid><description><![CDATA[<div class="featured-image">
+        <img src="https://imgapi.cn/api.php?zd=zsy&amp;fl=fengjing&amp;random=981326" referrerpolicy="no-referrer">
+      </div><p><a
+  href="https://github.com/kbsonlong/ingress-nginx/commit/f7cb030684591767b1988bf438279bfb40ac7dfa"
+  
+  
+    
+    
+    target="_blank"
+  
+  
+    rel="external nofollow noopener noreferrer"
+  
+  
+  
+>注解内容</a></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="c1"># ss -ntlp</span>
+</span></span><span class="line"><span class="cl">State          Recv-Q          Send-Q                   Local Address:Port                    Peer Address:Port         Process                                                            
+</span></span><span class="line"><span class="cl">LISTEN         <span class="m">0</span>               <span class="m">4096</span>                         127.0.0.1:10245                        0.0.0.0:*             users:<span class="o">((</span><span class="s2">&#34;nginx-ingress-c&#34;</span>,pid<span class="o">=</span>2671,fd<span class="o">=</span>8<span class="o">))</span>                         
+</span></span><span class="line"><span class="cl">LISTEN         <span class="m">0</span>               <span class="m">511</span>                          127.0.0.1:10246                        0.0.0.0:*             users:<span class="o">((</span><span class="s2">&#34;nginx&#34;</span>,pid<span class="o">=</span>2783,fd<span class="o">=</span>17<span class="o">)</span>,<span class="o">(</span><span class="s2">&#34;nginx&#34;</span>,pid<span class="o">=</span>2738,fd<span class="o">=</span>17<span class="o">))</span>         
+</span></span><span class="line"><span class="cl">LISTEN         <span class="m">0</span>               <span class="m">511</span>                          127.0.0.1:10247                        0.0.0.0:*             users:<span class="o">((</span><span class="s2">&#34;nginx&#34;</span>,pid<span class="o">=</span>2783,fd<span class="o">=</span>18<span class="o">)</span>,<span class="o">(</span><span class="s2">&#34;nginx&#34;</span>,pid<span class="o">=</span>2738,fd<span class="o">=</span>18<span class="o">))</span>         
+</span></span><span class="line"><span class="cl">LISTEN         <span class="m">0</span>               <span class="m">4096</span>                           0.0.0.0:80                           0.0.0.0:*             users:<span class="o">((</span><span class="s2">&#34;nginx&#34;</span>,pid<span class="o">=</span>2783,fd<span class="o">=</span>11<span class="o">)</span>,<span class="o">(</span><span class="s2">&#34;nginx&#34;</span>,pid<span class="o">=</span>2738,fd<span class="o">=</span>11<span class="o">))</span>         
+</span></span><span class="line"><span class="cl">LISTEN         <span class="m">0</span>               <span class="m">4096</span>                           0.0.0.0:8181                         0.0.0.0:*             users:<span class="o">((</span><span class="s2">&#34;nginx&#34;</span>,pid<span class="o">=</span>2783,fd<span class="o">=</span>15<span class="o">)</span>,<span class="o">(</span><span class="s2">&#34;nginx&#34;</span>,pid<span class="o">=</span>2738,fd<span class="o">=</span>15<span class="o">))</span>         
+</span></span><span class="line"><span class="cl">LISTEN         <span class="m">0</span>               <span class="m">4096</span>                           0.0.0.0:443                          0.0.0.0:*             users:<span class="o">((</span><span class="s2">&#34;nginx&#34;</span>,pid<span class="o">=</span>2783,fd<span class="o">=</span>13<span class="o">)</span>,<span class="o">(</span><span class="s2">&#34;nginx&#34;</span>,pid<span class="o">=</span>2738,fd<span class="o">=</span>13<span class="o">))</span>         
+</span></span><span class="line"><span class="cl">LISTEN         <span class="m">0</span>               <span class="m">4096</span>                                 *:10254                              *:*             users:<span class="o">((</span><span class="s2">&#34;nginx-ingress-c&#34;</span>,pid<span class="o">=</span>2671,fd<span class="o">=</span>33<span class="o">))</span>                        
+</span></span><span class="line"><span class="cl">LISTEN         <span class="m">0</span>               <span class="m">4096</span>                              <span class="o">[</span>::<span class="o">]</span>:80                              <span class="o">[</span>::<span class="o">]</span>:*             users:<span class="o">((</span><span class="s2">&#34;nginx&#34;</span>,pid<span class="o">=</span>2783,fd<span class="o">=</span>12<span class="o">)</span>,<span class="o">(</span><span class="s2">&#34;nginx&#34;</span>,pid<span class="o">=</span>2738,fd<span class="o">=</span>12<span class="o">))</span>         
+</span></span><span class="line"><span class="cl">LISTEN         <span class="m">0</span>               <span class="m">4096</span>                              <span class="o">[</span>::<span class="o">]</span>:8181                            <span class="o">[</span>::<span class="o">]</span>:*             users:<span class="o">((</span><span class="s2">&#34;nginx&#34;</span>,pid<span class="o">=</span>2783,fd<span class="o">=</span>16<span class="o">)</span>,<span class="o">(</span><span class="s2">&#34;nginx&#34;</span>,pid<span class="o">=</span>2738,fd<span class="o">=</span>16<span class="o">))</span>         
+</span></span><span class="line"><span class="cl">LISTEN         <span class="m">0</span>               <span class="m">4096</span>                                 *:8443                               *:*             users:<span class="o">((</span><span class="s2">&#34;nginx-ingress-c&#34;</span>,pid<span class="o">=</span>2671,fd<span class="o">=</span>34<span class="o">))</span>                        
+</span></span><span class="line"><span class="cl">LISTEN         <span class="m">0</span>               <span class="m">4096</span>                              <span class="o">[</span>::<span class="o">]</span>:443                             <span class="o">[</span>::<span class="o">]</span>:*             users:<span class="o">((</span><span class="s2">&#34;nginx&#34;</span>,pid<span class="o">=</span>2783,fd<span class="o">=</span>14<span class="o">)</span>,<span class="o">(</span><span class="s2">&#34;nginx&#34;</span>,pid<span class="o">=</span>2738,fd<span class="o">=</span>14<span class="o">))</span> 
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">## nginx-ingress-controller进程</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># ps aux |grep -w 2671</span>
+</span></span><span class="line"><span class="cl">_rpc        <span class="m">2671</span>  0.4  0.2 <span class="m">743856</span> <span class="m">42000</span> ?        Ssl  Sep15   5:06 /nginx-ingress-controller --publish-service<span class="o">=</span>ingress-nginx/ingress-nginx-controller --election-id<span class="o">=</span>ingress-controller-leader --controller-class<span class="o">=</span>k8s.io/ingress-nginx --ingress-class<span class="o">=</span>nginx --configmap<span class="o">=</span>ingress-nginx/ingress-nginx-controller --validating-webhook<span class="o">=</span>:8443 --validating-webhook-certificate<span class="o">=</span>/usr/local/certificates/cert --validating-webhook-key<span class="o">=</span>/usr/local/certificates/key
+</span></span><span class="line"><span class="cl">root      <span class="m">284760</span>  0.0  0.0   <span class="m">3100</span>   <span class="m">812</span> pts/1    S+   04:15   0:00 grep -w <span class="m">2671</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># </span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">## Nginx Master 进程</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># ps aux |grep -w 2738</span>
+</span></span><span class="line"><span class="cl">_rpc        <span class="m">2738</span>  0.0  0.2 <span class="m">145128</span> <span class="m">35448</span> ?        S    Sep15   0:00 nginx: master process /usr/local/nginx/sbin/nginx -c /etc/nginx/nginx.conf
+</span></span><span class="line"><span class="cl">root      <span class="m">284662</span>  0.0  0.0   <span class="m">3100</span>   <span class="m">844</span> pts/1    S+   04:15   0:00 grep -w <span class="m">2738</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># </span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">## Nginx worker 进程</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># ps aux |grep -w 2783</span>
+</span></span><span class="line"><span class="cl">_rpc        <span class="m">2783</span>  0.0  0.2 <span class="m">157240</span> <span class="m">41060</span> ?        Sl   Sep15   0:31 nginx: worker process
+</span></span><span class="line"><span class="cl">root      <span class="m">285147</span>  0.0  0.0   <span class="m">3100</span>   <span class="m">832</span> pts/1    S+   04:17   0:00 grep -w <span class="m">2783</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># </span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><blockquote>
+<p>从上面可以看出整个Ingress Nginx Controller Pod 包含两部分 nginx-ingress-controller 和 Nginx</p>
+</blockquote>]]></description></item><item><title>Grafana Mimir 和 VictoriaMetrics 之间的性能测试</title><link>http://devops.alongparty.cn/posts/6650ff/</link><pubDate>Wed, 14 Sep 2022 12:20:51 +0800</pubDate><author>kbsonlong</author><guid>http://devops.alongparty.cn/posts/6650ff/</guid><description><![CDATA[<div class="featured-image">
         <img src="https://imgapi.cn/api.php?zd=zsy&amp;fl=fengjing&amp;random=362101" referrerpolicy="no-referrer">
       </div>Grafana 实验室的 Mimir 是一个在 AGPLv3 许可下新的时间序列数据库，该工程团队从 Cortex TSDB 中汲取精华，同时降低了复杂性并提高了可扩展性。 根据 Grafana 实验室的测试，Mimir]]></description></item><item><title>Iptable的概念</title><link>http://devops.alongparty.cn/posts/d2d1d6/</link><pubDate>Wed, 14 Sep 2022 10:13:20 +0800</pubDate><author>kbsonlong</author><guid>http://devops.alongparty.cn/posts/d2d1d6/</guid><description><![CDATA[<div class="featured-image">
         <img src="https://imgapi.cn/api.php?zd=zsy&amp;fl=fengjing&amp;random=358256" referrerpolicy="no-referrer">
@@ -108,25 +234,8 @@
 </ul>
 <p>在最简单场景下，单个 Envoy Proxy 通常涉及 <code>Downstream</code> 和 <code>Upstream</code> 统计数据。这两种指标反映了取该 <code>网络节点</code> 的运行情况。来自整个网格的统计数据提供了每个<code> 网络节点</code> 和整体网络健康状况的非常详细的汇总信息。Envoy 的文档对这些指标有一些简单的说明。</p>]]></description></item><item><title>Istio组件详解</title><link>http://devops.alongparty.cn/posts/6be15f/</link><pubDate>Mon, 12 Sep 2022 08:19:28 +0800</pubDate><author>kbsonlong</author><guid>http://devops.alongparty.cn/posts/6be15f/</guid><description><![CDATA[<div class="featured-image">
         <img src="https://imgapi.cn/api.php?zd=zsy&amp;fl=fengjing&amp;random=081643" referrerpolicy="no-referrer">
-      </div>在我的前两篇博客中： Istio 中的 Sidecar 注入、透明流量劫持及流量路由过程详解 Sidecar 中的流量类型及 iptables 规则详解 我向你详细介绍了 Istio 数据平面中的流量，但数据平面并不]]></description></item><item><title>Sidecar 中的流量类型及 iptables 规则详解</title><link>http://devops.alongparty.cn/posts/61aaaf/</link><pubDate>Sun, 11 Sep 2022 14:56:39 +0800</pubDate><author>kbsonlong</author><guid>http://devops.alongparty.cn/posts/61aaaf/</guid><description><![CDATA[<div class="featured-image">
+      </div>在前两篇博客中： Istio 中的 Sidecar 注入、透明流量劫持及流量路由过程详解 Sidecar 中的流量类型及 iptables 规则详解 我向你详细介绍了 Istio 数据平面中的流量，但数据平面并不能孤]]></description></item><item><title>Sidecar 中的流量类型及 iptables 规则详解</title><link>http://devops.alongparty.cn/posts/61aaaf/</link><pubDate>Sun, 11 Sep 2022 14:56:39 +0800</pubDate><author>kbsonlong</author><guid>http://devops.alongparty.cn/posts/61aaaf/</guid><description><![CDATA[<div class="featured-image">
         <img src="https://imgapi.cn/api.php?zd=zsy&amp;fl=fengjing&amp;random=664184" referrerpolicy="no-referrer">
       </div>我在之前的一篇博客中讲解过 Istio 中 sidecar 的注入、使用 iptables 进行透明流量拦截及流量路由的详细过程，并以 Bookinfo 示例中的 productpage 服务访问 reviews 服务，和 reviews 服务访问 ratings 服务为例绘]]></description></item><item><title>Istio 中的 Sidecar 注入、透明流量劫持及流量路由过程详解</title><link>http://devops.alongparty.cn/posts/fe0ba1/</link><pubDate>Sun, 11 Sep 2022 14:26:02 +0800</pubDate><author>kbsonlong</author><guid>http://devops.alongparty.cn/posts/fe0ba1/</guid><description><![CDATA[<div class="featured-image">
         <img src="https://imgapi.cn/api.php?zd=zsy&amp;fl=fengjing&amp;random=954022" referrerpolicy="no-referrer">
-      </div>本文最早是基于 Istio 1.11 撰写，之后随着 Istio 的版本陆续更新，最新更新时间为 2022 年 5 月 12 日，关于本文历史版本的更新说明请见文章最后。本文记录了详细的实践过]]></description></item><item><title>VSCode 配置Markdown模板</title><link>http://devops.alongparty.cn/posts/4faa15/</link><pubDate>Sun, 11 Sep 2022 10:34:10 +0800</pubDate><author>kbsonlong</author><guid>http://devops.alongparty.cn/posts/4faa15/</guid><description><![CDATA[<div class="featured-image">
-        <img src="https://imgapi.cn/api.php?zd=zsy&amp;fl=fengjing&amp;random=762334" referrerpolicy="no-referrer">
-      </div><h3 id="打开settingjson">打开setting.json</h3>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt">1
-</span><span class="lnt">2
-</span><span class="lnt">3
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-json" data-lang="json"><span class="line"><span class="cl"><span class="s2">&#34;[markdown]&#34;</span><span class="err">:</span>  <span class="p">{</span>
-</span></span><span class="line"><span class="cl">    <span class="nt">&#34;editor.quickSuggestions&#34;</span><span class="p">:</span> <span class="kc">true</span>
-</span></span><span class="line"><span class="cl"><span class="p">}</span>
-</span></span></code></pre></td></tr></table>
-</div>
-</div>]]></description></item><item><title>S2I自定义构建器和模板</title><link>http://devops.alongparty.cn/posts/d83d7d/</link><pubDate>Sun, 11 Sep 2022 10:31:24 +0800</pubDate><author>kbsonlong</author><guid>http://devops.alongparty.cn/posts/d83d7d/</guid><description><![CDATA[<div class="featured-image">
-        <img src="https://imgapi.cn/api.php?zd=zsy&amp;fl=fengjing&amp;random=129254" referrerpolicy="no-referrer">
-      </div>准备工作 S2I自定义镜像构建器 ● assemble（必需）：从源代码构建应用程序制品的脚本 assemble。 ● run（必需）：用于运行应用程序]]></description></item></channel></rss>
+      </div>本文最早是基于 Istio 1.11 撰写，之后随着 Istio 的版本陆续更新，最新更新时间为 2022 年 5 月 12 日，关于本文历史版本的更新说明请见文章最后。本文记录了详细的实践过]]></description></item></channel></rss>
