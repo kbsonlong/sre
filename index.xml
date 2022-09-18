@@ -40,21 +40,7 @@
         </figcaption>
 </figure>]]></description></item><item><title>Ingress Controller源码解析</title><link>http://devops.alongparty.cn/posts/2da521/</link><pubDate>Fri, 16 Sep 2022 12:08:40 +0800</pubDate><author>kbsonlong</author><guid>http://devops.alongparty.cn/posts/2da521/</guid><description><![CDATA[<div class="featured-image">
         <img src="https://imgapi.cn/api.php?zd=zsy&amp;fl=fengjing&amp;random=981326" referrerpolicy="no-referrer">
-      </div><p><a
-  href="https://github.com/kbsonlong/ingress-nginx/commit/f7cb030684591767b1988bf438279bfb40ac7dfa"
-  
-  
-    
-    
-    target="_blank"
-  
-  
-    rel="external nofollow noopener noreferrer"
-  
-  
-  
->注解内容</a></p>
-<div class="highlight"><div class="chroma">
+      </div><div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2

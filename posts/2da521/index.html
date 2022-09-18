@@ -1,76 +1,4 @@
-<!doctype html><html lang=zh-cn><head><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1,maximum-scale=2"><meta name=robots content="noodp"><meta http-equiv=x-ua-compatible content="IE=edge, chrome=1"><title>Ingress Controller源码解析 - 蜷缩的蜗牛</title><meta name=author content="kbsonlong"><meta name=author-link content><meta name=description content="注解内容
-
-
- 1
- 2
- 3
- 4
- 5
- 6
- 7
- 8
- 9
-10
-11
-12
-13
-14
-15
-16
-17
-18
-19
-20
-21
-22
-23
-24
-25
-26
-27
-28
-29
-30
-31
-
-
-# ss -ntlp
-State          Recv-Q          Send-Q                   Local Address:Port                    Peer Address:Port         Process                                                            
-LISTEN         0               4096                         127.0.0.1:10245                        0.0.0.0:*             users:((&#34;nginx-ingress-c&#34;,pid=2671,fd=8))                         
-LISTEN         0               511                          127.0.0.1:10246                        0.0.0.0:*             users:((&#34;nginx&#34;,pid=2783,fd=17),(&#34;nginx&#34;,pid=2738,fd=17))         
-LISTEN         0               511                          127.0.0.1:10247                        0.0.0.0:*             users:((&#34;nginx&#34;,pid=2783,fd=18),(&#34;nginx&#34;,pid=2738,fd=18))         
-LISTEN         0               4096                           0.0.0.0:80                           0.0.0.0:*             users:((&#34;nginx&#34;,pid=2783,fd=11),(&#34;nginx&#34;,pid=2738,fd=11))         
-LISTEN         0               4096                           0.0.0.0:8181                         0.0.0.0:*             users:((&#34;nginx&#34;,pid=2783,fd=15),(&#34;nginx&#34;,pid=2738,fd=15))         
-LISTEN         0               4096                           0.0.0.0:443                          0.0.0.0:*             users:((&#34;nginx&#34;,pid=2783,fd=13),(&#34;nginx&#34;,pid=2738,fd=13))         
-LISTEN         0               4096                                 *:10254                              *:*             users:((&#34;nginx-ingress-c&#34;,pid=2671,fd=33))                        
-LISTEN         0               4096                              [::]:80                              [::]:*             users:((&#34;nginx&#34;,pid=2783,fd=12),(&#34;nginx&#34;,pid=2738,fd=12))         
-LISTEN         0               4096                              [::]:8181                            [::]:*             users:((&#34;nginx&#34;,pid=2783,fd=16),(&#34;nginx&#34;,pid=2738,fd=16))         
-LISTEN         0               4096                                 *:8443                               *:*             users:((&#34;nginx-ingress-c&#34;,pid=2671,fd=34))                        
-LISTEN         0               4096                              [::]:443                             [::]:*             users:((&#34;nginx&#34;,pid=2783,fd=14),(&#34;nginx&#34;,pid=2738,fd=14)) 
-
-## nginx-ingress-controller进程
-# ps aux |grep -w 2671
-_rpc        2671  0.4  0.2 743856 42000 ?        Ssl  Sep15   5:06 /nginx-ingress-controller --publish-service=ingress-nginx/ingress-nginx-controller --election-id=ingress-controller-leader --controller-class=k8s.io/ingress-nginx --ingress-class=nginx --configmap=ingress-nginx/ingress-nginx-controller --validating-webhook=:8443 --validating-webhook-certificate=/usr/local/certificates/cert --validating-webhook-key=/usr/local/certificates/key
-root      284760  0.0  0.0   3100   812 pts/1    S+   04:15   0:00 grep -w 2671
-# 
-
-## Nginx Master 进程
-# ps aux |grep -w 2738
-_rpc        2738  0.0  0.2 145128 35448 ?        S    Sep15   0:00 nginx: master process /usr/local/nginx/sbin/nginx -c /etc/nginx/nginx.conf
-root      284662  0.0  0.0   3100   844 pts/1    S+   04:15   0:00 grep -w 2738
-# 
-
-## Nginx worker 进程
-# ps aux |grep -w 2783
-_rpc        2783  0.0  0.2 157240 41060 ?        Sl   Sep15   0:31 nginx: worker process
-root      285147  0.0  0.0   3100   832 pts/1    S+   04:17   0:00 grep -w 2783
-# 
-
-
-
-从上面可以看出整个Ingress Nginx Controller Pod 包含两部分 nginx-ingress-controller 和 Nginx
-"><meta name=keywords content="ingress"><meta itemprop=name content="Ingress Controller源码解析"><meta itemprop=description content="注解内容
-
+<!doctype html><html lang=zh-cn><head><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1,maximum-scale=2"><meta name=robots content="noodp"><meta http-equiv=x-ua-compatible content="IE=edge, chrome=1"><title>Ingress Controller源码解析 - 蜷缩的蜗牛</title><meta name=author content="kbsonlong"><meta name=author-link content><meta name=description content="
 
  1
  2
@@ -140,79 +68,7 @@ root      285147  0.0  0.0   3100   832 pts/1    S+   04:17   0:00 grep -w 2783
 
 
 从上面可以看出整个Ingress Nginx Controller Pod 包含两部分 nginx-ingress-controller 和 Nginx
-"><meta itemprop=datePublished content="2022-09-16T12:08:40+08:00"><meta itemprop=dateModified content="2022-09-16T12:08:40+08:00"><meta itemprop=wordCount content="4702"><meta itemprop=image content="http://devops.alongparty.cn/logo_transparent.png"><meta itemprop=keywords content="ingress,"><meta property="og:title" content="Ingress Controller源码解析"><meta property="og:description" content="注解内容
-
-
- 1
- 2
- 3
- 4
- 5
- 6
- 7
- 8
- 9
-10
-11
-12
-13
-14
-15
-16
-17
-18
-19
-20
-21
-22
-23
-24
-25
-26
-27
-28
-29
-30
-31
-
-
-# ss -ntlp
-State          Recv-Q          Send-Q                   Local Address:Port                    Peer Address:Port         Process                                                            
-LISTEN         0               4096                         127.0.0.1:10245                        0.0.0.0:*             users:((&#34;nginx-ingress-c&#34;,pid=2671,fd=8))                         
-LISTEN         0               511                          127.0.0.1:10246                        0.0.0.0:*             users:((&#34;nginx&#34;,pid=2783,fd=17),(&#34;nginx&#34;,pid=2738,fd=17))         
-LISTEN         0               511                          127.0.0.1:10247                        0.0.0.0:*             users:((&#34;nginx&#34;,pid=2783,fd=18),(&#34;nginx&#34;,pid=2738,fd=18))         
-LISTEN         0               4096                           0.0.0.0:80                           0.0.0.0:*             users:((&#34;nginx&#34;,pid=2783,fd=11),(&#34;nginx&#34;,pid=2738,fd=11))         
-LISTEN         0               4096                           0.0.0.0:8181                         0.0.0.0:*             users:((&#34;nginx&#34;,pid=2783,fd=15),(&#34;nginx&#34;,pid=2738,fd=15))         
-LISTEN         0               4096                           0.0.0.0:443                          0.0.0.0:*             users:((&#34;nginx&#34;,pid=2783,fd=13),(&#34;nginx&#34;,pid=2738,fd=13))         
-LISTEN         0               4096                                 *:10254                              *:*             users:((&#34;nginx-ingress-c&#34;,pid=2671,fd=33))                        
-LISTEN         0               4096                              [::]:80                              [::]:*             users:((&#34;nginx&#34;,pid=2783,fd=12),(&#34;nginx&#34;,pid=2738,fd=12))         
-LISTEN         0               4096                              [::]:8181                            [::]:*             users:((&#34;nginx&#34;,pid=2783,fd=16),(&#34;nginx&#34;,pid=2738,fd=16))         
-LISTEN         0               4096                                 *:8443                               *:*             users:((&#34;nginx-ingress-c&#34;,pid=2671,fd=34))                        
-LISTEN         0               4096                              [::]:443                             [::]:*             users:((&#34;nginx&#34;,pid=2783,fd=14),(&#34;nginx&#34;,pid=2738,fd=14)) 
-
-## nginx-ingress-controller进程
-# ps aux |grep -w 2671
-_rpc        2671  0.4  0.2 743856 42000 ?        Ssl  Sep15   5:06 /nginx-ingress-controller --publish-service=ingress-nginx/ingress-nginx-controller --election-id=ingress-controller-leader --controller-class=k8s.io/ingress-nginx --ingress-class=nginx --configmap=ingress-nginx/ingress-nginx-controller --validating-webhook=:8443 --validating-webhook-certificate=/usr/local/certificates/cert --validating-webhook-key=/usr/local/certificates/key
-root      284760  0.0  0.0   3100   812 pts/1    S+   04:15   0:00 grep -w 2671
-# 
-
-## Nginx Master 进程
-# ps aux |grep -w 2738
-_rpc        2738  0.0  0.2 145128 35448 ?        S    Sep15   0:00 nginx: master process /usr/local/nginx/sbin/nginx -c /etc/nginx/nginx.conf
-root      284662  0.0  0.0   3100   844 pts/1    S+   04:15   0:00 grep -w 2738
-# 
-
-## Nginx worker 进程
-# ps aux |grep -w 2783
-_rpc        2783  0.0  0.2 157240 41060 ?        Sl   Sep15   0:31 nginx: worker process
-root      285147  0.0  0.0   3100   832 pts/1    S+   04:17   0:00 grep -w 2783
-# 
-
-
-
-从上面可以看出整个Ingress Nginx Controller Pod 包含两部分 nginx-ingress-controller 和 Nginx
-"><meta property="og:type" content="article"><meta property="og:url" content="http://devops.alongparty.cn/posts/2da521/"><meta property="og:image" content="http://devops.alongparty.cn/logo_transparent.png"><meta property="article:section" content="posts"><meta property="article:published_time" content="2022-09-16T12:08:40+08:00"><meta property="article:modified_time" content="2022-09-16T12:08:40+08:00"><meta name=twitter:card content="summary_large_image"><meta name=twitter:image content="http://devops.alongparty.cn/logo_transparent.png"><meta name=twitter:title content="Ingress Controller源码解析"><meta name=twitter:description content="注解内容
-
+"><meta name=keywords content="ingress"><meta itemprop=name content="Ingress Controller源码解析"><meta itemprop=description content="
 
  1
  2
@@ -282,7 +138,147 @@ root      285147  0.0  0.0   3100   832 pts/1    S+   04:17   0:00 grep -w 2783
 
 
 从上面可以看出整个Ingress Nginx Controller Pod 包含两部分 nginx-ingress-controller 和 Nginx
-"><meta name=application-name content="FixIt"><meta name=apple-mobile-web-app-title content="FixIt"><meta name=theme-color media="(prefers-color-scheme: light)" content="#ffffff"><meta name=theme-color media="(prefers-color-scheme: dark)" content="#252627"><meta name=msapplication-TileColor content="#da532c"><link rel="shortcut icon" type=image/x-icon href=/favicon.ico><link rel=icon type=image/png sizes=32x32 href=/favicon-32x32.png><link rel=icon type=image/png sizes=16x16 href=/favicon-16x16.png><link rel=apple-touch-icon sizes=180x180 href=/apple-touch-icon.png><link rel=mask-icon href=/safari-pinned-tab.svg color=#5bbad5><link rel=manifest href=/site.webmanifest><link rel=canonical href=http://devops.alongparty.cn/posts/2da521/><link rel=prev href=http://devops.alongparty.cn/posts/6650ff/><link rel=next href=http://devops.alongparty.cn/posts/3d18d6/><link rel=stylesheet href=/lib/normalize/normalize.min.css><link rel=stylesheet href=/css/style.min.css><link rel=stylesheet href=/lib/fontawesome-free/all.min.css><link rel=stylesheet href=/lib/animate/animate.min.css><script type=application/ld+json>{"@context":"http://schema.org","@type":"BlogPosting","headline":"Ingress Controller源码解析","inLanguage":"zh-CN","mainEntityOfPage":{"@type":"WebPage","@id":"http:\/\/devops.alongparty.cn\/posts\/2da521\/"},"genre":"posts","keywords":"ingress","wordcount":4702,"url":"http:\/\/devops.alongparty.cn\/posts\/2da521\/","datePublished":"2022-09-16T12:08:40+08:00","dateModified":"2022-09-16T12:08:40+08:00","license":"This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.","publisher":{"@type":"Organization","name":""},"author":{"@type":"Person","name":"kbsonlong"},"description":""}</script></head><body header-desktop=sticky header-mobile=auto><script type=text/javascript>(window.localStorage&&localStorage.getItem("theme")?localStorage.getItem("theme")==="dark":"auto"==="auto"?window.matchMedia("(prefers-color-scheme: dark)").matches:"auto"==="dark")&&document.body.setAttribute("theme","dark")</script><div class=wrapper><header class=desktop id=header-desktop><div class=header-wrapper github-corner=right><div class=header-title><a href=/ title=蜷缩的蜗牛><img class="lazyload logo" src=/svg/loading.min.svg data-src=/logo_transparent.png data-srcset="/logo_transparent.png, /logo_transparent.png 1.5x, /logo_transparent.png 2x" data-sizes=auto alt=蜷缩的蜗牛 title=蜷缩的蜗牛><span class=header-title-text>蜷缩的蜗牛</span></a><span class=header-subtitle></span></div><nav><ul class=menu><li class=menu-item><a class=menu-link href=/posts/><i class='fa-solid fa-archive fa-fw fa-sm'></i> 文章</a></li><li class=menu-item><a class=menu-link href=/categories/><i class='fa-solid fa-th fa-fw fa-sm'></i> 分类</a></li><li class=menu-item><a class=menu-link href=/tags/><i class='fa-solid fa-tags fa-fw fa-sm'></i> 标签</a></li><li class=menu-item><a class=menu-link href=/friends/ title=友情链接><i class='fa-solid fa-users fa-fw fa-sm'></i> 友链</a></li><li class=menu-item><a class=menu-link href=/about/><i class='fa-solid fa-info-circle fa-fw fa-sm'></i> 关于</a></li><li class="menu-item d-none-desktop text-center"><a class=menu-link href=https://github.com/kbsonlong/ title=GitHub rel="noopener noreferrer" target=_blank><i class='fa-brands fa-github fa-fw'></i></a></li><li class="menu-item d-none-desktop text-center"><a class=menu-link href=/messages/><i class='fa-solid fa-messages'></i> 留言板</a></li><li class=menu-item><a class=menu-link href=/messages/ title=留言板>留言板</a></li><li class="menu-item delimiter"></li><li class="menu-item language"><span title=选择语言>简体中文<i class="dropdown-icon fa-solid fa-chevron-down"></i></span><ul class=sub-menu><li class=menu-item>没有更多翻译</li></ul></li><li class="menu-item search" id=search-desktop><input type=text placeholder="搜索文章标题或内容 ..." id=search-input-desktop>
+"><meta itemprop=datePublished content="2022-09-16T12:08:40+08:00"><meta itemprop=dateModified content="2022-09-16T12:08:40+08:00"><meta itemprop=wordCount content="6043"><meta itemprop=image content="http://devops.alongparty.cn/logo_transparent.png"><meta itemprop=keywords content="ingress,"><meta property="og:title" content="Ingress Controller源码解析"><meta property="og:description" content="
+
+ 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+
+
+# ss -ntlp
+State          Recv-Q          Send-Q                   Local Address:Port                    Peer Address:Port         Process                                                            
+LISTEN         0               4096                         127.0.0.1:10245                        0.0.0.0:*             users:((&#34;nginx-ingress-c&#34;,pid=2671,fd=8))                         
+LISTEN         0               511                          127.0.0.1:10246                        0.0.0.0:*             users:((&#34;nginx&#34;,pid=2783,fd=17),(&#34;nginx&#34;,pid=2738,fd=17))         
+LISTEN         0               511                          127.0.0.1:10247                        0.0.0.0:*             users:((&#34;nginx&#34;,pid=2783,fd=18),(&#34;nginx&#34;,pid=2738,fd=18))         
+LISTEN         0               4096                           0.0.0.0:80                           0.0.0.0:*             users:((&#34;nginx&#34;,pid=2783,fd=11),(&#34;nginx&#34;,pid=2738,fd=11))         
+LISTEN         0               4096                           0.0.0.0:8181                         0.0.0.0:*             users:((&#34;nginx&#34;,pid=2783,fd=15),(&#34;nginx&#34;,pid=2738,fd=15))         
+LISTEN         0               4096                           0.0.0.0:443                          0.0.0.0:*             users:((&#34;nginx&#34;,pid=2783,fd=13),(&#34;nginx&#34;,pid=2738,fd=13))         
+LISTEN         0               4096                                 *:10254                              *:*             users:((&#34;nginx-ingress-c&#34;,pid=2671,fd=33))                        
+LISTEN         0               4096                              [::]:80                              [::]:*             users:((&#34;nginx&#34;,pid=2783,fd=12),(&#34;nginx&#34;,pid=2738,fd=12))         
+LISTEN         0               4096                              [::]:8181                            [::]:*             users:((&#34;nginx&#34;,pid=2783,fd=16),(&#34;nginx&#34;,pid=2738,fd=16))         
+LISTEN         0               4096                                 *:8443                               *:*             users:((&#34;nginx-ingress-c&#34;,pid=2671,fd=34))                        
+LISTEN         0               4096                              [::]:443                             [::]:*             users:((&#34;nginx&#34;,pid=2783,fd=14),(&#34;nginx&#34;,pid=2738,fd=14)) 
+
+## nginx-ingress-controller进程
+# ps aux |grep -w 2671
+_rpc        2671  0.4  0.2 743856 42000 ?        Ssl  Sep15   5:06 /nginx-ingress-controller --publish-service=ingress-nginx/ingress-nginx-controller --election-id=ingress-controller-leader --controller-class=k8s.io/ingress-nginx --ingress-class=nginx --configmap=ingress-nginx/ingress-nginx-controller --validating-webhook=:8443 --validating-webhook-certificate=/usr/local/certificates/cert --validating-webhook-key=/usr/local/certificates/key
+root      284760  0.0  0.0   3100   812 pts/1    S+   04:15   0:00 grep -w 2671
+# 
+
+## Nginx Master 进程
+# ps aux |grep -w 2738
+_rpc        2738  0.0  0.2 145128 35448 ?        S    Sep15   0:00 nginx: master process /usr/local/nginx/sbin/nginx -c /etc/nginx/nginx.conf
+root      284662  0.0  0.0   3100   844 pts/1    S+   04:15   0:00 grep -w 2738
+# 
+
+## Nginx worker 进程
+# ps aux |grep -w 2783
+_rpc        2783  0.0  0.2 157240 41060 ?        Sl   Sep15   0:31 nginx: worker process
+root      285147  0.0  0.0   3100   832 pts/1    S+   04:17   0:00 grep -w 2783
+# 
+
+
+
+从上面可以看出整个Ingress Nginx Controller Pod 包含两部分 nginx-ingress-controller 和 Nginx
+"><meta property="og:type" content="article"><meta property="og:url" content="http://devops.alongparty.cn/posts/2da521/"><meta property="og:image" content="http://devops.alongparty.cn/logo_transparent.png"><meta property="article:section" content="posts"><meta property="article:published_time" content="2022-09-16T12:08:40+08:00"><meta property="article:modified_time" content="2022-09-16T12:08:40+08:00"><meta name=twitter:card content="summary_large_image"><meta name=twitter:image content="http://devops.alongparty.cn/logo_transparent.png"><meta name=twitter:title content="Ingress Controller源码解析"><meta name=twitter:description content="
+
+ 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+
+
+# ss -ntlp
+State          Recv-Q          Send-Q                   Local Address:Port                    Peer Address:Port         Process                                                            
+LISTEN         0               4096                         127.0.0.1:10245                        0.0.0.0:*             users:((&#34;nginx-ingress-c&#34;,pid=2671,fd=8))                         
+LISTEN         0               511                          127.0.0.1:10246                        0.0.0.0:*             users:((&#34;nginx&#34;,pid=2783,fd=17),(&#34;nginx&#34;,pid=2738,fd=17))         
+LISTEN         0               511                          127.0.0.1:10247                        0.0.0.0:*             users:((&#34;nginx&#34;,pid=2783,fd=18),(&#34;nginx&#34;,pid=2738,fd=18))         
+LISTEN         0               4096                           0.0.0.0:80                           0.0.0.0:*             users:((&#34;nginx&#34;,pid=2783,fd=11),(&#34;nginx&#34;,pid=2738,fd=11))         
+LISTEN         0               4096                           0.0.0.0:8181                         0.0.0.0:*             users:((&#34;nginx&#34;,pid=2783,fd=15),(&#34;nginx&#34;,pid=2738,fd=15))         
+LISTEN         0               4096                           0.0.0.0:443                          0.0.0.0:*             users:((&#34;nginx&#34;,pid=2783,fd=13),(&#34;nginx&#34;,pid=2738,fd=13))         
+LISTEN         0               4096                                 *:10254                              *:*             users:((&#34;nginx-ingress-c&#34;,pid=2671,fd=33))                        
+LISTEN         0               4096                              [::]:80                              [::]:*             users:((&#34;nginx&#34;,pid=2783,fd=12),(&#34;nginx&#34;,pid=2738,fd=12))         
+LISTEN         0               4096                              [::]:8181                            [::]:*             users:((&#34;nginx&#34;,pid=2783,fd=16),(&#34;nginx&#34;,pid=2738,fd=16))         
+LISTEN         0               4096                                 *:8443                               *:*             users:((&#34;nginx-ingress-c&#34;,pid=2671,fd=34))                        
+LISTEN         0               4096                              [::]:443                             [::]:*             users:((&#34;nginx&#34;,pid=2783,fd=14),(&#34;nginx&#34;,pid=2738,fd=14)) 
+
+## nginx-ingress-controller进程
+# ps aux |grep -w 2671
+_rpc        2671  0.4  0.2 743856 42000 ?        Ssl  Sep15   5:06 /nginx-ingress-controller --publish-service=ingress-nginx/ingress-nginx-controller --election-id=ingress-controller-leader --controller-class=k8s.io/ingress-nginx --ingress-class=nginx --configmap=ingress-nginx/ingress-nginx-controller --validating-webhook=:8443 --validating-webhook-certificate=/usr/local/certificates/cert --validating-webhook-key=/usr/local/certificates/key
+root      284760  0.0  0.0   3100   812 pts/1    S+   04:15   0:00 grep -w 2671
+# 
+
+## Nginx Master 进程
+# ps aux |grep -w 2738
+_rpc        2738  0.0  0.2 145128 35448 ?        S    Sep15   0:00 nginx: master process /usr/local/nginx/sbin/nginx -c /etc/nginx/nginx.conf
+root      284662  0.0  0.0   3100   844 pts/1    S+   04:15   0:00 grep -w 2738
+# 
+
+## Nginx worker 进程
+# ps aux |grep -w 2783
+_rpc        2783  0.0  0.2 157240 41060 ?        Sl   Sep15   0:31 nginx: worker process
+root      285147  0.0  0.0   3100   832 pts/1    S+   04:17   0:00 grep -w 2783
+# 
+
+
+
+从上面可以看出整个Ingress Nginx Controller Pod 包含两部分 nginx-ingress-controller 和 Nginx
+"><meta name=application-name content="FixIt"><meta name=apple-mobile-web-app-title content="FixIt"><meta name=theme-color media="(prefers-color-scheme: light)" content="#ffffff"><meta name=theme-color media="(prefers-color-scheme: dark)" content="#252627"><meta name=msapplication-TileColor content="#da532c"><link rel="shortcut icon" type=image/x-icon href=/favicon.ico><link rel=icon type=image/png sizes=32x32 href=/favicon-32x32.png><link rel=icon type=image/png sizes=16x16 href=/favicon-16x16.png><link rel=apple-touch-icon sizes=180x180 href=/apple-touch-icon.png><link rel=mask-icon href=/safari-pinned-tab.svg color=#5bbad5><link rel=manifest href=/site.webmanifest><link rel=canonical href=http://devops.alongparty.cn/posts/2da521/><link rel=prev href=http://devops.alongparty.cn/posts/6650ff/><link rel=next href=http://devops.alongparty.cn/posts/3d18d6/><link rel=stylesheet href=/lib/normalize/normalize.min.css><link rel=stylesheet href=/css/style.min.css><link rel=stylesheet href=/lib/fontawesome-free/all.min.css><link rel=stylesheet href=/lib/animate/animate.min.css><script type=application/ld+json>{"@context":"http://schema.org","@type":"BlogPosting","headline":"Ingress Controller源码解析","inLanguage":"zh-CN","mainEntityOfPage":{"@type":"WebPage","@id":"http:\/\/devops.alongparty.cn\/posts\/2da521\/"},"genre":"posts","keywords":"ingress","wordcount":6043,"url":"http:\/\/devops.alongparty.cn\/posts\/2da521\/","datePublished":"2022-09-16T12:08:40+08:00","dateModified":"2022-09-16T12:08:40+08:00","license":"This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.","publisher":{"@type":"Organization","name":""},"author":{"@type":"Person","name":"kbsonlong"},"description":""}</script></head><body header-desktop=sticky header-mobile=auto><script type=text/javascript>(window.localStorage&&localStorage.getItem("theme")?localStorage.getItem("theme")==="dark":"auto"==="auto"?window.matchMedia("(prefers-color-scheme: dark)").matches:"auto"==="dark")&&document.body.setAttribute("theme","dark")</script><div class=wrapper><header class=desktop id=header-desktop><div class=header-wrapper github-corner=right><div class=header-title><a href=/ title=蜷缩的蜗牛><img class="lazyload logo" src=/svg/loading.min.svg data-src=/logo_transparent.png data-srcset="/logo_transparent.png, /logo_transparent.png 1.5x, /logo_transparent.png 2x" data-sizes=auto alt=蜷缩的蜗牛 title=蜷缩的蜗牛><span class=header-title-text>蜷缩的蜗牛</span></a><span class=header-subtitle></span></div><nav><ul class=menu><li class=menu-item><a class=menu-link href=/posts/><i class='fa-solid fa-archive fa-fw fa-sm'></i> 文章</a></li><li class=menu-item><a class=menu-link href=/categories/><i class='fa-solid fa-th fa-fw fa-sm'></i> 分类</a></li><li class=menu-item><a class=menu-link href=/tags/><i class='fa-solid fa-tags fa-fw fa-sm'></i> 标签</a></li><li class=menu-item><a class=menu-link href=/friends/ title=友情链接><i class='fa-solid fa-users fa-fw fa-sm'></i> 友链</a></li><li class=menu-item><a class=menu-link href=/about/><i class='fa-solid fa-info-circle fa-fw fa-sm'></i> 关于</a></li><li class="menu-item d-none-desktop text-center"><a class=menu-link href=https://github.com/kbsonlong/ title=GitHub rel="noopener noreferrer" target=_blank><i class='fa-brands fa-github fa-fw'></i></a></li><li class="menu-item d-none-desktop text-center"><a class=menu-link href=/messages/><i class='fa-solid fa-messages'></i> 留言板</a></li><li class=menu-item><a class=menu-link href=/messages/ title=留言板>留言板</a></li><li class="menu-item delimiter"></li><li class="menu-item language"><span title=选择语言>简体中文<i class="dropdown-icon fa-solid fa-chevron-down"></i></span><ul class=sub-menu><li class=menu-item>没有更多翻译</li></ul></li><li class="menu-item search" id=search-desktop><input type=text placeholder="搜索文章标题或内容 ..." id=search-input-desktop>
 <a href=javascript:void(0); class="search-button search-toggle" id=search-toggle-desktop title=搜索><i class="fa-solid fa-search fa-fw"></i></a>
 <a href=javascript:void(0); class="search-button search-clear" id=search-clear-desktop title=清空><i class="fa-solid fa-times-circle fa-fw"></i></a>
 <span class="search-button search-loading" id=search-loading-desktop><i class="fa-solid fa-spinner fa-fw fa-spin"></i></span></li><li class="menu-item theme-switch" title=切换主题><i class="fa-solid fa-adjust fa-fw"></i></li></ul></nav></div></header><header class=mobile id=header-mobile><div class=header-container><div class=header-wrapper><div class=header-title><a href=/ title=蜷缩的蜗牛><img class="lazyload logo" src=/svg/loading.min.svg data-src=/logo_transparent.png data-srcset="/logo_transparent.png, /logo_transparent.png 1.5x, /logo_transparent.png 2x" data-sizes=auto alt=/logo_transparent.png title=/logo_transparent.png><span class=header-title-text>蜷缩的蜗牛</span></a><span class=header-subtitle></span></div><div class=menu-toggle id=menu-toggle-mobile><span></span><span></span><span></span></div></div><nav><ul class=menu id=menu-mobile><li class=search-wrapper><div class="search mobile" id=search-mobile><input type=text placeholder="搜索文章标题或内容 ..." id=search-input-mobile>
@@ -291,9 +287,9 @@ root      285147  0.0  0.0   3100   832 pts/1    S+   04:17   0:00 grep -w 2783
 <span class="search-button search-loading" id=search-loading-mobile><i class="fa-solid fa-spinner fa-fw fa-spin"></i></span></div><a href=javascript:void(0); class=search-cancel id=search-cancel-mobile>取消</a></li><li class=menu-item><a class=menu-link href=/posts/><i class='fa-solid fa-archive fa-fw fa-sm'></i> 文章</a></li><li class=menu-item><a class=menu-link href=/categories/><i class='fa-solid fa-th fa-fw fa-sm'></i> 分类</a></li><li class=menu-item><a class=menu-link href=/tags/><i class='fa-solid fa-tags fa-fw fa-sm'></i> 标签</a></li><li class=menu-item><a class=menu-link href=/friends/ title=友情链接><i class='fa-solid fa-users fa-fw fa-sm'></i> 友链</a></li><li class=menu-item><a class=menu-link href=/about/><i class='fa-solid fa-info-circle fa-fw fa-sm'></i> 关于</a></li><li class="menu-item d-none-desktop text-center"><a class=menu-link href=https://github.com/kbsonlong/ title=GitHub rel="noopener noreferrer" target=_blank><i class='fa-brands fa-github fa-fw'></i></a></li><li class="menu-item d-none-desktop text-center"><a class=menu-link href=/messages/><i class='fa-solid fa-messages'></i> 留言板</a></li><li class=menu-item><a class=menu-link href=/messages/ title=留言板>留言板</a></li><li class="menu-item theme-switch" title=切换主题><i class="fa-solid fa-adjust fa-fw"></i></li><li class="menu-item language"><span title=选择语言>简体中文<i class="dropdown-icon fa-solid fa-chevron-down"></i></span>
 <select class=language-select onchange="location=this.value"><option disabled>没有更多翻译</option></select></li></ul></nav></div></header><div class="search-dropdown desktop"><div id=search-dropdown-desktop></div></div><div class="search-dropdown mobile"><div id=search-dropdown-mobile></div></div><main class=container page-style=normal><aside class=toc id=toc-auto><h2 class=toc-title>目录 <i class="toc-icon fa-solid fa-angle-down fa-fw"></i></h2><div class=toc-content id=toc-content-auto></div></aside><aside class=aside-custom></aside><article class="page single"><div class=header><h1 class="single-title animate__animated animate__flipInX"><span>Ingress Controller源码解析</span></h1></div><div class=post-meta><div class=post-meta-line><span class=post-author><span class=author><img class="lazyload avatar" src=/svg/loading.min.svg data-src="https://gravatar.loli.net/avatar/598872715ec08296cf1e1806135cd518?s=32&d=mp" data-srcset="https://gravatar.loli.net/avatar/598872715ec08296cf1e1806135cd518?s=32&d=mp, https://gravatar.loli.net/avatar/598872715ec08296cf1e1806135cd518?s=32&d=mp 1.5x, https://gravatar.loli.net/avatar/598872715ec08296cf1e1806135cd518?s=32&d=mp 2x" data-sizes=auto alt=kbsonlong title=kbsonlong>&nbsp;kbsonlong</span></span>
 <span class=post-category>收录于 <a href=/categories/%E4%BA%91%E5%8E%9F%E7%94%9F/><i class="fa-regular fa-folder fa-fw"></i>&nbsp;云原生</a></span></div><div class=post-meta-line><span title="2022-09-16 12:08:40"><i class="fa-regular fa-calendar-alt fa-fw"></i>&nbsp;<time datetime=2022-09-16>2022-09-16</time>
-</span>&nbsp;<i class="fa-solid fa-pencil-alt fa-fw"></i>&nbsp;约 4702 字&nbsp;
-<i class="fa-regular fa-clock fa-fw"></i>&nbsp;预计阅读 10 分钟&nbsp;</div></div><div class=featured-image><img class=lazyload src=/svg/loading.min.svg data-src="https://imgapi.cn/api.php?zd=zsy&fl=fengjing&random=981326" data-srcset="https://imgapi.cn/api.php?zd=zsy&fl=fengjing&random=981326, https://imgapi.cn/api.php?zd=zsy&fl=fengjing&random=981326 1.5x, https://imgapi.cn/api.php?zd=zsy&fl=fengjing&random=981326 2x" data-sizes=auto alt="https://imgapi.cn/api.php?zd=zsy&fl=fengjing&random=981326" title="https://imgapi.cn/api.php?zd=zsy&fl=fengjing&random=981326"></div><div class="details toc" id=toc-static kept=false><div class="details-summary toc-title"><span>目录</span>
-<span><i class="details-icon fa-solid fa-angle-right"></i></span></div><div class="details-content toc-content" id=toc-content-static><nav id=TableOfContents><ul><li><a href=#编译-build>编译 build</a></li><li><a href=#1-创建nginxcontroller-控制器>1 创建NGINXController 控制器</a><ul><li><a href=#11-实例化-ngx-controller-控制器>1.1 实例化 ngx controller 控制器</a></li><li><a href=#12-创建store本地缓存>1.2 创建store(本地缓存)</a></li></ul></li></ul></nav></div></div><div class=content id=content><p><a href=https://github.com/kbsonlong/ingress-nginx/commit/f7cb030684591767b1988bf438279bfb40ac7dfa target=_blank rel="external nofollow noopener noreferrer">注解内容</a></p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span>&nbsp;<i class="fa-solid fa-pencil-alt fa-fw"></i>&nbsp;约 6043 字&nbsp;
+<i class="fa-regular fa-clock fa-fw"></i>&nbsp;预计阅读 13 分钟&nbsp;</div></div><div class=featured-image><img class=lazyload src=/svg/loading.min.svg data-src="https://imgapi.cn/api.php?zd=zsy&fl=fengjing&random=981326" data-srcset="https://imgapi.cn/api.php?zd=zsy&fl=fengjing&random=981326, https://imgapi.cn/api.php?zd=zsy&fl=fengjing&random=981326 1.5x, https://imgapi.cn/api.php?zd=zsy&fl=fengjing&random=981326 2x" data-sizes=auto alt="https://imgapi.cn/api.php?zd=zsy&fl=fengjing&random=981326" title="https://imgapi.cn/api.php?zd=zsy&fl=fengjing&random=981326"></div><div class="details toc" id=toc-static kept=false><div class="details-summary toc-title"><span>目录</span>
+<span><i class="details-icon fa-solid fa-angle-right"></i></span></div><div class="details-content toc-content" id=toc-content-static><nav id=TableOfContents><ul><li><a href=#1-controller-控制器>1 Controller 控制器</a><ul><li><a href=#编译-controller>编译 Controller</a></li></ul></li><li><a href=#2-创建nginxcontroller-控制器>2 创建NGINXController 控制器</a><ul><li><a href=#21-nginxcontroller>2.1 NGINXController</a></li><li><a href=#configuration>Configuration</a></li><li><a href=#21-实例化-newnginxcontroller-控制器>2.1 实例化 NewNGINXController 控制器</a></li><li><a href=#22-创建store本地缓存>2.2 创建store(本地缓存)</a><ul><li><a href=#221-监听范围和资源>2.2.1 监听范围和资源</a></li></ul></li></ul></li><li><a href=#3-nginx-反向代理>3 Nginx 反向代理</a><ul><li><a href=#31-nginxtmpl>3.1 nginx.tmpl</a></li></ul></li></ul></nav></div></div><div class=content id=content><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
 </span><span class=lnt> 2
 </span><span class=lnt> 3
 </span><span class=lnt> 4
@@ -355,7 +351,7 @@ root      285147  0.0  0.0   3100   832 pts/1    S+   04:17   0:00 grep -w 2783
 </span></span><span class=line><span class=cl>_rpc        <span class=m>2783</span>  0.0  0.2 <span class=m>157240</span> <span class=m>41060</span> ?        Sl   Sep15   0:31 nginx: worker process
 </span></span><span class=line><span class=cl>root      <span class=m>285147</span>  0.0  0.0   <span class=m>3100</span>   <span class=m>832</span> pts/1    S+   04:17   0:00 grep -w <span class=m>2783</span>
 </span></span><span class=line><span class=cl><span class=c1># </span>
-</span></span></code></pre></td></tr></table></div></div><blockquote><p>从上面可以看出整个Ingress Nginx Controller Pod 包含两部分 nginx-ingress-controller 和 Nginx</p></blockquote><h2 id=编译-build>编译 build</h2><p>build/build.sh</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span></span></code></pre></td></tr></table></div></div><blockquote><p>从上面可以看出整个Ingress Nginx Controller Pod 包含两部分 nginx-ingress-controller 和 Nginx</p></blockquote><p>nginx-ingress-controller 如其名 控制管理（control）ingress资源的应用。ingress controller会监听集群中ingress资源事件，然后根据对应的事件处理逻辑更新Nginx的配置。</p><p><img class=lazyload src=/svg/loading.min.svg data-src=https://raw.githubusercontent.com/kbsonlong/notes_statics/main/diagrams/ingress-nginx-controller.png data-srcset="https://raw.githubusercontent.com/kbsonlong/notes_statics/main/diagrams/ingress-nginx-controller.png, https://raw.githubusercontent.com/kbsonlong/notes_statics/main/diagrams/ingress-nginx-controller.png 1.5x, https://raw.githubusercontent.com/kbsonlong/notes_statics/main/diagrams/ingress-nginx-controller.png 2x" data-sizes=auto alt=https://raw.githubusercontent.com/kbsonlong/notes_statics/main/diagrams/ingress-nginx-controller.png title=https://raw.githubusercontent.com/kbsonlong/notes_statics/main/diagrams/ingress-nginx-controller.png></p><h2 id=1-controller-控制器>1 Controller 控制器</h2><h3 id=编译-controller>编译 Controller</h3><p>build/build.sh</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
 </span><span class=lnt>2
 </span><span class=lnt>3
 </span><span class=lnt>4
@@ -615,7 +611,283 @@ root      285147  0.0  0.0   3100   832 pts/1    S+   04:17   0:00 grep -w 2783
 </span></span><span class=line><span class=cl>		<span class=nx>os</span><span class=p>.</span><span class=nf>Exit</span><span class=p>(</span><span class=nx>code</span><span class=p>)</span>
 </span></span><span class=line><span class=cl>	<span class=p>})</span>
 </span></span><span class=line><span class=cl><span class=p>}</span>
-</span></span></code></pre></td></tr></table></div></div><p>controller 启动进程中传入配置信息以及一些默认配置项</p><h2 id=1-创建nginxcontroller-控制器>1 创建NGINXController 控制器</h2><h3 id=11-实例化-ngx-controller-控制器>1.1 实例化 ngx controller 控制器</h3><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>  1
+</span></span></code></pre></td></tr></table></div></div><p>controller 启动进程中传入配置信息以及一些默认配置项, 并根据配置项启用 Metrics、HealthCheck、Profile、Logging 等功能，本文主要介绍 Controller 控制器主流程 <code>ngx := controller.NewNGINXController(conf, mc)</code></p><h2 id=2-创建nginxcontroller-控制器>2 创建NGINXController 控制器</h2><h3 id=21-nginxcontroller>2.1 NGINXController</h3><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span><span class=lnt>21
+</span><span class=lnt>22
+</span><span class=lnt>23
+</span><span class=lnt>24
+</span><span class=lnt>25
+</span><span class=lnt>26
+</span><span class=lnt>27
+</span><span class=lnt>28
+</span><span class=lnt>29
+</span><span class=lnt>30
+</span><span class=lnt>31
+</span><span class=lnt>32
+</span><span class=lnt>33
+</span><span class=lnt>34
+</span><span class=lnt>35
+</span><span class=lnt>36
+</span><span class=lnt>37
+</span><span class=lnt>38
+</span><span class=lnt>39
+</span><span class=lnt>40
+</span><span class=lnt>41
+</span><span class=lnt>42
+</span><span class=lnt>43
+</span><span class=lnt>44
+</span><span class=lnt>45
+</span><span class=lnt>46
+</span><span class=lnt>47
+</span><span class=lnt>48
+</span><span class=lnt>49
+</span><span class=lnt>50
+</span><span class=lnt>51
+</span><span class=lnt>52
+</span><span class=lnt>53
+</span><span class=lnt>54
+</span><span class=lnt>55
+</span><span class=lnt>56
+</span><span class=lnt>57
+</span><span class=lnt>58
+</span><span class=lnt>59
+</span><span class=lnt>60
+</span><span class=lnt>61
+</span><span class=lnt>62
+</span><span class=lnt>63
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-golang data-lang=golang><span class=line><span class=cl><span class=kd>type</span> <span class=nx>NGINXController</span> <span class=kd>struct</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>	<span class=c1>// 配置信息
+</span></span></span><span class=line><span class=cl><span class=c1></span>	<span class=nx>cfg</span> <span class=o>*</span><span class=nx>Configuration</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>	<span class=c1>// 事件通知器
+</span></span></span><span class=line><span class=cl><span class=c1></span>	<span class=nx>recorder</span> <span class=nx>record</span><span class=p>.</span><span class=nx>EventRecorder</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>	<span class=c1>// 同步队列
+</span></span></span><span class=line><span class=cl><span class=c1></span>	<span class=nx>syncQueue</span> <span class=o>*</span><span class=nx>task</span><span class=p>.</span><span class=nx>Queue</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>	<span class=c1>// 同步状态 -- [kubernetes-ingress状态上报机制](https://blog.dianduidian.com/post/kubernetes-ingress%E7%8A%B6%E6%80%81%E4%B8%8A%E6%8A%A5%E6%9C%BA%E5%88%B6/)
+</span></span></span><span class=line><span class=cl><span class=c1></span>	<span class=nx>syncStatus</span> <span class=nx>status</span><span class=p>.</span><span class=nx>Syncer</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>	<span class=c1>// 同步限流器
+</span></span></span><span class=line><span class=cl><span class=c1></span>	<span class=nx>syncRateLimiter</span> <span class=nx>flowcontrol</span><span class=p>.</span><span class=nx>RateLimiter</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>	<span class=c1>// stopLock is used to enforce that only a single call to Stop send at
+</span></span></span><span class=line><span class=cl><span class=c1></span>	<span class=c1>// a given time. We allow stopping through an HTTP endpoint and
+</span></span></span><span class=line><span class=cl><span class=c1></span>	<span class=c1>// allowing concurrent stoppers leads to stack traces.
+</span></span></span><span class=line><span class=cl><span class=c1></span>	<span class=nx>stopLock</span> <span class=o>*</span><span class=nx>sync</span><span class=p>.</span><span class=nx>Mutex</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>	<span class=nx>stopCh</span> <span class=kd>chan</span> <span class=kd>struct</span><span class=p>{}</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>	<span class=c1>// 更新环状channel
+</span></span></span><span class=line><span class=cl><span class=c1></span>	<span class=nx>updateCh</span> <span class=o>*</span><span class=nx>channels</span><span class=p>.</span><span class=nx>RingChannel</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>	<span class=c1>// 接受nginx 错误信息channel
+</span></span></span><span class=line><span class=cl><span class=c1></span>	<span class=c1>// ngxErrCh is used to detect errors with the NGINX processes
+</span></span></span><span class=line><span class=cl><span class=c1></span>	<span class=nx>ngxErrCh</span> <span class=kd>chan</span> <span class=kt>error</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>	<span class=c1>// 当前配置文件,用来对比配置是否有更新
+</span></span></span><span class=line><span class=cl><span class=c1></span>	<span class=c1>// runningConfig contains the running configuration in the Backend
+</span></span></span><span class=line><span class=cl><span class=c1></span>	<span class=nx>runningConfig</span> <span class=o>*</span><span class=nx>ingress</span><span class=p>.</span><span class=nx>Configuration</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>	<span class=c1>// nginx 配置模板渲染器
+</span></span></span><span class=line><span class=cl><span class=c1></span>	<span class=nx>t</span> <span class=nx>ngx_template</span><span class=p>.</span><span class=nx>Writer</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>	<span class=c1>// nameserver 列表
+</span></span></span><span class=line><span class=cl><span class=c1></span>	<span class=c1>// 读取/etc/resolv.conf 中的ns地址，用来生成nginx.conf使用，eg:resolver 127.0.0.1 [::1]:5353;
+</span></span></span><span class=line><span class=cl><span class=c1></span>	<span class=nx>resolver</span> <span class=p>[]</span><span class=nx>net</span><span class=p>.</span><span class=nx>IP</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>	<span class=c1>// 是否启用ipv6
+</span></span></span><span class=line><span class=cl><span class=c1></span>	<span class=nx>isIPV6Enabled</span> <span class=kt>bool</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>	<span class=c1>// 是否关闭
+</span></span></span><span class=line><span class=cl><span class=c1></span>	<span class=nx>isShuttingDown</span> <span class=kt>bool</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>	<span class=c1>// TCP代理，启用SSLPassthrough时使用
+</span></span></span><span class=line><span class=cl><span class=c1></span>	<span class=nx>Proxy</span> <span class=o>*</span><span class=nx>tcpproxy</span><span class=p>.</span><span class=nx>TCPProxy</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>	<span class=c1>// 本地缓存
+</span></span></span><span class=line><span class=cl><span class=c1></span>	<span class=nx>store</span> <span class=nx>store</span><span class=p>.</span><span class=nx>Storer</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>	<span class=c1>// metrics 收集器
+</span></span></span><span class=line><span class=cl><span class=c1></span>	<span class=nx>metricCollector</span>    <span class=nx>metric</span><span class=p>.</span><span class=nx>Collector</span>
+</span></span><span class=line><span class=cl>	<span class=nx>admissionCollector</span> <span class=nx>metric</span><span class=p>.</span><span class=nx>Collector</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>	<span class=c1>// webhook
+</span></span></span><span class=line><span class=cl><span class=c1></span>	<span class=nx>validationWebhookServer</span> <span class=o>*</span><span class=nx>http</span><span class=p>.</span><span class=nx>Server</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>	<span class=c1>// 操作Nginx的接口，用来启动Nginx进程和测试配置文件
+</span></span></span><span class=line><span class=cl><span class=c1></span>	<span class=nx>command</span> <span class=nx>NginxExecTester</span>
+</span></span><span class=line><span class=cl><span class=p>}</span>
+</span></span></code></pre></td></tr></table></div></div><h3 id=configuration>Configuration</h3><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span><span class=lnt>21
+</span><span class=lnt>22
+</span><span class=lnt>23
+</span><span class=lnt>24
+</span><span class=lnt>25
+</span><span class=lnt>26
+</span><span class=lnt>27
+</span><span class=lnt>28
+</span><span class=lnt>29
+</span><span class=lnt>30
+</span><span class=lnt>31
+</span><span class=lnt>32
+</span><span class=lnt>33
+</span><span class=lnt>34
+</span><span class=lnt>35
+</span><span class=lnt>36
+</span><span class=lnt>37
+</span><span class=lnt>38
+</span><span class=lnt>39
+</span><span class=lnt>40
+</span><span class=lnt>41
+</span><span class=lnt>42
+</span><span class=lnt>43
+</span><span class=lnt>44
+</span><span class=lnt>45
+</span><span class=lnt>46
+</span><span class=lnt>47
+</span><span class=lnt>48
+</span><span class=lnt>49
+</span><span class=lnt>50
+</span><span class=lnt>51
+</span><span class=lnt>52
+</span><span class=lnt>53
+</span><span class=lnt>54
+</span><span class=lnt>55
+</span><span class=lnt>56
+</span><span class=lnt>57
+</span><span class=lnt>58
+</span><span class=lnt>59
+</span><span class=lnt>60
+</span><span class=lnt>61
+</span><span class=lnt>62
+</span><span class=lnt>63
+</span><span class=lnt>64
+</span><span class=lnt>65
+</span><span class=lnt>66
+</span><span class=lnt>67
+</span><span class=lnt>68
+</span><span class=lnt>69
+</span><span class=lnt>70
+</span><span class=lnt>71
+</span><span class=lnt>72
+</span><span class=lnt>73
+</span><span class=lnt>74
+</span><span class=lnt>75
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-golang data-lang=golang><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=kd>type</span> <span class=nx>Configuration</span> <span class=kd>struct</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>	<span class=nx>APIServerHost</span> <span class=kt>string</span>
+</span></span><span class=line><span class=cl>	<span class=nx>RootCAFile</span>    <span class=kt>string</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>	<span class=nx>KubeConfigFile</span> <span class=kt>string</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>	<span class=nx>Client</span> <span class=nx>clientset</span><span class=p>.</span><span class=nx>Interface</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>	<span class=nx>ResyncPeriod</span> <span class=nx>time</span><span class=p>.</span><span class=nx>Duration</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>	<span class=nx>ConfigMapName</span>  <span class=kt>string</span>
+</span></span><span class=line><span class=cl>	<span class=nx>DefaultService</span> <span class=kt>string</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>	<span class=nx>Namespace</span> <span class=kt>string</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>	<span class=nx>WatchNamespaceSelector</span> <span class=nx>labels</span><span class=p>.</span><span class=nx>Selector</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>	<span class=c1>// +optional
+</span></span></span><span class=line><span class=cl><span class=c1></span>	<span class=nx>TCPConfigMapName</span> <span class=kt>string</span>
+</span></span><span class=line><span class=cl>	<span class=c1>// +optional
+</span></span></span><span class=line><span class=cl><span class=c1></span>	<span class=nx>UDPConfigMapName</span> <span class=kt>string</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>	<span class=nx>DefaultSSLCertificate</span> <span class=kt>string</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>	<span class=c1>// +optional
+</span></span></span><span class=line><span class=cl><span class=c1></span>	<span class=nx>PublishService</span>       <span class=kt>string</span>
+</span></span><span class=line><span class=cl>	<span class=nx>PublishStatusAddress</span> <span class=kt>string</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>	<span class=nx>UpdateStatus</span>           <span class=kt>bool</span>
+</span></span><span class=line><span class=cl>	<span class=nx>UseNodeInternalIP</span>      <span class=kt>bool</span>
+</span></span><span class=line><span class=cl>	<span class=nx>ElectionID</span>             <span class=kt>string</span>
+</span></span><span class=line><span class=cl>	<span class=nx>UpdateStatusOnShutdown</span> <span class=kt>bool</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>	<span class=nx>HealthCheckHost</span> <span class=kt>string</span>
+</span></span><span class=line><span class=cl>	<span class=nx>ListenPorts</span>     <span class=o>*</span><span class=nx>ngx_config</span><span class=p>.</span><span class=nx>ListenPorts</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>	<span class=nx>DisableServiceExternalName</span> <span class=kt>bool</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>	<span class=nx>EnableSSLPassthrough</span> <span class=kt>bool</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>	<span class=nx>EnableProfiling</span> <span class=kt>bool</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>	<span class=nx>EnableMetrics</span>       <span class=kt>bool</span>
+</span></span><span class=line><span class=cl>	<span class=nx>MetricsPerHost</span>      <span class=kt>bool</span>
+</span></span><span class=line><span class=cl>	<span class=nx>MetricsBuckets</span>      <span class=o>*</span><span class=nx>collectors</span><span class=p>.</span><span class=nx>HistogramBuckets</span>
+</span></span><span class=line><span class=cl>	<span class=nx>ReportStatusClasses</span> <span class=kt>bool</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>	<span class=nx>FakeCertificate</span> <span class=o>*</span><span class=nx>ingress</span><span class=p>.</span><span class=nx>SSLCert</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>	<span class=nx>SyncRateLimit</span> <span class=kt>float32</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>	<span class=nx>DisableCatchAll</span> <span class=kt>bool</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>	<span class=nx>IngressClassConfiguration</span> <span class=o>*</span><span class=nx>ingressclass</span><span class=p>.</span><span class=nx>IngressClassConfiguration</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>	<span class=nx>ValidationWebhook</span>         <span class=kt>string</span>
+</span></span><span class=line><span class=cl>	<span class=nx>ValidationWebhookCertPath</span> <span class=kt>string</span>
+</span></span><span class=line><span class=cl>	<span class=nx>ValidationWebhookKeyPath</span>  <span class=kt>string</span>
+</span></span><span class=line><span class=cl>	<span class=nx>DisableFullValidationTest</span> <span class=kt>bool</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>	<span class=nx>GlobalExternalAuth</span>  <span class=o>*</span><span class=nx>ngx_config</span><span class=p>.</span><span class=nx>GlobalExternalAuth</span>
+</span></span><span class=line><span class=cl>	<span class=nx>MaxmindEditionFiles</span> <span class=o>*</span><span class=p>[]</span><span class=kt>string</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>	<span class=nx>MonitorMaxBatchSize</span> <span class=kt>int</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>	<span class=nx>PostShutdownGracePeriod</span> <span class=kt>int</span>
+</span></span><span class=line><span class=cl>	<span class=nx>ShutdownGracePeriod</span>     <span class=kt>int</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>	<span class=nx>InternalLoggerAddress</span> <span class=kt>string</span>
+</span></span><span class=line><span class=cl>	<span class=nx>IsChroot</span>              <span class=kt>bool</span>
+</span></span><span class=line><span class=cl>	<span class=nx>DeepInspector</span>         <span class=kt>bool</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>	<span class=nx>DynamicConfigurationRetries</span> <span class=kt>int</span>
+</span></span><span class=line><span class=cl><span class=p>}</span>
+</span></span></code></pre></td></tr></table></div></div><p>这些配置需要控制器启动时通过命令行传入</p><h3 id=21-实例化-newnginxcontroller-控制器>2.1 实例化 NewNGINXController 控制器</h3><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>  1
 </span><span class=lnt>  2
 </span><span class=lnt>  3
 </span><span class=lnt>  4
@@ -923,7 +1195,7 @@ root      285147  0.0  0.0   3100   832 pts/1    S+   04:17   0:00 grep -w 2783
 </span></span><span class=line><span class=cl>
 </span></span><span class=line><span class=cl>	<span class=k>return</span> <span class=nx>n</span>
 </span></span><span class=line><span class=cl><span class=p>}</span>
-</span></span></code></pre></td></tr></table></div></div><h3 id=12-创建store本地缓存>1.2 创建store(本地缓存)</h3><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>  1
+</span></span></code></pre></td></tr></table></div></div><h3 id=22-创建store本地缓存>2.2 创建store(本地缓存)</h3><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>  1
 </span><span class=lnt>  2
 </span><span class=lnt>  3
 </span><span class=lnt>  4
@@ -2095,7 +2367,139 @@ root      285147  0.0  0.0   3100   832 pts/1    S+   04:17   0:00 grep -w 2783
 </span></span><span class=line><span class=cl>	<span class=nx>store</span><span class=p>.</span><span class=nf>setConfig</span><span class=p>(</span><span class=nx>cm</span><span class=p>)</span>
 </span></span><span class=line><span class=cl>	<span class=k>return</span> <span class=nx>store</span>
 </span></span><span class=line><span class=cl><span class=p>}</span>
-</span></span></code></pre></td></tr></table></div></div><p>在controller的创建过程中controller只是创建了自身并监控本地文件的更新，并没有涉及与k8s集群交互的部分，而是通过将交互接口全部抽象到store对象，ingress, configmap, service等资源的事件响应也全部放在store里面，store负责判断对象是否应该传递给NGINXController的主循环, 然后将数据缓存到本地, 以便后面让NGINXController对象查询，NGINXController对象主要负责怎么将资源的变更同步给nginx，比如怎么渲染模板，是否动态更新数据给nginx。</p></div><div class=post-footer id=post-footer><div class=post-info><div class=post-info-line><div class=post-info-mod><span title="2022-09-16 12:08:40">更新于 2022-09-16</span></div><div class=post-info-license><span><a rel="license external nofollow noopener noreffer" href=https://creativecommons.org/licenses/by-nc/4.0/ target=_blank>CC BY-NC 4.0</a></span></div></div><div class=post-info-line><div class=post-info-md><span><a href=/posts/2da521/index.md title=阅读原始文档 class=link-to-markdown>阅读原始文档</a></span></div><div class=post-info-share><span><a href=javascript:void(0); title="分享到 Twitter" data-sharer=twitter data-url=http://devops.alongparty.cn/posts/2da521/ data-title="Ingress Controller源码解析" data-hashtags=ingress><i class="fa-brands fa-twitter fa-fw"></i></a>
+</span></span></code></pre></td></tr></table></div></div><h4 id=221-监听范围和资源>2.2.1 监听范围和资源</h4><p>file: internal/ingress/controller/store/store.go</p><ul><li>Informer type</li></ul><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span><span class=lnt>6
+</span><span class=lnt>7
+</span><span class=lnt>8
+</span><span class=lnt>9
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-golang data-lang=golang><span class=line><span class=cl><span class=kd>type</span> <span class=nx>Informer</span> <span class=kd>struct</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>	<span class=nx>Ingress</span>      <span class=nx>cache</span><span class=p>.</span><span class=nx>SharedIndexInformer</span>
+</span></span><span class=line><span class=cl>	<span class=nx>IngressClass</span> <span class=nx>cache</span><span class=p>.</span><span class=nx>SharedIndexInformer</span>
+</span></span><span class=line><span class=cl>	<span class=nx>Endpoint</span>     <span class=nx>cache</span><span class=p>.</span><span class=nx>SharedIndexInformer</span>
+</span></span><span class=line><span class=cl>	<span class=nx>Service</span>      <span class=nx>cache</span><span class=p>.</span><span class=nx>SharedIndexInformer</span>
+</span></span><span class=line><span class=cl>	<span class=nx>Secret</span>       <span class=nx>cache</span><span class=p>.</span><span class=nx>SharedIndexInformer</span>
+</span></span><span class=line><span class=cl>	<span class=nx>ConfigMap</span>    <span class=nx>cache</span><span class=p>.</span><span class=nx>SharedIndexInformer</span>
+</span></span><span class=line><span class=cl>	<span class=nx>Namespace</span>    <span class=nx>cache</span><span class=p>.</span><span class=nx>SharedIndexInformer</span>
+</span></span><span class=line><span class=cl><span class=p>}</span>
+</span></span></code></pre></td></tr></table></div></div><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span><span class=lnt>21
+</span><span class=lnt>22
+</span><span class=lnt>23
+</span><span class=lnt>24
+</span><span class=lnt>25
+</span><span class=lnt>26
+</span><span class=lnt>27
+</span><span class=lnt>28
+</span><span class=lnt>29
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-golang data-lang=golang><span class=line><span class=cl>    <span class=c1>// 默认监听整个 `Kubernetes` 集群, 如果设置了 --watch-namespace 或者 --watch-namespace-selector 配置项，Controller只监听相关名称空间的相关资源事件
+</span></span></span><span class=line><span class=cl><span class=c1></span>	<span class=c1>// avoid caching namespaces at cluster scope when watching single namespace
+</span></span></span><span class=line><span class=cl><span class=c1></span>	<span class=k>if</span> <span class=nx>namespaceSelector</span> <span class=o>!=</span> <span class=kc>nil</span> <span class=o>&amp;&amp;</span> <span class=p>!</span><span class=nx>namespaceSelector</span><span class=p>.</span><span class=nf>Empty</span><span class=p>()</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>		<span class=c1>// cache informers factory for namespaces
+</span></span></span><span class=line><span class=cl><span class=c1></span>		<span class=nx>infFactoryNamespaces</span> <span class=o>:=</span> <span class=nx>informers</span><span class=p>.</span><span class=nf>NewSharedInformerFactoryWithOptions</span><span class=p>(</span><span class=nx>client</span><span class=p>,</span> <span class=nx>resyncPeriod</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>			<span class=nx>informers</span><span class=p>.</span><span class=nf>WithTweakListOptions</span><span class=p>(</span><span class=nx>labelsTweakListOptionsFunc</span><span class=p>),</span>
+</span></span><span class=line><span class=cl>		<span class=p>)</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>		<span class=nx>store</span><span class=p>.</span><span class=nx>informers</span><span class=p>.</span><span class=nx>Namespace</span> <span class=p>=</span> <span class=nx>infFactoryNamespaces</span><span class=p>.</span><span class=nf>Core</span><span class=p>().</span><span class=nf>V1</span><span class=p>().</span><span class=nf>Namespaces</span><span class=p>().</span><span class=nf>Informer</span><span class=p>()</span>
+</span></span><span class=line><span class=cl>		<span class=nx>store</span><span class=p>.</span><span class=nx>listers</span><span class=p>.</span><span class=nx>Namespace</span><span class=p>.</span><span class=nx>Store</span> <span class=p>=</span> <span class=nx>store</span><span class=p>.</span><span class=nx>informers</span><span class=p>.</span><span class=nx>Namespace</span><span class=p>.</span><span class=nf>GetStore</span><span class=p>()</span>
+</span></span><span class=line><span class=cl>	<span class=p>}</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>	<span class=nx>watchedNamespace</span> <span class=o>:=</span> <span class=kd>func</span><span class=p>(</span><span class=nx>namespace</span> <span class=kt>string</span><span class=p>)</span> <span class=kt>bool</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>		<span class=k>if</span> <span class=nx>namespaceSelector</span> <span class=o>==</span> <span class=kc>nil</span> <span class=o>||</span> <span class=nx>namespaceSelector</span><span class=p>.</span><span class=nf>Empty</span><span class=p>()</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>			<span class=k>return</span> <span class=kc>true</span>
+</span></span><span class=line><span class=cl>		<span class=p>}</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>		<span class=nx>item</span><span class=p>,</span> <span class=nx>ok</span><span class=p>,</span> <span class=nx>err</span> <span class=o>:=</span> <span class=nx>store</span><span class=p>.</span><span class=nx>listers</span><span class=p>.</span><span class=nx>Namespace</span><span class=p>.</span><span class=nf>GetByKey</span><span class=p>(</span><span class=nx>namespace</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>		<span class=k>if</span> <span class=p>!</span><span class=nx>ok</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>			<span class=nx>klog</span><span class=p>.</span><span class=nf>Errorf</span><span class=p>(</span><span class=s>&#34;Namespace %s not existed: %v.&#34;</span><span class=p>,</span> <span class=nx>namespace</span><span class=p>,</span> <span class=nx>err</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>			<span class=k>return</span> <span class=kc>false</span>
+</span></span><span class=line><span class=cl>		<span class=p>}</span>
+</span></span><span class=line><span class=cl>		<span class=nx>ns</span><span class=p>,</span> <span class=nx>ok</span> <span class=o>:=</span> <span class=nx>item</span><span class=p>.(</span><span class=o>*</span><span class=nx>corev1</span><span class=p>.</span><span class=nx>Namespace</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>		<span class=k>if</span> <span class=p>!</span><span class=nx>ok</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>			<span class=k>return</span> <span class=kc>false</span>
+</span></span><span class=line><span class=cl>		<span class=p>}</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>		<span class=k>return</span> <span class=nx>namespaceSelector</span><span class=p>.</span><span class=nf>Matches</span><span class=p>(</span><span class=nx>labels</span><span class=p>.</span><span class=nf>Set</span><span class=p>(</span><span class=nx>ns</span><span class=p>.</span><span class=nx>Labels</span><span class=p>))</span>
+</span></span><span class=line><span class=cl>	<span class=p>}</span>
+</span></span></code></pre></td></tr></table></div></div><ul><li>Handler</li></ul><p><img class=lazyload src=/svg/loading.min.svg data-src=https://raw.githubusercontent.com/kbsonlong/notes_statics/main/images20220918155511.png data-srcset="https://raw.githubusercontent.com/kbsonlong/notes_statics/main/images20220918155511.png, https://raw.githubusercontent.com/kbsonlong/notes_statics/main/images20220918155511.png 1.5x, https://raw.githubusercontent.com/kbsonlong/notes_statics/main/images20220918155511.png 2x" data-sizes=auto alt=https://raw.githubusercontent.com/kbsonlong/notes_statics/main/images20220918155511.png title=https://raw.githubusercontent.com/kbsonlong/notes_statics/main/images20220918155511.png></p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span><span class=lnt>21
+</span><span class=lnt>22
+</span><span class=lnt>23
+</span><span class=lnt>24
+</span><span class=lnt>25
+</span><span class=lnt>26
+</span><span class=lnt>27
+</span><span class=lnt>28
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-golang data-lang=golang><span class=line><span class=cl><span class=nx>ingDeleteHandler</span> <span class=o>:=</span> <span class=kd>func</span> <span class=p>(</span><span class=nx>obj</span> <span class=kd>interface</span><span class=p>{})</span>  <span class=p>{</span>
+</span></span><span class=line><span class=cl>   <span class=o>...</span>
+</span></span><span class=line><span class=cl>   <span class=o>...</span>
+</span></span><span class=line><span class=cl>   <span class=nx>updateCh</span><span class=p>.</span><span class=nf>In</span><span class=p>()</span> <span class=o>&lt;-</span> <span class=nx>Event</span><span class=p>{</span>
+</span></span><span class=line><span class=cl>			<span class=nx>Type</span><span class=p>:</span> <span class=nx>DeleteEvent</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>			<span class=nx>Obj</span><span class=p>:</span>  <span class=nx>obj</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>		<span class=p>}</span>
+</span></span><span class=line><span class=cl><span class=p>}</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=nx>ingEventHandler</span> <span class=o>:=</span> <span class=nx>cache</span><span class=p>.</span><span class=nx>ResourceEventHandlerFuncs</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>	<span class=nx>AddFunc</span><span class=p>:</span> <span class=kd>func</span><span class=p>(</span><span class=nx>obj</span> <span class=kd>interface</span><span class=p>{})</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>		<span class=o>...</span>
+</span></span><span class=line><span class=cl>		<span class=o>...</span>
+</span></span><span class=line><span class=cl>		<span class=nx>updateCh</span><span class=p>.</span><span class=nf>In</span><span class=p>()</span> <span class=o>&lt;-</span> <span class=nx>Event</span><span class=p>{</span>
+</span></span><span class=line><span class=cl>				<span class=nx>Type</span><span class=p>:</span> <span class=nx>CreateEvent</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>				<span class=nx>Obj</span><span class=p>:</span>  <span class=nx>obj</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>			<span class=p>}</span>
+</span></span><span class=line><span class=cl>	<span class=p>},</span>
+</span></span><span class=line><span class=cl>	<span class=nx>DeleteFunc</span><span class=p>:</span> <span class=nx>ingDeleteHandler</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>	<span class=nx>UpdateFunc</span><span class=p>:</span> <span class=kd>func</span><span class=p>(</span><span class=nx>old</span><span class=p>,</span> <span class=nx>cur</span> <span class=kd>interface</span><span class=p>{})</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>		<span class=o>...</span>
+</span></span><span class=line><span class=cl>		<span class=o>...</span>
+</span></span><span class=line><span class=cl>		<span class=nx>updateCh</span><span class=p>.</span><span class=nf>In</span><span class=p>()</span> <span class=o>&lt;-</span> <span class=nx>Event</span><span class=p>{</span>
+</span></span><span class=line><span class=cl>					<span class=nx>Type</span><span class=p>:</span> <span class=nx>UpdateEvent</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>					<span class=nx>Obj</span><span class=p>:</span>  <span class=nx>cur</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>				<span class=p>}</span>
+</span></span><span class=line><span class=cl>	<span class=p>}</span>
+</span></span><span class=line><span class=cl><span class=p>}</span>
+</span></span></code></pre></td></tr></table></div></div><p>从上面函数中我们可以获取几个重要信息：</p><ul><li>控制器监听了Ingress、IngressClass、Endpoint、Secret、ConfigMap、Service、Namespace等资源。</li><li>调用syncIngress函数处理监听到资源</li><li>监听到资源变化后生成Event并通过updateCh通道发送出去。</li></ul><p>在controller的创建过程中controller只是创建了自身并监控本地文件的更新，并没有涉及与k8s集群交互的部分，而是通过将交互接口全部抽象到store对象，ingress, configmap, service等资源的事件响应也全部放在store里面，store负责判断对象是否应该传递给NGINXController的主循环, 然后将数据缓存到本地, 以便后面让NGINXController对象查询，NGINXController对象主要负责怎么将资源的变更同步给nginx，比如怎么渲染模板，是否动态更新数据给nginx。</p><h2 id=3-nginx-反向代理>3 Nginx 反向代理</h2><h3 id=31-nginxtmpl>3.1 nginx.tmpl</h3><p>文件内容太大，详细请查看<a href=https://github.com/kbsonlong/ingress-nginx/blob/controller-v1.3.1/rootfs/etc/nginx/template/nginx.tmpl target=_blank rel="external nofollow noopener noreferrer">源文件</a></p><p><a href=https://github.com/kbsonlong/ingress-nginx/commit/f7cb030684591767b1988bf438279bfb40ac7dfa target=_blank rel="external nofollow noopener noreferrer">注解内容</a></p></div><div class=post-footer id=post-footer><div class=post-info><div class=post-info-line><div class=post-info-mod><span title="2022-09-16 12:08:40">更新于 2022-09-16</span></div><div class=post-info-license><span><a rel="license external nofollow noopener noreffer" href=https://creativecommons.org/licenses/by-nc/4.0/ target=_blank>CC BY-NC 4.0</a></span></div></div><div class=post-info-line><div class=post-info-md><span><a href=/posts/2da521/index.md title=阅读原始文档 class=link-to-markdown>阅读原始文档</a></span></div><div class=post-info-share><span><a href=javascript:void(0); title="分享到 Twitter" data-sharer=twitter data-url=http://devops.alongparty.cn/posts/2da521/ data-title="Ingress Controller源码解析" data-hashtags=ingress><i class="fa-brands fa-twitter fa-fw"></i></a>
 <a href=javascript:void(0); title="分享到 Facebook" data-sharer=facebook data-url=http://devops.alongparty.cn/posts/2da521/ data-hashtag=ingress><i class="fa-brands fa-facebook-square fa-fw"></i></a>
 <a href=javascript:void(0); title="分享到 WhatsApp" data-sharer=whatsapp data-url=http://devops.alongparty.cn/posts/2da521/ data-title="Ingress Controller源码解析" data-web><i class="fa-brands fa-whatsapp fa-fw"></i></a>
 <a href=javascript:void(0); title="分享到 Line" data-sharer=line data-url=http://devops.alongparty.cn/posts/2da521/ data-title="Ingress Controller源码解析"><i data-svg-src=/lib/simple-icons/icons/line.min.svg></i></a>
