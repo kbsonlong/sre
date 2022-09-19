@@ -1,4 +1,42 @@
-<rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title>蜷缩的蜗牛</title><link>http://devops.alongparty.cn/</link><description>云原生时代运维</description><generator>Hugo -- gohugo.io</generator><language>zh-CN</language><managingEditor>kbsonlong@gmail.com (kbsonlong)</managingEditor><webMaster>kbsonlong@gmail.com (kbsonlong)</webMaster><copyright>This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.</copyright><lastBuildDate>Fri, 16 Sep 2022 17:25:59 +0800</lastBuildDate><atom:link href="http://devops.alongparty.cn/index.xml" rel="self" type="application/rss+xml"/><item><title>深入Istio系列-Pilot agent</title><link>http://devops.alongparty.cn/posts/3d18d6/</link><pubDate>Fri, 16 Sep 2022 17:25:59 +0800</pubDate><author>kbsonlong</author><guid>http://devops.alongparty.cn/posts/3d18d6/</guid><description><![CDATA[<div class="featured-image">
+<rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title>蜷缩的蜗牛</title><link>http://devops.alongparty.cn/</link><description>云原生时代运维</description><generator>Hugo -- gohugo.io</generator><language>zh-CN</language><managingEditor>kbsonlong@gmail.com (kbsonlong)</managingEditor><webMaster>kbsonlong@gmail.com (kbsonlong)</webMaster><copyright>This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.</copyright><lastBuildDate>Mon, 19 Sep 2022 15:30:40 +0800</lastBuildDate><atom:link href="http://devops.alongparty.cn/index.xml" rel="self" type="application/rss+xml"/><item><title>golang热加载工具</title><link>http://devops.alongparty.cn/posts/f7f93a/</link><pubDate>Mon, 19 Sep 2022 15:30:40 +0800</pubDate><author>kbsonlong</author><guid>http://devops.alongparty.cn/posts/f7f93a/</guid><description><![CDATA[<div class="featured-image">
+        <img src="https://imgapi.cn/api.php?zd=zsy&amp;fl=fengjing&amp;random=442518" referrerpolicy="no-referrer">
+      </div><p>在用 Go 和 gin 框架开发网站时，gin 缺乏实时重载的功能是令人遗憾的,修改完代码之后经常需要 <code>ctrl + c</code> 结束服务，重新运行 <code>go run</code>,影响开发效率。
+<a
+  href="https://github.com/cosmtrek/air.git"
+  
+  
+    
+    
+    target="_blank"
+  
+  
+    rel="external nofollow noopener noreferrer"
+  
+  
+  
+>Air</a> 是为 Go 应用开发设计的另外一个热重载的命令行工具。只需在你的项目根目录下输入 air，然后把它放在一边，专注于你的代码即可</p>
+<h2 id="安装">安装</h2>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="c1"># binary 文件会是在 $(go env GOPATH)/bin/air</span>
+</span></span><span class="line"><span class="cl">curl -sSfL https://raw.githubusercontent.com/cosmtrek/air/master/install.sh <span class="p">|</span> sh -s -- -b <span class="k">$(</span>go env GOPATH<span class="k">)</span>/bin
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 或者把它安装在 ./bin/ 路径下</span>
+</span></span><span class="line"><span class="cl">curl -sSfL https://raw.githubusercontent.com/cosmtrek/air/master/install.sh <span class="p">|</span> sh -s
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">air -v
+</span></span></code></pre></td></tr></table>
+</div>
+</div>]]></description></item><item><title>深入Istio系列-Pilot agent</title><link>http://devops.alongparty.cn/posts/3d18d6/</link><pubDate>Fri, 16 Sep 2022 17:25:59 +0800</pubDate><author>kbsonlong</author><guid>http://devops.alongparty.cn/posts/3d18d6/</guid><description><![CDATA[<div class="featured-image">
         <img src="https://imgapi.cn/api.php?zd=zsy&amp;fl=fengjing&amp;random=760948" referrerpolicy="no-referrer">
       </div><h3 id="查看监听端口和进程">查看监听端口和进程</h3>
 <div class="highlight"><div class="chroma">
@@ -221,6 +259,4 @@
         <img src="https://imgapi.cn/api.php?zd=zsy&amp;fl=fengjing&amp;random=081643" referrerpolicy="no-referrer">
       </div>在前两篇博客中： Istio 中的 Sidecar 注入、透明流量劫持及流量路由过程详解 Sidecar 中的流量类型及 iptables 规则详解 我向你详细介绍了 Istio 数据平面中的流量，但数据平面并不能孤]]></description></item><item><title>Sidecar 中的流量类型及 iptables 规则详解</title><link>http://devops.alongparty.cn/posts/61aaaf/</link><pubDate>Sun, 11 Sep 2022 14:56:39 +0800</pubDate><author>kbsonlong</author><guid>http://devops.alongparty.cn/posts/61aaaf/</guid><description><![CDATA[<div class="featured-image">
         <img src="https://imgapi.cn/api.php?zd=zsy&amp;fl=fengjing&amp;random=664184" referrerpolicy="no-referrer">
-      </div>我在之前的一篇博客中讲解过 Istio 中 sidecar 的注入、使用 iptables 进行透明流量拦截及流量路由的详细过程，并以 Bookinfo 示例中的 productpage 服务访问 reviews 服务，和 reviews 服务访问 ratings 服务为例绘]]></description></item><item><title>Istio 中的 Sidecar 注入、透明流量劫持及流量路由过程详解</title><link>http://devops.alongparty.cn/posts/fe0ba1/</link><pubDate>Sun, 11 Sep 2022 14:26:02 +0800</pubDate><author>kbsonlong</author><guid>http://devops.alongparty.cn/posts/fe0ba1/</guid><description><![CDATA[<div class="featured-image">
-        <img src="https://imgapi.cn/api.php?zd=zsy&amp;fl=fengjing&amp;random=954022" referrerpolicy="no-referrer">
-      </div>本文最早是基于 Istio 1.11 撰写，之后随着 Istio 的版本陆续更新，最新更新时间为 2022 年 5 月 12 日，关于本文历史版本的更新说明请见文章最后。本文记录了详细的实践过]]></description></item></channel></rss>
+      </div>我在之前的一篇博客中讲解过 Istio 中 sidecar 的注入、使用 iptables 进行透明流量拦截及流量路由的详细过程，并以 Bookinfo 示例中的 productpage 服务访问 reviews 服务，和 reviews 服务访问 ratings 服务为例绘]]></description></item></channel></rss>
