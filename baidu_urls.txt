@@ -45,4 +45,6 @@ http://devops.alongparty.cn/posts/git%E5%B7%A5%E5%85%B7-%E9%87%8D%E5%86%99%E5%8E
 http://devops.alongparty.cn/posts/git%E5%B7%A5%E5%85%B7-%E9%87%8D%E7%BD%AE%E6%8F%AD%E5%AF%86/
 http://devops.alongparty.cn/posts/git%E5%9F%BA%E7%A1%80%E4%B8%8E%E5%91%BD%E4%BB%A4/
 http://devops.alongparty.cn/posts/%E5%B8%B8%E7%94%A8git%E5%91%BD%E4%BB%A4%E6%B8%85%E5%8D%95/
+http://devops.alongparty.cn/posts/understand-kubernetes-affinity/
 http://devops.alongparty.cn/offline/
+http://devops.alongparty.cn/posts/
