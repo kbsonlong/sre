@@ -1,6 +1,4 @@
-<rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title>蜷缩的蜗牛</title><link>http://devops.alongparty.cn/</link><description>云原生时代运维</description><generator>Hugo -- gohugo.io</generator><language>zh-CN</language><managingEditor>kbsonlong@gmail.com (kbsonlong)</managingEditor><webMaster>kbsonlong@gmail.com (kbsonlong)</webMaster><copyright>This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.</copyright><lastBuildDate>Tue, 18 Oct 2022 19:53:40 +0800</lastBuildDate><atom:link href="http://devops.alongparty.cn/index.xml" rel="self" type="application/rss+xml"/><item><title>OpenEBS性能测试</title><link>http://devops.alongparty.cn/posts/f41ffb/</link><pubDate>Tue, 18 Oct 2022 19:53:40 +0800</pubDate><author>kbsonlong</author><guid>http://devops.alongparty.cn/posts/f41ffb/</guid><description><![CDATA[<div class="featured-image">
-        <img src="https://imgapi.cn/api.php?zd=zsy&amp;fl=fengjing&amp;random=654184" referrerpolicy="no-referrer">
-      </div><h2 id="依赖说明">依赖说明</h2>
+<rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title>蜷缩的蜗牛</title><link>http://devops.alongparty.cn/</link><description>云原生时代运维</description><generator>Hugo -- gohugo.io</generator><language>zh-CN</language><managingEditor>kbsonlong@gmail.com (kbsonlong)</managingEditor><webMaster>kbsonlong@gmail.com (kbsonlong)</webMaster><copyright>This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.</copyright><lastBuildDate>Tue, 18 Oct 2022 19:53:40 +0800</lastBuildDate><atom:link href="http://devops.alongparty.cn/index.xml" rel="self" type="application/rss+xml"/><item><title>OpenEBS性能测试</title><link>http://devops.alongparty.cn/posts/f41ffb/</link><pubDate>Tue, 18 Oct 2022 19:53:40 +0800</pubDate><author>kbsonlong</author><guid>http://devops.alongparty.cn/posts/f41ffb/</guid><description><![CDATA[<h2 id="依赖说明">依赖说明</h2>
 <h3 id="准备裸盘">准备裸盘</h3>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
@@ -35,9 +33,7 @@
 </span></span><span class="line"><span class="cl">sudo systemctl <span class="nb">enable</span> --now iscsid
 </span></span></code></pre></td></tr></table>
 </div>
-</div>]]></description></item><item><title>FIO存储性能工具</title><link>http://devops.alongparty.cn/posts/4d68ea/</link><pubDate>Tue, 18 Oct 2022 10:01:33 +0800</pubDate><author>kbsonlong</author><guid>http://devops.alongparty.cn/posts/4d68ea/</guid><description><![CDATA[<div class="featured-image">
-        <img src="https://imgapi.cn/api.php?zd=zsy&amp;fl=fengjing&amp;random=216316" referrerpolicy="no-referrer">
-      </div><h3 id="fio-介绍">FIO 介绍</h3>
+</div>]]></description></item><item><title>FIO存储性能工具</title><link>http://devops.alongparty.cn/posts/4d68ea/</link><pubDate>Tue, 18 Oct 2022 10:01:33 +0800</pubDate><author>kbsonlong</author><guid>http://devops.alongparty.cn/posts/4d68ea/</guid><description><![CDATA[<h3 id="fio-介绍">FIO 介绍</h3>
 <p>fio 是一个常见的用于测试磁盘 I/O 性能的工具，支持 19 种不同的 I/O 引擎，包括：sync, mmap, libaio, posixaio, SG v3, splice, null, network, syslet, guasi, solarisaio 等等。fio 一直在更新，最新的版本是 v3.19，它的官网是 fio。</p>
 <h4 id="常用参数">常用参数</h4>
 <table>
@@ -165,17 +161,13 @@
 <td>iodepth=16</td>
 </tr>
 </tbody>
-</table>]]></description></item><item><title>全网最全的云原生存储 OpenEBS 使用指南</title><link>http://devops.alongparty.cn/posts/d75507/</link><pubDate>Sat, 15 Oct 2022 18:57:37 +0800</pubDate><author>kbsonlong</author><guid>http://devops.alongparty.cn/posts/d75507/</guid><description><![CDATA[<div class="featured-image">
-        <img src="https://imgapi.cn/api.php?zd=zsy&amp;fl=fengjing&amp;random=750583" referrerpolicy="no-referrer">
-      </div><blockquote>
+</table>]]></description></item><item><title>全网最全的云原生存储 OpenEBS 使用指南</title><link>http://devops.alongparty.cn/posts/d75507/</link><pubDate>Sat, 15 Oct 2022 18:57:37 +0800</pubDate><author>kbsonlong</author><guid>http://devops.alongparty.cn/posts/d75507/</guid><description><![CDATA[<blockquote>
 <p><strong>简介</strong></p>
 </blockquote>
 <h3 id="openebs-是什么"><strong>OpenEBS 是什么？</strong></h3>
 <p><code>OpenEBS</code> 是一种开源云原生存储解决方案，托管于 <code>CNCF</code> 基金会，目前该项目处于沙箱阶段。</p>
 <p>OpenEBS 是一组存储引擎，允许您为有状态工作负载 (StatefulSet) 和 Kubernetes 平台类型选择正确的存储解决方案。在高层次上，OpenEBS 支持两大类卷——本地卷和复制卷。</p>
-<p>OpenEBS 是 Kubernetes 本地超融合存储解决方案，它管理节点可用的本地存储，并为有状态工作负载提供本地或高可用的分布式持久卷。作为一个完全的 Kubernetes 原生解决方案的另一个优势是，管理员和开发人员可以使用 kubectl、Helm、 Prometheus、Grafana、Weave Scope 等 Kubernetes 可用的所有优秀工具来交互和管理 OpenEBS。</p>]]></description></item><item><title>golang热加载工具</title><link>http://devops.alongparty.cn/posts/f7f93a/</link><pubDate>Mon, 19 Sep 2022 15:30:40 +0800</pubDate><author>kbsonlong</author><guid>http://devops.alongparty.cn/posts/f7f93a/</guid><description><![CDATA[<div class="featured-image">
-        <img src="https://imgapi.cn/api.php?zd=zsy&amp;fl=fengjing&amp;random=442518" referrerpolicy="no-referrer">
-      </div><p>在用 Go 和 gin 框架开发网站时，gin 缺乏实时重载的功能是令人遗憾的,修改完代码之后经常需要 <code>ctrl + c</code> 结束服务，重新运行 <code>go run</code>,影响开发效率。
+<p>OpenEBS 是 Kubernetes 本地超融合存储解决方案，它管理节点可用的本地存储，并为有状态工作负载提供本地或高可用的分布式持久卷。作为一个完全的 Kubernetes 原生解决方案的另一个优势是，管理员和开发人员可以使用 kubectl、Helm、 Prometheus、Grafana、Weave Scope 等 Kubernetes 可用的所有优秀工具来交互和管理 OpenEBS。</p>]]></description></item><item><title>golang热加载工具</title><link>http://devops.alongparty.cn/posts/f7f93a/</link><pubDate>Mon, 19 Sep 2022 15:30:40 +0800</pubDate><author>kbsonlong</author><guid>http://devops.alongparty.cn/posts/f7f93a/</guid><description><![CDATA[<p>在用 Go 和 gin 框架开发网站时，gin 缺乏实时重载的功能是令人遗憾的,修改完代码之后经常需要 <code>ctrl + c</code> 结束服务，重新运行 <code>go run</code>,影响开发效率。
 <a
   href="https://github.com/cosmtrek/air.git"
   
@@ -211,9 +203,7 @@
 </span></span><span class="line"><span class="cl">air -v
 </span></span></code></pre></td></tr></table>
 </div>
-</div>]]></description></item><item><title>深入Istio系列-Pilot agent</title><link>http://devops.alongparty.cn/posts/3d18d6/</link><pubDate>Fri, 16 Sep 2022 17:25:59 +0800</pubDate><author>kbsonlong</author><guid>http://devops.alongparty.cn/posts/3d18d6/</guid><description><![CDATA[<div class="featured-image">
-        <img src="https://imgapi.cn/api.php?zd=zsy&amp;fl=fengjing&amp;random=760948" referrerpolicy="no-referrer">
-      </div><h3 id="查看监听端口和进程">查看监听端口和进程</h3>
+</div>]]></description></item><item><title>深入Istio系列-Pilot agent</title><link>http://devops.alongparty.cn/posts/3d18d6/</link><pubDate>Fri, 16 Sep 2022 17:25:59 +0800</pubDate><author>kbsonlong</author><guid>http://devops.alongparty.cn/posts/3d18d6/</guid><description><![CDATA[<h3 id="查看监听端口和进程">查看监听端口和进程</h3>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt"> 1
@@ -249,9 +239,7 @@
 </span></span></code></pre></td></tr></table>
 </div>
 </div><figure>
-</figure>]]></description></item><item><title>深入Ingress - Ingress Controller源码解析</title><link>http://devops.alongparty.cn/posts/2da521/</link><pubDate>Fri, 16 Sep 2022 12:08:40 +0800</pubDate><author>kbsonlong</author><guid>http://devops.alongparty.cn/posts/2da521/</guid><description><![CDATA[<div class="featured-image">
-        <img src="https://imgapi.cn/api.php?zd=zsy&amp;fl=fengjing&amp;random=981326" referrerpolicy="no-referrer">
-      </div><div class="highlight"><div class="chroma">
+</figure>]]></description></item><item><title>深入Ingress - Ingress Controller源码解析</title><link>http://devops.alongparty.cn/posts/2da521/</link><pubDate>Fri, 16 Sep 2022 12:08:40 +0800</pubDate><author>kbsonlong</author><guid>http://devops.alongparty.cn/posts/2da521/</guid><description><![CDATA[<div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
@@ -322,11 +310,7 @@
 </div><blockquote>
 <p>从上面可以看出整个Ingress Nginx Controller Pod 包含两部分 nginx-ingress-controller 和 Nginx</p>
 </blockquote>
-<p></p>]]></description></item><item><title>Grafana Mimir 和 VictoriaMetrics 之间的性能测试</title><link>http://devops.alongparty.cn/posts/6650ff/</link><pubDate>Wed, 14 Sep 2022 12:20:51 +0800</pubDate><author>kbsonlong</author><guid>http://devops.alongparty.cn/posts/6650ff/</guid><description><![CDATA[<div class="featured-image">
-        <img src="https://imgapi.cn/api.php?zd=zsy&amp;fl=fengjing&amp;random=362101" referrerpolicy="no-referrer">
-      </div>Grafana 实验室的 Mimir 是一个在 AGPLv3 许可下新的时间序列数据库，该工程团队从 Cortex TSDB 中汲取精华，同时降低了复杂性并提高了可扩展性。 根据 Grafana 实验室的测试，Mimir]]></description></item><item><title>Iptable的概念</title><link>http://devops.alongparty.cn/posts/d2d1d6/</link><pubDate>Wed, 14 Sep 2022 10:13:20 +0800</pubDate><author>kbsonlong</author><guid>http://devops.alongparty.cn/posts/d2d1d6/</guid><description><![CDATA[<div class="featured-image">
-        <img src="https://imgapi.cn/api.php?zd=zsy&amp;fl=fengjing&amp;random=358256" referrerpolicy="no-referrer">
-      </div><h2 id="iptales四表五链">Iptales四表五链</h2>
+<p></p>]]></description></item><item><title>Grafana Mimir 和 VictoriaMetrics 之间的性能测试</title><link>http://devops.alongparty.cn/posts/6650ff/</link><pubDate>Wed, 14 Sep 2022 12:20:51 +0800</pubDate><author>kbsonlong</author><guid>http://devops.alongparty.cn/posts/6650ff/</guid><description>Grafana 实验室的 Mimir 是一个在 AGPLv3 许可下新的时间序列数据库，该工程团队从 Cortex TSDB 中汲取精华，同时降低了复杂性并提高了可扩展性。 根据 Grafana 实验室的测试，Mimir</description></item><item><title>Iptable的概念</title><link>http://devops.alongparty.cn/posts/d2d1d6/</link><pubDate>Wed, 14 Sep 2022 10:13:20 +0800</pubDate><author>kbsonlong</author><guid>http://devops.alongparty.cn/posts/d2d1d6/</guid><description><![CDATA[<h2 id="iptales四表五链">Iptales四表五链</h2>
 <h3 id="四表五链关系概览">四表五链关系概览</h3>
 <table>
 <thead>
@@ -375,9 +359,7 @@
 <td>❌</td>
 </tr>
 </tbody>
-</table>]]></description></item><item><title>Prometheus Operator 常用指标</title><link>http://devops.alongparty.cn/posts/adb863/</link><pubDate>Tue, 13 Sep 2022 17:53:07 +0800</pubDate><author>kbsonlong</author><guid>http://devops.alongparty.cn/posts/adb863/</guid><description><![CDATA[<div class="featured-image">
-        <img src="https://imgapi.cn/api.php?zd=zsy&amp;fl=fengjing&amp;random=960376" referrerpolicy="no-referrer">
-      </div><p>Prometheus Operator 安装完成后会有很多默认的监控指标，一不注意就大量的报警产生，所以我们非常有必要了解下这些常用的监控指标，有部分指标很有可能对于我们自己的业务可有可无，所以可以适当的进行修改，这里我们就来对常用的几个指标进行简单的说明。</p>
+</table>]]></description></item><item><title>Prometheus Operator 常用指标</title><link>http://devops.alongparty.cn/posts/adb863/</link><pubDate>Tue, 13 Sep 2022 17:53:07 +0800</pubDate><author>kbsonlong</author><guid>http://devops.alongparty.cn/posts/adb863/</guid><description><![CDATA[<p>Prometheus Operator 安装完成后会有很多默认的监控指标，一不注意就大量的报警产生，所以我们非常有必要了解下这些常用的监控指标，有部分指标很有可能对于我们自己的业务可有可无，所以可以适当的进行修改，这里我们就来对常用的几个指标进行简单的说明。</p>
 <h2 id="1-kubernetes-资源相关">1. Kubernetes 资源相关</h2>
 <h3 id="11-cputhrottlinghigh">1.1 CPUThrottlingHigh</h3>
 <p>关于 CPU 的 limit 合理性指标。查出最近5分钟，超过25%的 CPU 执行周期受到限制的容器。表达式：</p>
@@ -403,9 +385,7 @@
 </ul>
 </li>
 <li>container_cpu_cfs_throttled_periods_total：容器生命周期中度过的受限的 cpu 周期总数</li>
-</ul>]]></description></item><item><title>Istio性能指标</title><link>http://devops.alongparty.cn/posts/6899d1/</link><pubDate>Tue, 13 Sep 2022 10:56:21 +0800</pubDate><author>kbsonlong</author><guid>http://devops.alongparty.cn/posts/6899d1/</guid><description><![CDATA[<div class="featured-image">
-        <img src="https://imgapi.cn/api.php?zd=zsy&amp;fl=fengjing&amp;random=813275" referrerpolicy="no-referrer">
-      </div><h1 id="istio-指标">Istio 指标</h1>
+</ul>]]></description></item><item><title>Istio性能指标</title><link>http://devops.alongparty.cn/posts/6899d1/</link><pubDate>Tue, 13 Sep 2022 10:56:21 +0800</pubDate><author>kbsonlong</author><guid>http://devops.alongparty.cn/posts/6899d1/</guid><description><![CDATA[<h1 id="istio-指标">Istio 指标</h1>
 <h2 id="istio-自己的-metrics">Istio 自己的 Metrics</h2>
 <h3 id="标准指标说明">标准指标说明</h3>
 <blockquote>
