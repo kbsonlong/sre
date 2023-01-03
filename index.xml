@@ -1,4 +1,4 @@
-<rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title>蜷缩的蜗牛</title><link>http://devops.alongparty.cn/</link><description>云原生时代运维</description><generator>Hugo -- gohugo.io</generator><language>zh-CN</language><managingEditor>kbsonlong@gmail.com (kbsonlong)</managingEditor><webMaster>kbsonlong@gmail.com (kbsonlong)</webMaster><copyright>This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.</copyright><lastBuildDate>Fri, 30 Dec 2022 18:44:58 +0800</lastBuildDate><atom:link href="http://devops.alongparty.cn/index.xml" rel="self" type="application/rss+xml"/><item><title>自建k8s部署aws-ebs-csi-driver</title><link>http://devops.alongparty.cn/posts/4842bb/</link><pubDate>Fri, 30 Dec 2022 18:44:58 +0800</pubDate><author>kbsonlong</author><guid>http://devops.alongparty.cn/posts/4842bb/</guid><description><![CDATA[<h3 id="部署aws-ebs-csi-driver">部署aws-ebs-csi-driver</h3>
+<rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title>蜷缩的蜗牛</title><link>http://devops.alongparty.cn/</link><description>云原生时代运维</description><generator>Hugo -- gohugo.io</generator><language>zh-CN</language><managingEditor>kbsonlong@gmail.com (kbsonlong)</managingEditor><webMaster>kbsonlong@gmail.com (kbsonlong)</webMaster><copyright>This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.</copyright><lastBuildDate>Tue, 03 Jan 2023 16:55:15 +0800</lastBuildDate><atom:link href="http://devops.alongparty.cn/index.xml" rel="self" type="application/rss+xml"/><item><title>Sentry 监控 - Snuba 数据中台本地开发环境配置实战</title><link>http://devops.alongparty.cn/posts/ac8605/</link><pubDate>Tue, 03 Jan 2023 16:55:15 +0800</pubDate><author>kbsonlong</author><guid>http://devops.alongparty.cn/posts/ac8605/</guid><description>系列 1 分钟快速使用 Docker 上手最新版 Sentry-CLI - 创建版本 快速使用 Docker 上手 Sentry-CLI - 30 秒上手 Source Maps Sentry For React 完整接入详解 Sentry For Vue 完整接入详解 Sentry-CLI 使用详解 Sentry Web 性能监控 - Web Vitals Sentry Web</description></item><item><title>自建k8s部署aws-ebs-csi-driver</title><link>http://devops.alongparty.cn/posts/4842bb/</link><pubDate>Fri, 30 Dec 2022 18:44:58 +0800</pubDate><author>kbsonlong</author><guid>http://devops.alongparty.cn/posts/4842bb/</guid><description><![CDATA[<h3 id="部署aws-ebs-csi-driver">部署aws-ebs-csi-driver</h3>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt"> 1
@@ -381,53 +381,4 @@
 </div><blockquote>
 <p>从上面可以看出整个Ingress Nginx Controller Pod 包含两部分 nginx-ingress-controller 和 Nginx</p>
 </blockquote>
-<p></p>]]></description></item><item><title>Grafana Mimir 和 VictoriaMetrics 之间的性能测试</title><link>http://devops.alongparty.cn/posts/6650ff/</link><pubDate>Wed, 14 Sep 2022 12:20:51 +0800</pubDate><author>kbsonlong</author><guid>http://devops.alongparty.cn/posts/6650ff/</guid><description>Grafana 实验室的 Mimir 是一个在 AGPLv3 许可下新的时间序列数据库，该工程团队从 Cortex TSDB 中汲取精华，同时降低了复杂性并提高了可扩展性。 根据 Grafana 实验室的测试，Mimir</description></item><item><title>Iptable的概念</title><link>http://devops.alongparty.cn/posts/d2d1d6/</link><pubDate>Wed, 14 Sep 2022 10:13:20 +0800</pubDate><author>kbsonlong</author><guid>http://devops.alongparty.cn/posts/d2d1d6/</guid><description><![CDATA[<h2 id="iptales四表五链">Iptales四表五链</h2>
-<h3 id="四表五链关系概览">四表五链关系概览</h3>
-<table>
-<thead>
-<tr>
-<th></th>
-<th>raw 表</th>
-<th>mangle 表</th>
-<th>nat 表</th>
-<th>filter 表</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>PREROUTING 链</td>
-<td>✅</td>
-<td>✅</td>
-<td>✅</td>
-<td>❌</td>
-</tr>
-<tr>
-<td>INPUT 链</td>
-<td>❌</td>
-<td>✅</td>
-<td>✅</td>
-<td>✔</td>
-</tr>
-<tr>
-<td>FORWARD 链</td>
-<td>❌</td>
-<td>✅</td>
-<td>❌</td>
-<td>✅</td>
-</tr>
-<tr>
-<td>OUTPUT 链</td>
-<td>✅</td>
-<td>✅</td>
-<td>✅</td>
-<td>✅</td>
-</tr>
-<tr>
-<td>POSTROUTING 链</td>
-<td>❌</td>
-<td>✅</td>
-<td>✅</td>
-<td>❌</td>
-</tr>
-</tbody>
-</table>]]></description></item></channel></rss>
+<p></p>]]></description></item><item><title>Grafana Mimir 和 VictoriaMetrics 之间的性能测试</title><link>http://devops.alongparty.cn/posts/6650ff/</link><pubDate>Wed, 14 Sep 2022 12:20:51 +0800</pubDate><author>kbsonlong</author><guid>http://devops.alongparty.cn/posts/6650ff/</guid><description>Grafana 实验室的 Mimir 是一个在 AGPLv3 许可下新的时间序列数据库，该工程团队从 Cortex TSDB 中汲取精华，同时降低了复杂性并提高了可扩展性。 根据 Grafana 实验室的测试，Mimir</description></item></channel></rss>
