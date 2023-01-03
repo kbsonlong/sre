@@ -1,4 +1,75 @@
-<rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title>所有文章 - 蜷缩的蜗牛</title><link>http://devops.alongparty.cn/posts/</link><description>所有文章 | 蜷缩的蜗牛</description><generator>Hugo -- gohugo.io</generator><language>zh-CN</language><managingEditor>kbsonlong@gmail.com (kbsonlong)</managingEditor><webMaster>kbsonlong@gmail.com (kbsonlong)</webMaster><copyright>This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.</copyright><lastBuildDate>Fri, 30 Dec 2022 18:44:58 +0800</lastBuildDate><atom:link href="http://devops.alongparty.cn/posts/" rel="self" type="application/rss+xml"/><item><title>自建k8s部署aws-ebs-csi-driver</title><link>http://devops.alongparty.cn/posts/4842bb/</link><pubDate>Fri, 30 Dec 2022 18:44:58 +0800</pubDate><author>kbsonlong</author><guid>http://devops.alongparty.cn/posts/4842bb/</guid><description>部署aws-ebs-csi-driver 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 # helm repo add aws-ebs-csi-driver https://kubernetes-sigs.github.io/aws-ebs-csi-driver # helm upgrade --install aws-ebs-csi-driver \ --namespace kube-system \ aws-ebs-csi-driver/aws-ebs-csi-driver \ --set sidecars.provisioner.image.repository=registry.cn-hangzhou.aliyuncs.com/seam/csi-provisioner \ --set sidecars.attacher.image.repository=registry.cn-hangzhou.aliyuncs.com/seam/csi-attacher \ --set sidecars.snapshotter.image.repository=registry.cn-hangzhou.aliyuncs.com/seam/csi-snapshotter \ --set</description></item><item><title>github工作流</title><link>http://devops.alongparty.cn/posts/f09cdc/</link><pubDate>Fri, 30 Dec 2022 18:26:53 +0800</pubDate><author>kbsonlong</author><guid>http://devops.alongparty.cn/posts/f09cdc/</guid><description>1. Fork in the cloud Visit https://github.com/kubernetes/kubernetes Click Fork button (top right) to establish a cloud-based fork. 2. Clone fork to local storage Per Go&amp;rsquo;s workspace instructions, place Kubernetes&amp;rsquo; code on your GOPATH using the following cloning procedure. In your shell, define a local working directory as working_dir. If your GOPATH has multiple paths, pick just one and use it instead of $GOPATH. You must follow exactly this pattern, neither</description></item><item><title>OpenEBS性能测试</title><link>http://devops.alongparty.cn/posts/f41ffb/</link><pubDate>Tue, 18 Oct 2022 19:53:40 +0800</pubDate><author>kbsonlong</author><guid>http://devops.alongparty.cn/posts/f41ffb/</guid><description><![CDATA[<h2 id="依赖说明">依赖说明</h2>
+<rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title>所有文章 - 蜷缩的蜗牛</title><link>http://devops.alongparty.cn/posts/</link><description>所有文章 | 蜷缩的蜗牛</description><generator>Hugo -- gohugo.io</generator><language>zh-CN</language><managingEditor>kbsonlong@gmail.com (kbsonlong)</managingEditor><webMaster>kbsonlong@gmail.com (kbsonlong)</webMaster><copyright>This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.</copyright><lastBuildDate>Fri, 30 Dec 2022 18:44:58 +0800</lastBuildDate><atom:link href="http://devops.alongparty.cn/posts/" rel="self" type="application/rss+xml"/><item><title>自建k8s部署aws-ebs-csi-driver</title><link>http://devops.alongparty.cn/posts/4842bb/</link><pubDate>Fri, 30 Dec 2022 18:44:58 +0800</pubDate><author>kbsonlong</author><guid>http://devops.alongparty.cn/posts/4842bb/</guid><description><![CDATA[<h3 id="部署aws-ebs-csi-driver">部署aws-ebs-csi-driver</h3>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="line"><span class="cl"><span class="c"># helm repo add aws-ebs-csi-driver https://kubernetes-sigs.github.io/aws-ebs-csi-driver</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="c"># helm upgrade --install aws-ebs-csi-driver \</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span>--<span class="l">namespace kube-system \</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="l">aws-ebs-csi-driver/aws-ebs-csi-driver \</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span>--<span class="l">set sidecars.provisioner.image.repository=registry.cn-hangzhou.aliyuncs.com/seam/csi-provisioner \</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span>--<span class="l">set sidecars.attacher.image.repository=registry.cn-hangzhou.aliyuncs.com/seam/csi-attacher \</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span>--<span class="l">set sidecars.snapshotter.image.repository=registry.cn-hangzhou.aliyuncs.com/seam/csi-snapshotter \</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span>--<span class="l">set sidecars.livenessProbe.image.repository=registry.cn-hangzhou.aliyuncs.com/seam/livenessprobe \</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span>--<span class="l">set sidecars.resizer.image.repository=registry.cn-hangzhou.aliyuncs.com/seam/csi-resizer \</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span>--<span class="l">set sidecars.nodeDriverRegistrar.image.repository=registry.cn-hangzhou.aliyuncs.com/seam/csi-node-driver-registrar \</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span>--<span class="l">set node.kubeletPath=/data/k8s/kubelet</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="c"># kubectl get pod -n kube-system -l &#34;app.kubernetes.io/name=aws-ebs-csi-driver,app.kubernetes.io/instance=aws-ebs-csi-driver&#34;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="l">NAME                                 READY   STATUS    RESTARTS   AGE</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="l">ebs-csi-controller-5cbfd45dc-2fq9q   6/6     Running   0          102s</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="l">ebs-csi-controller-5cbfd45dc-jgpl9   6/6     Running   0          102s</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="l">ebs-csi-node-2s8lj                   3/3     Running   0          101s</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="l">ebs-csi-node-4jstr                   3/3     Running   0          101s</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="l">ebs-csi-node-72w69                   3/3     Running   0          101s</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="l">ebs-csi-node-759rd                   0/3     Pending   0          101s</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="l">ebs-csi-node-cq86s                   3/3     Running   0          101s</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="l">ebs-csi-node-jnfxk                   0/3     Pending   0          101s</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="l">ebs-csi-node-m48nn                   3/3     Running   0          101s</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div>]]></description></item><item><title>github工作流</title><link>http://devops.alongparty.cn/posts/f09cdc/</link><pubDate>Fri, 30 Dec 2022 18:26:53 +0800</pubDate><author>kbsonlong</author><guid>http://devops.alongparty.cn/posts/f09cdc/</guid><description><![CDATA[<p></p>
+<h2 id="1-fork-in-the-cloud">1. Fork in the cloud</h2>
+<ol>
+<li>Visit <a
+  href="https://github.com/kubernetes/kubernetes"
+  
+  
+    
+    
+    target="_blank"
+  
+  
+    rel="external nofollow noopener noreferrer"
+  
+  
+  
+>https://github.com/kubernetes/kubernetes</a></li>
+<li>Click <code>Fork</code> button (top right) to establish a cloud-based fork.</li>
+</ol>]]></description></item><item><title>OpenEBS性能测试</title><link>http://devops.alongparty.cn/posts/f41ffb/</link><pubDate>Tue, 18 Oct 2022 19:53:40 +0800</pubDate><author>kbsonlong</author><guid>http://devops.alongparty.cn/posts/f41ffb/</guid><description><![CDATA[<h2 id="依赖说明">依赖说明</h2>
 <h3 id="准备裸盘">准备裸盘</h3>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
