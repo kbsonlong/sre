@@ -1,4 +1,14 @@
-<!doctype html><html lang=zh-cn><head><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1,maximum-scale=2"><meta name=robots content="noodp"><meta http-equiv=x-ua-compatible content="IE=edge, chrome=1"><title>自建k8s部署aws-ebs-csi-driver - 蜷缩的蜗牛</title><meta name=author content="kbsonlong"><meta name=author-link content><meta name=description content="部署aws-ebs-csi-driver
+<!doctype html><html lang=zh-cn><head><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1,maximum-scale=2"><meta name=robots content="noodp"><meta http-equiv=x-ua-compatible content="IE=edge, chrome=1"><title>自建k8s部署aws-ebs-csi-driver - 蜷缩的蜗牛</title><meta name=author content="kbsonlong"><meta name=author-link content><meta name=description content="创建 aws IAM权限
+
+
+1
+
+
+https://github.com/kubernetes-sigs/aws-ebs-csi-driver/blob/v1.13.0/docs/example-iam-policy.json
+
+
+获取AK、SK
+部署aws-ebs-csi-driver
 
 
  1
@@ -24,11 +34,25 @@
 21
 22
 23
+24
+25
+26
+27
+28
+29
+30
 
 
+kubectl create secret generic aws-secret \
+    --namespace kube-system \
+    --from-literal &#34;key_id=${AWS_ACCESS_KEY_ID}&#34; \
+    --from-literal &#34;access_key=${AWS_SECRET_ACCESS_KEY}&#34;
+``
+
+```yaml
 # helm repo add aws-ebs-csi-driver https://kubernetes-sigs.github.io/aws-ebs-csi-driver
 
-# helm upgrade --install aws-ebs-csi-driver \
+# helm upgrade --install aws-ebs-csi-driver --version 2.13.0\
     --namespace kube-system \
     aws-ebs-csi-driver/aws-ebs-csi-driver \
     --set sidecars.provisioner.image.repository=registry.cn-hangzhou.aliyuncs.com/seam/csi-provisioner \
@@ -51,7 +75,17 @@ ebs-csi-node-jnfxk                   0/3     Pending   0          101s
 ebs-csi-node-m48nn                   3/3     Running   0          101s
 
 
-"><meta name=keywords content="云原生,运维,SRE,DEVOPS"><meta itemprop=name content="自建k8s部署aws-ebs-csi-driver"><meta itemprop=description content="部署aws-ebs-csi-driver
+"><meta name=keywords content="云原生,运维,SRE,DEVOPS"><meta itemprop=name content="自建k8s部署aws-ebs-csi-driver"><meta itemprop=description content="创建 aws IAM权限
+
+
+1
+
+
+https://github.com/kubernetes-sigs/aws-ebs-csi-driver/blob/v1.13.0/docs/example-iam-policy.json
+
+
+获取AK、SK
+部署aws-ebs-csi-driver
 
 
  1
@@ -77,11 +111,25 @@ ebs-csi-node-m48nn                   3/3     Running   0          101s
 21
 22
 23
+24
+25
+26
+27
+28
+29
+30
 
 
+kubectl create secret generic aws-secret \
+    --namespace kube-system \
+    --from-literal &#34;key_id=${AWS_ACCESS_KEY_ID}&#34; \
+    --from-literal &#34;access_key=${AWS_SECRET_ACCESS_KEY}&#34;
+``
+
+```yaml
 # helm repo add aws-ebs-csi-driver https://kubernetes-sigs.github.io/aws-ebs-csi-driver
 
-# helm upgrade --install aws-ebs-csi-driver \
+# helm upgrade --install aws-ebs-csi-driver --version 2.13.0\
     --namespace kube-system \
     aws-ebs-csi-driver/aws-ebs-csi-driver \
     --set sidecars.provisioner.image.repository=registry.cn-hangzhou.aliyuncs.com/seam/csi-provisioner \
@@ -104,7 +152,17 @@ ebs-csi-node-jnfxk                   0/3     Pending   0          101s
 ebs-csi-node-m48nn                   3/3     Running   0          101s
 
 
-"><meta itemprop=datePublished content="2022-12-30T18:44:58+08:00"><meta itemprop=dateModified content="2022-12-30T18:44:58+08:00"><meta itemprop=wordCount content="4734"><meta itemprop=image content="http://devops.alongparty.cn/logo_transparent.png"><meta itemprop=keywords content><meta property="og:title" content="自建k8s部署aws-ebs-csi-driver"><meta property="og:description" content="部署aws-ebs-csi-driver
+"><meta itemprop=datePublished content="2022-12-30T18:44:58+08:00"><meta itemprop=dateModified content="2022-12-30T18:44:58+08:00"><meta itemprop=wordCount content="4775"><meta itemprop=image content="http://devops.alongparty.cn/logo_transparent.png"><meta itemprop=keywords content><meta property="og:title" content="自建k8s部署aws-ebs-csi-driver"><meta property="og:description" content="创建 aws IAM权限
+
+
+1
+
+
+https://github.com/kubernetes-sigs/aws-ebs-csi-driver/blob/v1.13.0/docs/example-iam-policy.json
+
+
+获取AK、SK
+部署aws-ebs-csi-driver
 
 
  1
@@ -130,11 +188,25 @@ ebs-csi-node-m48nn                   3/3     Running   0          101s
 21
 22
 23
+24
+25
+26
+27
+28
+29
+30
 
 
+kubectl create secret generic aws-secret \
+    --namespace kube-system \
+    --from-literal &#34;key_id=${AWS_ACCESS_KEY_ID}&#34; \
+    --from-literal &#34;access_key=${AWS_SECRET_ACCESS_KEY}&#34;
+``
+
+```yaml
 # helm repo add aws-ebs-csi-driver https://kubernetes-sigs.github.io/aws-ebs-csi-driver
 
-# helm upgrade --install aws-ebs-csi-driver \
+# helm upgrade --install aws-ebs-csi-driver --version 2.13.0\
     --namespace kube-system \
     aws-ebs-csi-driver/aws-ebs-csi-driver \
     --set sidecars.provisioner.image.repository=registry.cn-hangzhou.aliyuncs.com/seam/csi-provisioner \
@@ -157,7 +229,17 @@ ebs-csi-node-jnfxk                   0/3     Pending   0          101s
 ebs-csi-node-m48nn                   3/3     Running   0          101s
 
 
-"><meta property="og:type" content="article"><meta property="og:url" content="http://devops.alongparty.cn/posts/4842bb/"><meta property="og:image" content="http://devops.alongparty.cn/logo_transparent.png"><meta property="article:section" content="posts"><meta property="article:published_time" content="2022-12-30T18:44:58+08:00"><meta property="article:modified_time" content="2022-12-30T18:44:58+08:00"><meta name=twitter:card content="summary_large_image"><meta name=twitter:image content="http://devops.alongparty.cn/logo_transparent.png"><meta name=twitter:title content="自建k8s部署aws-ebs-csi-driver"><meta name=twitter:description content="部署aws-ebs-csi-driver
+"><meta property="og:type" content="article"><meta property="og:url" content="http://devops.alongparty.cn/posts/4842bb/"><meta property="og:image" content="http://devops.alongparty.cn/logo_transparent.png"><meta property="article:section" content="posts"><meta property="article:published_time" content="2022-12-30T18:44:58+08:00"><meta property="article:modified_time" content="2022-12-30T18:44:58+08:00"><meta name=twitter:card content="summary_large_image"><meta name=twitter:image content="http://devops.alongparty.cn/logo_transparent.png"><meta name=twitter:title content="自建k8s部署aws-ebs-csi-driver"><meta name=twitter:description content="创建 aws IAM权限
+
+
+1
+
+
+https://github.com/kubernetes-sigs/aws-ebs-csi-driver/blob/v1.13.0/docs/example-iam-policy.json
+
+
+获取AK、SK
+部署aws-ebs-csi-driver
 
 
  1
@@ -183,11 +265,25 @@ ebs-csi-node-m48nn                   3/3     Running   0          101s
 21
 22
 23
+24
+25
+26
+27
+28
+29
+30
 
 
+kubectl create secret generic aws-secret \
+    --namespace kube-system \
+    --from-literal &#34;key_id=${AWS_ACCESS_KEY_ID}&#34; \
+    --from-literal &#34;access_key=${AWS_SECRET_ACCESS_KEY}&#34;
+``
+
+```yaml
 # helm repo add aws-ebs-csi-driver https://kubernetes-sigs.github.io/aws-ebs-csi-driver
 
-# helm upgrade --install aws-ebs-csi-driver \
+# helm upgrade --install aws-ebs-csi-driver --version 2.13.0\
     --namespace kube-system \
     aws-ebs-csi-driver/aws-ebs-csi-driver \
     --set sidecars.provisioner.image.repository=registry.cn-hangzhou.aliyuncs.com/seam/csi-provisioner \
@@ -210,7 +306,7 @@ ebs-csi-node-jnfxk                   0/3     Pending   0          101s
 ebs-csi-node-m48nn                   3/3     Running   0          101s
 
 
-"><meta name=application-name content="FixIt"><meta name=apple-mobile-web-app-title content="FixIt"><meta name=theme-color media="(prefers-color-scheme: light)" content="#ffffff"><meta name=theme-color media="(prefers-color-scheme: dark)" content="#252627"><meta name=msapplication-TileColor content="#da532c"><link rel="shortcut icon" type=image/x-icon href=/favicon.ico><link rel=icon type=image/png sizes=32x32 href=/favicon-32x32.png><link rel=icon type=image/png sizes=16x16 href=/favicon-16x16.png><link rel=apple-touch-icon sizes=180x180 href=/apple-touch-icon.png><link rel=mask-icon href=/safari-pinned-tab.svg color=#5bbad5><link rel=manifest href=/site.webmanifest><link rel=canonical href=http://devops.alongparty.cn/posts/4842bb/><link rel=prev href=http://devops.alongparty.cn/posts/f09cdc/><link rel=next href=http://devops.alongparty.cn/posts/ac8605/><link rel=stylesheet href=/lib/normalize/normalize.min.css><link rel=stylesheet href=/css/style.min.css><link rel=stylesheet href=/lib/fontawesome-free/all.min.css><link rel=stylesheet href=/lib/animate/animate.min.css><script type=application/ld+json>{"@context":"http://schema.org","@type":"BlogPosting","headline":"自建k8s部署aws-ebs-csi-driver","inLanguage":"zh-CN","mainEntityOfPage":{"@type":"WebPage","@id":"http:\/\/devops.alongparty.cn\/posts\/4842bb\/"},"genre":"posts","wordcount":4734,"url":"http:\/\/devops.alongparty.cn\/posts\/4842bb\/","datePublished":"2022-12-30T18:44:58+08:00","dateModified":"2022-12-30T18:44:58+08:00","license":"This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.","publisher":{"@type":"Organization","name":""},"author":{"@type":"Person","name":"kbsonlong"},"description":""}</script></head><body header-desktop=sticky header-mobile=auto><script type=text/javascript>(window.localStorage&&localStorage.getItem("theme")?localStorage.getItem("theme")==="dark":"auto"==="auto"?window.matchMedia("(prefers-color-scheme: dark)").matches:"auto"==="dark")&&document.body.setAttribute("theme","dark")</script><div class=wrapper><header class=desktop id=header-desktop><div class=header-wrapper github-corner=right><div class=header-title><a href=/ title=蜷缩的蜗牛><img class="lazyload logo" src=/svg/loading.min.svg data-src=/logo_transparent.png data-srcset="/logo_transparent.png, /logo_transparent.png 1.5x, /logo_transparent.png 2x" data-sizes=auto alt=蜷缩的蜗牛 title=蜷缩的蜗牛><span class=header-title-text>蜷缩的蜗牛</span></a><span class=header-subtitle></span></div><nav><ul class=menu><li class=menu-item><a class=menu-link href=/posts/><i class='fa-solid fa-archive fa-fw fa-sm'></i> 文章</a></li><li class=menu-item><a class=menu-link href=/categories/><i class='fa-solid fa-th fa-fw fa-sm'></i> 分类</a></li><li class=menu-item><a class=menu-link href=/tags/><i class='fa-solid fa-tags fa-fw fa-sm'></i> 标签</a></li><li class=menu-item><a class=menu-link href=/friends/ title=友情链接><i class='fa-solid fa-users fa-fw fa-sm'></i> 友链</a></li><li class=menu-item><a class=menu-link href=/about/><i class='fa-solid fa-info-circle fa-fw fa-sm'></i> 关于</a></li><li class="menu-item d-none-desktop text-center"><a class=menu-link href=https://github.com/kbsonlong/ title=GitHub rel="noopener noreferrer" target=_blank><i class='fa-brands fa-github fa-fw'></i></a></li><li class="menu-item d-none-desktop text-center"><a class=menu-link href=/messages/><i class='fa-solid fa-messages'></i> 留言板</a></li><li class=menu-item><a class=menu-link href=/messages/ title=留言板>留言板</a></li><li class="menu-item delimiter"></li><li class="menu-item language"><span title=选择语言>简体中文<i class="dropdown-icon fa-solid fa-chevron-down"></i></span><ul class=sub-menu><li class=menu-item>没有更多翻译</li></ul></li><li class="menu-item search" id=search-desktop><input type=text placeholder="搜索文章标题或内容 ..." id=search-input-desktop>
+"><meta name=application-name content="FixIt"><meta name=apple-mobile-web-app-title content="FixIt"><meta name=theme-color media="(prefers-color-scheme: light)" content="#ffffff"><meta name=theme-color media="(prefers-color-scheme: dark)" content="#252627"><meta name=msapplication-TileColor content="#da532c"><link rel="shortcut icon" type=image/x-icon href=/favicon.ico><link rel=icon type=image/png sizes=32x32 href=/favicon-32x32.png><link rel=icon type=image/png sizes=16x16 href=/favicon-16x16.png><link rel=apple-touch-icon sizes=180x180 href=/apple-touch-icon.png><link rel=mask-icon href=/safari-pinned-tab.svg color=#5bbad5><link rel=manifest href=/site.webmanifest><link rel=canonical href=http://devops.alongparty.cn/posts/4842bb/><link rel=prev href=http://devops.alongparty.cn/posts/f09cdc/><link rel=next href=http://devops.alongparty.cn/posts/ac8605/><link rel=stylesheet href=/lib/normalize/normalize.min.css><link rel=stylesheet href=/css/style.min.css><link rel=stylesheet href=/lib/fontawesome-free/all.min.css><link rel=stylesheet href=/lib/animate/animate.min.css><script type=application/ld+json>{"@context":"http://schema.org","@type":"BlogPosting","headline":"自建k8s部署aws-ebs-csi-driver","inLanguage":"zh-CN","mainEntityOfPage":{"@type":"WebPage","@id":"http:\/\/devops.alongparty.cn\/posts\/4842bb\/"},"genre":"posts","wordcount":4775,"url":"http:\/\/devops.alongparty.cn\/posts\/4842bb\/","datePublished":"2022-12-30T18:44:58+08:00","dateModified":"2022-12-30T18:44:58+08:00","license":"This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.","publisher":{"@type":"Organization","name":""},"author":{"@type":"Person","name":"kbsonlong"},"description":""}</script></head><body header-desktop=sticky header-mobile=auto><script type=text/javascript>(window.localStorage&&localStorage.getItem("theme")?localStorage.getItem("theme")==="dark":"auto"==="auto"?window.matchMedia("(prefers-color-scheme: dark)").matches:"auto"==="dark")&&document.body.setAttribute("theme","dark")</script><div class=wrapper><header class=desktop id=header-desktop><div class=header-wrapper github-corner=right><div class=header-title><a href=/ title=蜷缩的蜗牛><img class="lazyload logo" src=/svg/loading.min.svg data-src=/logo_transparent.png data-srcset="/logo_transparent.png, /logo_transparent.png 1.5x, /logo_transparent.png 2x" data-sizes=auto alt=蜷缩的蜗牛 title=蜷缩的蜗牛><span class=header-title-text>蜷缩的蜗牛</span></a><span class=header-subtitle></span></div><nav><ul class=menu><li class=menu-item><a class=menu-link href=/posts/><i class='fa-solid fa-archive fa-fw fa-sm'></i> 文章</a></li><li class=menu-item><a class=menu-link href=/categories/><i class='fa-solid fa-th fa-fw fa-sm'></i> 分类</a></li><li class=menu-item><a class=menu-link href=/tags/><i class='fa-solid fa-tags fa-fw fa-sm'></i> 标签</a></li><li class=menu-item><a class=menu-link href=/friends/ title=友情链接><i class='fa-solid fa-users fa-fw fa-sm'></i> 友链</a></li><li class=menu-item><a class=menu-link href=/about/><i class='fa-solid fa-info-circle fa-fw fa-sm'></i> 关于</a></li><li class="menu-item d-none-desktop text-center"><a class=menu-link href=https://github.com/kbsonlong/ title=GitHub rel="noopener noreferrer" target=_blank><i class='fa-brands fa-github fa-fw'></i></a></li><li class="menu-item d-none-desktop text-center"><a class=menu-link href=/messages/><i class='fa-solid fa-messages'></i> 留言板</a></li><li class=menu-item><a class=menu-link href=/messages/ title=留言板>留言板</a></li><li class="menu-item delimiter"></li><li class="menu-item language"><span title=选择语言>简体中文<i class="dropdown-icon fa-solid fa-chevron-down"></i></span><ul class=sub-menu><li class=menu-item>没有更多翻译</li></ul></li><li class="menu-item search" id=search-desktop><input type=text placeholder="搜索文章标题或内容 ..." id=search-input-desktop>
 <a href=javascript:void(0); class="search-button search-toggle" id=search-toggle-desktop title=搜索><i class="fa-solid fa-search fa-fw"></i></a>
 <a href=javascript:void(0); class="search-button search-clear" id=search-clear-desktop title=清空><i class="fa-solid fa-times-circle fa-fw"></i></a>
 <span class="search-button search-loading" id=search-loading-desktop><i class="fa-solid fa-spinner fa-fw fa-spin"></i></span></li><li class="menu-item theme-switch" title=切换主题><i class="fa-solid fa-adjust fa-fw"></i></li></ul></nav></div></header><header class=mobile id=header-mobile><div class=header-container><div class=header-wrapper><div class=header-title><a href=/ title=蜷缩的蜗牛><img class="lazyload logo" src=/svg/loading.min.svg data-src=/logo_transparent.png data-srcset="/logo_transparent.png, /logo_transparent.png 1.5x, /logo_transparent.png 2x" data-sizes=auto alt=/logo_transparent.png title=/logo_transparent.png><span class=header-title-text>蜷缩的蜗牛</span></a><span class=header-subtitle></span></div><div class=menu-toggle id=menu-toggle-mobile><span></span><span></span><span></span></div></div><nav><ul class=menu id=menu-mobile><li class=search-wrapper><div class="search mobile" id=search-mobile><input type=text placeholder="搜索文章标题或内容 ..." id=search-input-mobile>
@@ -218,9 +314,11 @@ ebs-csi-node-m48nn                   3/3     Running   0          101s
 <a href=javascript:void(0); class="search-button search-clear" id=search-clear-mobile title=清空><i class="fa-solid fa-times-circle fa-fw"></i></a>
 <span class="search-button search-loading" id=search-loading-mobile><i class="fa-solid fa-spinner fa-fw fa-spin"></i></span></div><a href=javascript:void(0); class=search-cancel id=search-cancel-mobile>取消</a></li><li class=menu-item><a class=menu-link href=/posts/><i class='fa-solid fa-archive fa-fw fa-sm'></i> 文章</a></li><li class=menu-item><a class=menu-link href=/categories/><i class='fa-solid fa-th fa-fw fa-sm'></i> 分类</a></li><li class=menu-item><a class=menu-link href=/tags/><i class='fa-solid fa-tags fa-fw fa-sm'></i> 标签</a></li><li class=menu-item><a class=menu-link href=/friends/ title=友情链接><i class='fa-solid fa-users fa-fw fa-sm'></i> 友链</a></li><li class=menu-item><a class=menu-link href=/about/><i class='fa-solid fa-info-circle fa-fw fa-sm'></i> 关于</a></li><li class="menu-item d-none-desktop text-center"><a class=menu-link href=https://github.com/kbsonlong/ title=GitHub rel="noopener noreferrer" target=_blank><i class='fa-brands fa-github fa-fw'></i></a></li><li class="menu-item d-none-desktop text-center"><a class=menu-link href=/messages/><i class='fa-solid fa-messages'></i> 留言板</a></li><li class=menu-item><a class=menu-link href=/messages/ title=留言板>留言板</a></li><li class="menu-item theme-switch" title=切换主题><i class="fa-solid fa-adjust fa-fw"></i></li><li class="menu-item language"><span title=选择语言>简体中文<i class="dropdown-icon fa-solid fa-chevron-down"></i></span>
 <select class=language-select onchange="location=this.value"><option disabled>没有更多翻译</option></select></li></ul></nav></div></header><div class="search-dropdown desktop"><div id=search-dropdown-desktop></div></div><div class="search-dropdown mobile"><div id=search-dropdown-mobile></div></div><main class=container page-style=normal><aside class=toc id=toc-auto><h2 class=toc-title>目录 <i class="toc-icon fa-solid fa-angle-down fa-fw"></i></h2><div class=toc-content id=toc-content-auto></div></aside><aside class=aside-custom></aside><article class="page single"><div class=header><h1 class="single-title animate__animated animate__flipInX"><span>自建k8s部署aws-ebs-csi-driver</span></h1></div><div class=post-meta><div class=post-meta-line><span class=post-author><span class=author><img class="lazyload avatar" src=/svg/loading.min.svg data-src="https://gravatar.loli.net/avatar/598872715ec08296cf1e1806135cd518?s=32&d=mp" data-srcset="https://gravatar.loli.net/avatar/598872715ec08296cf1e1806135cd518?s=32&d=mp, https://gravatar.loli.net/avatar/598872715ec08296cf1e1806135cd518?s=32&d=mp 1.5x, https://gravatar.loli.net/avatar/598872715ec08296cf1e1806135cd518?s=32&d=mp 2x" data-sizes=auto alt=kbsonlong title=kbsonlong>&nbsp;kbsonlong</span></span></div><div class=post-meta-line><span title="2022-12-30 18:44:58"><i class="fa-regular fa-calendar-alt fa-fw"></i>&nbsp;<time datetime=2022-12-30>2022-12-30</time>
-</span>&nbsp;<i class="fa-solid fa-pencil-alt fa-fw"></i>&nbsp;约 4734 字&nbsp;
+</span>&nbsp;<i class="fa-solid fa-pencil-alt fa-fw"></i>&nbsp;约 4775 字&nbsp;
 <i class="fa-regular fa-clock fa-fw"></i>&nbsp;预计阅读 10 分钟&nbsp;</div></div><div class="details toc" id=toc-static kept=false><div class="details-summary toc-title"><span>目录</span>
-<span><i class="details-icon fa-solid fa-angle-right"></i></span></div><div class="details-content toc-content" id=toc-content-static><nav id=TableOfContents><ul><li><ul><li><a href=#部署aws-ebs-csi-driver>部署aws-ebs-csi-driver</a></li><li><a href=#挂载验证>挂载验证</a></li><li><a href=#设置存储类>设置存储类</a></li><li><a href=#性能测试>性能测试</a><ul><li><a href=#基准测试脚本>基准测试脚本</a></li><li><a href=#3000-iops>3000 iops</a></li><li><a href=#5000-iops>5000 iops</a></li></ul></li><li><a href=#存在问题>存在问题</a><ul><li><a href=#rbac角色问题导致节点无法挂载>RBAC角色问题导致节点无法挂载</a></li><li><a href=#操作系统版本问题找不到驱动>操作系统版本问题找不到驱动</a></li></ul></li></ul></li></ul></nav></div></div><div class=content id=content><h3 id=部署aws-ebs-csi-driver>部署aws-ebs-csi-driver</h3><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+<span><i class="details-icon fa-solid fa-angle-right"></i></span></div><div class="details-content toc-content" id=toc-content-static><nav id=TableOfContents><ul><li><ul><li><a href=#创建-aws-iam权限>创建 <code>aws</code> IAM权限</a></li><li><a href=#部署aws-ebs-csi-driver>部署aws-ebs-csi-driver</a></li><li><a href=#挂载验证>挂载验证</a></li><li><a href=#设置存储类>设置存储类</a></li><li><a href=#性能测试>性能测试</a><ul><li><a href=#基准测试脚本>基准测试脚本</a></li><li><a href=#3000-iops>3000 iops</a></li><li><a href=#5000-iops>5000 iops</a></li></ul></li><li><a href=#存在问题>存在问题</a><ul><li><a href=#rbac角色问题导致节点无法挂载>RBAC角色问题导致节点无法挂载</a></li><li><a href=#操作系统版本问题找不到驱动>操作系统版本问题找不到驱动</a></li></ul></li></ul></li></ul></nav></div></div><div class=content id=content><h3 id=创建-aws-iam权限>创建 <code>aws</code> IAM权限</h3><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl>https://github.com/kubernetes-sigs/aws-ebs-csi-driver/blob/v1.13.0/docs/example-iam-policy.json
+</span></span></code></pre></td></tr></table></div></div><p>获取AK、SK</p><h3 id=部署aws-ebs-csi-driver>部署aws-ebs-csi-driver</h3><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
 </span><span class=lnt> 2
 </span><span class=lnt> 3
 </span><span class=lnt> 4
@@ -243,30 +341,44 @@ ebs-csi-node-m48nn                   3/3     Running   0          101s
 </span><span class=lnt>21
 </span><span class=lnt>22
 </span><span class=lnt>23
-</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-yaml data-lang=yaml><span class=line><span class=cl><span class=c># helm repo add aws-ebs-csi-driver https://kubernetes-sigs.github.io/aws-ebs-csi-driver</span><span class=w>
-</span></span></span><span class=line><span class=cl><span class=w>
-</span></span></span><span class=line><span class=cl><span class=w></span><span class=c># helm upgrade --install aws-ebs-csi-driver \</span><span class=w>
-</span></span></span><span class=line><span class=cl><span class=w>    </span>--<span class=l>namespace kube-system \</span><span class=w>
-</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=l>aws-ebs-csi-driver/aws-ebs-csi-driver \</span><span class=w>
-</span></span></span><span class=line><span class=cl><span class=w>    </span>--<span class=l>set sidecars.provisioner.image.repository=registry.cn-hangzhou.aliyuncs.com/seam/csi-provisioner \</span><span class=w>
-</span></span></span><span class=line><span class=cl><span class=w>    </span>--<span class=l>set sidecars.attacher.image.repository=registry.cn-hangzhou.aliyuncs.com/seam/csi-attacher \</span><span class=w>
-</span></span></span><span class=line><span class=cl><span class=w>    </span>--<span class=l>set sidecars.snapshotter.image.repository=registry.cn-hangzhou.aliyuncs.com/seam/csi-snapshotter \</span><span class=w>
-</span></span></span><span class=line><span class=cl><span class=w>    </span>--<span class=l>set sidecars.livenessProbe.image.repository=registry.cn-hangzhou.aliyuncs.com/seam/livenessprobe \</span><span class=w>
-</span></span></span><span class=line><span class=cl><span class=w>    </span>--<span class=l>set sidecars.resizer.image.repository=registry.cn-hangzhou.aliyuncs.com/seam/csi-resizer \</span><span class=w>
-</span></span></span><span class=line><span class=cl><span class=w>    </span>--<span class=l>set sidecars.nodeDriverRegistrar.image.repository=registry.cn-hangzhou.aliyuncs.com/seam/csi-node-driver-registrar \</span><span class=w>
-</span></span></span><span class=line><span class=cl><span class=w>    </span>--<span class=l>set node.kubeletPath=/data/k8s/kubelet</span><span class=w>
-</span></span></span><span class=line><span class=cl><span class=w></span><span class=c># kubectl get pod -n kube-system -l &#34;app.kubernetes.io/name=aws-ebs-csi-driver,app.kubernetes.io/instance=aws-ebs-csi-driver&#34;</span><span class=w>
-</span></span></span><span class=line><span class=cl><span class=w></span><span class=l>NAME                                 READY   STATUS    RESTARTS   AGE</span><span class=w>
-</span></span></span><span class=line><span class=cl><span class=w></span><span class=l>ebs-csi-controller-5cbfd45dc-2fq9q   6/6     Running   0          102s</span><span class=w>
-</span></span></span><span class=line><span class=cl><span class=w></span><span class=l>ebs-csi-controller-5cbfd45dc-jgpl9   6/6     Running   0          102s</span><span class=w>
-</span></span></span><span class=line><span class=cl><span class=w></span><span class=l>ebs-csi-node-2s8lj                   3/3     Running   0          101s</span><span class=w>
-</span></span></span><span class=line><span class=cl><span class=w></span><span class=l>ebs-csi-node-4jstr                   3/3     Running   0          101s</span><span class=w>
-</span></span></span><span class=line><span class=cl><span class=w></span><span class=l>ebs-csi-node-72w69                   3/3     Running   0          101s</span><span class=w>
-</span></span></span><span class=line><span class=cl><span class=w></span><span class=l>ebs-csi-node-759rd                   0/3     Pending   0          101s</span><span class=w>
-</span></span></span><span class=line><span class=cl><span class=w></span><span class=l>ebs-csi-node-cq86s                   3/3     Running   0          101s</span><span class=w>
-</span></span></span><span class=line><span class=cl><span class=w></span><span class=l>ebs-csi-node-jnfxk                   0/3     Pending   0          101s</span><span class=w>
-</span></span></span><span class=line><span class=cl><span class=w></span><span class=l>ebs-csi-node-m48nn                   3/3     Running   0          101s</span><span class=w>
-</span></span></span></code></pre></td></tr></table></div></div><h3 id=挂载验证>挂载验证</h3><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt>24
+</span><span class=lnt>25
+</span><span class=lnt>26
+</span><span class=lnt>27
+</span><span class=lnt>28
+</span><span class=lnt>29
+</span><span class=lnt>30
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl>kubectl create secret generic aws-secret <span class=se>\
+</span></span></span><span class=line><span class=cl><span class=se></span>    --namespace kube-system <span class=se>\
+</span></span></span><span class=line><span class=cl><span class=se></span>    --from-literal <span class=s2>&#34;key_id=</span><span class=si>${</span><span class=nv>AWS_ACCESS_KEY_ID</span><span class=si>}</span><span class=s2>&#34;</span> <span class=se>\
+</span></span></span><span class=line><span class=cl><span class=se></span>    --from-literal <span class=s2>&#34;access_key=</span><span class=si>${</span><span class=nv>AWS_SECRET_ACCESS_KEY</span><span class=si>}</span><span class=s2>&#34;</span>
+</span></span><span class=line><span class=cl><span class=sb>``</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=sb>```</span>yaml
+</span></span><span class=line><span class=cl><span class=c1># helm repo add aws-ebs-csi-driver https://kubernetes-sigs.github.io/aws-ebs-csi-driver</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># helm upgrade --install aws-ebs-csi-driver --version 2.13.0\</span>
+</span></span><span class=line><span class=cl>    --namespace kube-system <span class=se>\
+</span></span></span><span class=line><span class=cl><span class=se></span>    aws-ebs-csi-driver/aws-ebs-csi-driver <span class=se>\
+</span></span></span><span class=line><span class=cl><span class=se></span>    --set sidecars.provisioner.image.repository<span class=o>=</span>registry.cn-hangzhou.aliyuncs.com/seam/csi-provisioner <span class=se>\
+</span></span></span><span class=line><span class=cl><span class=se></span>    --set sidecars.attacher.image.repository<span class=o>=</span>registry.cn-hangzhou.aliyuncs.com/seam/csi-attacher <span class=se>\
+</span></span></span><span class=line><span class=cl><span class=se></span>    --set sidecars.snapshotter.image.repository<span class=o>=</span>registry.cn-hangzhou.aliyuncs.com/seam/csi-snapshotter <span class=se>\
+</span></span></span><span class=line><span class=cl><span class=se></span>    --set sidecars.livenessProbe.image.repository<span class=o>=</span>registry.cn-hangzhou.aliyuncs.com/seam/livenessprobe <span class=se>\
+</span></span></span><span class=line><span class=cl><span class=se></span>    --set sidecars.resizer.image.repository<span class=o>=</span>registry.cn-hangzhou.aliyuncs.com/seam/csi-resizer <span class=se>\
+</span></span></span><span class=line><span class=cl><span class=se></span>    --set sidecars.nodeDriverRegistrar.image.repository<span class=o>=</span>registry.cn-hangzhou.aliyuncs.com/seam/csi-node-driver-registrar <span class=se>\
+</span></span></span><span class=line><span class=cl><span class=se></span>    --set node.kubeletPath<span class=o>=</span>/data/k8s/kubelet
+</span></span><span class=line><span class=cl><span class=c1># kubectl get pod -n kube-system -l &#34;app.kubernetes.io/name=aws-ebs-csi-driver,app.kubernetes.io/instance=aws-ebs-csi-driver&#34;</span>
+</span></span><span class=line><span class=cl>NAME                                 READY   STATUS    RESTARTS   AGE
+</span></span><span class=line><span class=cl>ebs-csi-controller-5cbfd45dc-2fq9q   6/6     Running   <span class=m>0</span>          102s
+</span></span><span class=line><span class=cl>ebs-csi-controller-5cbfd45dc-jgpl9   6/6     Running   <span class=m>0</span>          102s
+</span></span><span class=line><span class=cl>ebs-csi-node-2s8lj                   3/3     Running   <span class=m>0</span>          101s
+</span></span><span class=line><span class=cl>ebs-csi-node-4jstr                   3/3     Running   <span class=m>0</span>          101s
+</span></span><span class=line><span class=cl>ebs-csi-node-72w69                   3/3     Running   <span class=m>0</span>          101s
+</span></span><span class=line><span class=cl>ebs-csi-node-759rd                   0/3     Pending   <span class=m>0</span>          101s
+</span></span><span class=line><span class=cl>ebs-csi-node-cq86s                   3/3     Running   <span class=m>0</span>          101s
+</span></span><span class=line><span class=cl>ebs-csi-node-jnfxk                   0/3     Pending   <span class=m>0</span>          101s
+</span></span><span class=line><span class=cl>ebs-csi-node-m48nn                   3/3     Running   <span class=m>0</span>          101s
+</span></span></code></pre></td></tr></table></div></div><h3 id=挂载验证>挂载验证</h3><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
 </span><span class=lnt> 2
 </span><span class=lnt> 3
 </span><span class=lnt> 4
