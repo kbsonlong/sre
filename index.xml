@@ -1,4 +1,30 @@
-<rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title>蜷缩的蜗牛</title><link>http://devops.alongparty.cn/</link><description>云原生时代运维</description><generator>Hugo -- gohugo.io</generator><language>zh-CN</language><managingEditor>kbsonlong@gmail.com (kbsonlong)</managingEditor><webMaster>kbsonlong@gmail.com (kbsonlong)</webMaster><copyright>This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.</copyright><lastBuildDate>Tue, 03 Jan 2023 16:55:15 +0800</lastBuildDate><atom:link href="http://devops.alongparty.cn/index.xml" rel="self" type="application/rss+xml"/><item><title>Sentry 监控 - Snuba 数据中台本地开发环境配置实战</title><link>http://devops.alongparty.cn/posts/ac8605/</link><pubDate>Tue, 03 Jan 2023 16:55:15 +0800</pubDate><author>kbsonlong</author><guid>http://devops.alongparty.cn/posts/ac8605/</guid><description>系列 1 分钟快速使用 Docker 上手最新版 Sentry-CLI - 创建版本 快速使用 Docker 上手 Sentry-CLI - 30 秒上手 Source Maps Sentry For React 完整接入详解 Sentry For Vue 完整接入详解 Sentry-CLI 使用详解 Sentry Web 性能监控 - Web Vitals Sentry Web</description></item><item><title>自建k8s部署aws-ebs-csi-driver</title><link>http://devops.alongparty.cn/posts/4842bb/</link><pubDate>Fri, 30 Dec 2022 18:44:58 +0800</pubDate><author>kbsonlong</author><guid>http://devops.alongparty.cn/posts/4842bb/</guid><description><![CDATA[<h3 id="创建-aws-iam权限">创建 <code>aws</code> IAM权限</h3>
+<rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title>蜷缩的蜗牛</title><link>http://devops.alongparty.cn/</link><description>云原生时代运维</description><generator>Hugo -- gohugo.io</generator><language>zh-CN</language><managingEditor>kbsonlong@gmail.com (kbsonlong)</managingEditor><webMaster>kbsonlong@gmail.com (kbsonlong)</webMaster><copyright>This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.</copyright><lastBuildDate>Fri, 24 Feb 2023 16:55:03 +0800</lastBuildDate><atom:link href="http://devops.alongparty.cn/index.xml" rel="self" type="application/rss+xml"/><item><title>深入Istio系列-Sidecar配置模板</title><link>http://devops.alongparty.cn/posts/aaad19/</link><pubDate>Fri, 24 Feb 2023 16:55:03 +0800</pubDate><author>kbsonlong</author><guid>http://devops.alongparty.cn/posts/aaad19/</guid><description><![CDATA[<p>本文不讲源码，来说说 istio sidecar 配置，从而灵活的控制 sidecar 注入、资源修改等场景。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">kubectl get cm -n istio-system istio-sidecar-injector -o yaml
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>先来预览一下 <code>istio-sidecar-injector</code>，主要包含 <code>config</code> 和 values
+</p>
+<h2 id="config">config</h2>
+<p>可以看到配置项有 默认模板 <code>defaultTemplates</code>、注入策略 <code>policy</code>、注入选择器 <code>alwaysInjectSelector</code>、 永不注入选择器 <code>neverInjectSelector</code>、<code>injectedAnnotations</code> 和 模板内容 <code>templates</code> 等</p>
+<p>关于注入策略(policy)、注入选择器(alwaysInjectSelector、neverInjectSelector)和注入注解(injectedAnnotations)可以查看 <a
+  href="https://devops.alongparty.cn/posts/dd0bd7/#injectrequired%E6%96%B9%E6%B3%95"
+  
+  
+    
+    
+    target="_blank"
+  
+  
+    rel="external nofollow noopener noreferrer"
+  
+  
+  
+>Sidecar 自动注入</a> 本文主要来了解 <code>Sidecar</code> 注入的模板，方便后续需要针对<code>Sidecar</code> 的部署调整</p>]]></description></item><item><title>Sentry 监控 - Snuba 数据中台本地开发环境配置实战</title><link>http://devops.alongparty.cn/posts/ac8605/</link><pubDate>Tue, 03 Jan 2023 16:55:15 +0800</pubDate><author>kbsonlong</author><guid>http://devops.alongparty.cn/posts/ac8605/</guid><description>系列 1 分钟快速使用 Docker 上手最新版 Sentry-CLI - 创建版本 快速使用 Docker 上手 Sentry-CLI - 30 秒上手 Source Maps Sentry For React 完整接入详解 Sentry For Vue 完整接入详解 Sentry-CLI 使用详解 Sentry Web 性能监控 - Web Vitals Sentry Web</description></item><item><title>自建k8s部署aws-ebs-csi-driver</title><link>http://devops.alongparty.cn/posts/4842bb/</link><pubDate>Fri, 30 Dec 2022 18:44:58 +0800</pubDate><author>kbsonlong</author><guid>http://devops.alongparty.cn/posts/4842bb/</guid><description><![CDATA[<h3 id="创建-aws-iam权限">创建 <code>aws</code> IAM权限</h3>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
@@ -405,4 +431,4 @@
 </div><blockquote>
 <p>从上面可以看出整个Ingress Nginx Controller Pod 包含两部分 nginx-ingress-controller 和 Nginx</p>
 </blockquote>
-<p></p>]]></description></item><item><title>Grafana Mimir 和 VictoriaMetrics 之间的性能测试</title><link>http://devops.alongparty.cn/posts/6650ff/</link><pubDate>Wed, 14 Sep 2022 12:20:51 +0800</pubDate><author>kbsonlong</author><guid>http://devops.alongparty.cn/posts/6650ff/</guid><description>Grafana 实验室的 Mimir 是一个在 AGPLv3 许可下新的时间序列数据库，该工程团队从 Cortex TSDB 中汲取精华，同时降低了复杂性并提高了可扩展性。 根据 Grafana 实验室的测试，Mimir</description></item></channel></rss>
+<p></p>]]></description></item></channel></rss>
