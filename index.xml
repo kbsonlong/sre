@@ -1,4 +1,4 @@
-<rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title>蜷缩的蜗牛</title><link>http://devops.alongparty.cn/</link><description>云原生时代运维</description><generator>Hugo -- gohugo.io</generator><language>zh-CN</language><managingEditor>kbsonlong@gmail.com (kbsonlong)</managingEditor><webMaster>kbsonlong@gmail.com (kbsonlong)</webMaster><copyright>This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.</copyright><lastBuildDate>Fri, 03 Mar 2023 17:42:56 +0800</lastBuildDate><atom:link href="http://devops.alongparty.cn/index.xml" rel="self" type="application/rss+xml"/><item><title>OpenEBS-CStor使用指南</title><link>http://devops.alongparty.cn/posts/4df4f1/</link><pubDate>Fri, 03 Mar 2023 17:42:56 +0800</pubDate><author>kbsonlong</author><guid>http://devops.alongparty.cn/posts/4df4f1/</guid><description>CStor 存储策略 目标节点 nodeSelector 1 2 3 4 5 6 7 8 9 10 11 cat &amp;lt;&amp;lt; EOF | kubectl apply -f - apiVersion: cstor.openebs.io/v1 kind: CStorVolumePolicy metadata: name: csi-volume-policy namespace: openebs spec: target: nodeSelector: biz.type: test EOF 目标节点亲和行 affinity 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 apiVersion:</description></item><item><title>深入Istio系列-Sidecar配置模板</title><link>http://devops.alongparty.cn/posts/aaad19/</link><pubDate>Fri, 24 Feb 2023 16:55:03 +0800</pubDate><author>kbsonlong</author><guid>http://devops.alongparty.cn/posts/aaad19/</guid><description><![CDATA[<p>本文不讲源码，来说说 istio sidecar 配置，从而灵活的控制 sidecar 注入、资源修改等场景。</p>
+<rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title>蜷缩的蜗牛</title><link>http://devops.alongparty.cn/</link><description>云原生时代运维</description><generator>Hugo -- gohugo.io</generator><language>zh-CN</language><managingEditor>kbsonlong@gmail.com (kbsonlong)</managingEditor><webMaster>kbsonlong@gmail.com (kbsonlong)</webMaster><copyright>This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.</copyright><lastBuildDate>Fri, 17 Mar 2023 13:57:26 +0800</lastBuildDate><atom:link href="http://devops.alongparty.cn/index.xml" rel="self" type="application/rss+xml"/><item><title>Istio Proxy Access日志</title><link>http://devops.alongparty.cn/posts/5a662f/</link><pubDate>Fri, 17 Mar 2023 13:57:26 +0800</pubDate><author>kbsonlong</author><guid>http://devops.alongparty.cn/posts/5a662f/</guid><description><![CDATA[开启 Access 日志 1 2 3 4 5 6 7 8 9 10 apiVersion: v1 kind: ConfigMap metadata: name: istio namespace: istio-system data: mesh: | accessLogEncoding: JSON accessLogFile: /dev/stdout accessLogFormat: &#34;&#34; 格式化 Access 日志 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 { &#34;authority&#34;: &#34;%REQ(:AUTHORITY)%&#34;, &#34;bytes_received&#34;: &#34;%BYTES_RECEIVED%&#34;, &#34;bytes_sent&#34;:]]></description></item><item><title>如何选择最佳的Kubernetes集群自动伸缩策略</title><link>http://devops.alongparty.cn/posts/a18401/</link><pubDate>Thu, 16 Mar 2023 14:55:47 +0800</pubDate><author>kbsonlong</author><guid>http://devops.alongparty.cn/posts/a18401/</guid><description>前言 这篇内容篇幅比较长，如果不想深入探讨或时间有限，这是全文简述： 在默认设置下，扩展 Kubernetes 集群中的 pod 和节点可能需要几分钟时间。 了解如何调整集群节</description></item><item><title>SLA和运维指标</title><link>http://devops.alongparty.cn/posts/3e3c43/</link><pubDate>Wed, 08 Mar 2023 17:47:14 +0800</pubDate><author>kbsonlong</author><guid>http://devops.alongparty.cn/posts/3e3c43/</guid><description>1，SLA SLA是Service-Level Agreement的缩写，意思是服务等级协议，一般是协议双方做的彼此承诺，放在运维的领域，很重要</description></item><item><title>OpenEBS-CStor使用指南</title><link>http://devops.alongparty.cn/posts/4df4f1/</link><pubDate>Fri, 03 Mar 2023 17:42:56 +0800</pubDate><author>kbsonlong</author><guid>http://devops.alongparty.cn/posts/4df4f1/</guid><description>CStor 存储策略 目标节点 nodeSelector 1 2 3 4 5 6 7 8 9 10 11 cat &amp;lt;&amp;lt; EOF | kubectl apply -f - apiVersion: cstor.openebs.io/v1 kind: CStorVolumePolicy metadata: name: csi-volume-policy namespace: openebs spec: target: nodeSelector: biz.type: test EOF 目标节点亲和行 affinity 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 apiVersion:</description></item><item><title>深入Istio系列-Sidecar配置模板</title><link>http://devops.alongparty.cn/posts/aaad19/</link><pubDate>Fri, 24 Feb 2023 16:55:03 +0800</pubDate><author>kbsonlong</author><guid>http://devops.alongparty.cn/posts/aaad19/</guid><description><![CDATA[<p>本文不讲源码，来说说 istio sidecar 配置，从而灵活的控制 sidecar 注入、资源修改等场景。</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
@@ -282,82 +282,4 @@
 <td>iodepth=16</td>
 </tr>
 </tbody>
-</table>]]></description></item><item><title>全网最全的云原生存储 OpenEBS 使用指南</title><link>http://devops.alongparty.cn/posts/d75507/</link><pubDate>Sat, 15 Oct 2022 18:57:37 +0800</pubDate><author>kbsonlong</author><guid>http://devops.alongparty.cn/posts/d75507/</guid><description><![CDATA[<blockquote>
-<p><strong>简介</strong></p>
-</blockquote>
-<h3 id="openebs-是什么"><strong>OpenEBS 是什么？</strong></h3>
-<p><code>OpenEBS</code> 是一种开源云原生存储解决方案，托管于 <code>CNCF</code> 基金会，目前该项目处于沙箱阶段。</p>
-<p>OpenEBS 是一组存储引擎，允许您为有状态工作负载 (StatefulSet) 和 Kubernetes 平台类型选择正确的存储解决方案。在高层次上，OpenEBS 支持两大类卷——本地卷和复制卷。</p>
-<p>OpenEBS 是 Kubernetes 本地超融合存储解决方案，它管理节点可用的本地存储，并为有状态工作负载提供本地或高可用的分布式持久卷。作为一个完全的 Kubernetes 原生解决方案的另一个优势是，管理员和开发人员可以使用 kubectl、Helm、 Prometheus、Grafana、Weave Scope 等 Kubernetes 可用的所有优秀工具来交互和管理 OpenEBS。</p>]]></description></item><item><title>golang热加载工具</title><link>http://devops.alongparty.cn/posts/f7f93a/</link><pubDate>Mon, 19 Sep 2022 15:30:40 +0800</pubDate><author>kbsonlong</author><guid>http://devops.alongparty.cn/posts/f7f93a/</guid><description><![CDATA[<p>在用 Go 和 gin 框架开发网站时，gin 缺乏实时重载的功能是令人遗憾的,修改完代码之后经常需要 <code>ctrl + c</code> 结束服务，重新运行 <code>go run</code>,影响开发效率。
-<a
-  href="https://github.com/cosmtrek/air.git"
-  
-  
-    
-    
-    target="_blank"
-  
-  
-    rel="external nofollow noopener noreferrer"
-  
-  
-  
->Air</a> 是为 Go 应用开发设计的另外一个热重载的命令行工具。只需在你的项目根目录下输入 air，然后把它放在一边，专注于你的代码即可</p>
-<h2 id="安装">安装</h2>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt">1
-</span><span class="lnt">2
-</span><span class="lnt">3
-</span><span class="lnt">4
-</span><span class="lnt">5
-</span><span class="lnt">6
-</span><span class="lnt">7
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="c1"># binary 文件会是在 $(go env GOPATH)/bin/air</span>
-</span></span><span class="line"><span class="cl">curl -sSfL https://raw.githubusercontent.com/cosmtrek/air/master/install.sh <span class="p">|</span> sh -s -- -b <span class="k">$(</span>go env GOPATH<span class="k">)</span>/bin
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl"><span class="c1"># 或者把它安装在 ./bin/ 路径下</span>
-</span></span><span class="line"><span class="cl">curl -sSfL https://raw.githubusercontent.com/cosmtrek/air/master/install.sh <span class="p">|</span> sh -s
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl">air -v
-</span></span></code></pre></td></tr></table>
-</div>
-</div>]]></description></item><item><title>深入Istio系列-Pilot agent</title><link>http://devops.alongparty.cn/posts/3d18d6/</link><pubDate>Fri, 16 Sep 2022 17:25:59 +0800</pubDate><author>kbsonlong</author><guid>http://devops.alongparty.cn/posts/3d18d6/</guid><description><![CDATA[<h3 id="查看监听端口和进程">查看监听端口和进程</h3>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
-</span><span class="lnt"> 2
-</span><span class="lnt"> 3
-</span><span class="lnt"> 4
-</span><span class="lnt"> 5
-</span><span class="lnt"> 6
-</span><span class="lnt"> 7
-</span><span class="lnt"> 8
-</span><span class="lnt"> 9
-</span><span class="lnt">10
-</span><span class="lnt">11
-</span><span class="lnt">12
-</span><span class="lnt">13
-</span><span class="lnt">14
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">istio-proxy@istio-ingressgateway-799bbc9474-hf7kv:/$ ss -ntlp
-</span></span><span class="line"><span class="cl">State           Recv-Q          Send-Q                     Local Address:Port                      Peer Address:Port          Process                                       
-</span></span><span class="line"><span class="cl">LISTEN          <span class="m">0</span>               <span class="m">128</span>                            127.0.0.1:15000                          0.0.0.0:*              users:<span class="o">((</span><span class="s2">&#34;envoy&#34;</span>,pid<span class="o">=</span>16,fd<span class="o">=</span>18<span class="o">))</span>               
-</span></span><span class="line"><span class="cl">LISTEN          <span class="m">0</span>               <span class="m">128</span>                            127.0.0.1:15004                          0.0.0.0:*              users:<span class="o">((</span><span class="s2">&#34;pilot-agent&#34;</span>,pid<span class="o">=</span>1,fd<span class="o">=</span>15<span class="o">))</span>          
-</span></span><span class="line"><span class="cl">LISTEN          <span class="m">0</span>               <span class="m">128</span>                              0.0.0.0:15021                          0.0.0.0:*              users:<span class="o">((</span><span class="s2">&#34;envoy&#34;</span>,pid<span class="o">=</span>16,fd<span class="o">=</span>24<span class="o">))</span>               
-</span></span><span class="line"><span class="cl">LISTEN          <span class="m">0</span>               <span class="m">128</span>                              0.0.0.0:15021                          0.0.0.0:*              users:<span class="o">((</span><span class="s2">&#34;envoy&#34;</span>,pid<span class="o">=</span>16,fd<span class="o">=</span>23<span class="o">))</span>               
-</span></span><span class="line"><span class="cl">LISTEN          <span class="m">0</span>               <span class="m">128</span>                              0.0.0.0:8080                           0.0.0.0:*              users:<span class="o">((</span><span class="s2">&#34;envoy&#34;</span>,pid<span class="o">=</span>16,fd<span class="o">=</span>40<span class="o">))</span>               
-</span></span><span class="line"><span class="cl">LISTEN          <span class="m">0</span>               <span class="m">128</span>                              0.0.0.0:8080                           0.0.0.0:*              users:<span class="o">((</span><span class="s2">&#34;envoy&#34;</span>,pid<span class="o">=</span>16,fd<span class="o">=</span>39<span class="o">))</span>               
-</span></span><span class="line"><span class="cl">LISTEN          <span class="m">0</span>               <span class="m">128</span>                              0.0.0.0:15090                          0.0.0.0:*              users:<span class="o">((</span><span class="s2">&#34;envoy&#34;</span>,pid<span class="o">=</span>16,fd<span class="o">=</span>22<span class="o">))</span>               
-</span></span><span class="line"><span class="cl">LISTEN          <span class="m">0</span>               <span class="m">128</span>                              0.0.0.0:15090                          0.0.0.0:*              users:<span class="o">((</span><span class="s2">&#34;envoy&#34;</span>,pid<span class="o">=</span>16,fd<span class="o">=</span>21<span class="o">))</span>               
-</span></span><span class="line"><span class="cl">LISTEN          <span class="m">0</span>               <span class="m">128</span>                                    *:15020                                *:*              users:<span class="o">((</span><span class="s2">&#34;pilot-agent&#34;</span>,pid<span class="o">=</span>1,fd<span class="o">=</span>12<span class="o">))</span>          
-</span></span><span class="line"><span class="cl">istio-proxy@istio-ingressgateway-799bbc9474-hf7kv:/$ ps -ef <span class="p">|</span>grep pilot-agent
-</span></span><span class="line"><span class="cl">istio-p+     <span class="m">1</span>     <span class="m">0</span>  <span class="m">0</span> Sep14 ?        00:01:27 /usr/local/bin/pilot-agent proxy router --domain istio-system.svc.cluster.local --proxyLogLevel<span class="o">=</span>warning --proxyComponentLogLevel<span class="o">=</span>misc:error --log_output_level<span class="o">=</span>default:info
-</span></span><span class="line"><span class="cl">istio-p+    <span class="m">74</span>    <span class="m">30</span>  <span class="m">0</span> 09:37 pts/0    00:00:00 grep --color<span class="o">=</span>auto pilot-agent
-</span></span></code></pre></td></tr></table>
-</div>
-</div><figure>
-</figure>]]></description></item></channel></rss>
+</table>]]></description></item></channel></rss>
