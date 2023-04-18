@@ -1,4 +1,4 @@
-<rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title>蜷缩的蜗牛</title><link>http://devops.alongparty.cn/</link><description>云原生时代运维</description><generator>Hugo -- gohugo.io</generator><language>zh-CN</language><managingEditor>kbsonlong@gmail.com (kbsonlong)</managingEditor><webMaster>kbsonlong@gmail.com (kbsonlong)</webMaster><copyright>This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.</copyright><lastBuildDate>Tue, 28 Mar 2023 15:10:12 +0800</lastBuildDate><atom:link href="http://devops.alongparty.cn/index.xml" rel="self" type="application/rss+xml"/><item><title>深入Istio系列 - Envoy配置分析</title><link>http://devops.alongparty.cn/posts/18798d/</link><pubDate>Tue, 28 Mar 2023 15:10:12 +0800</pubDate><author>kbsonlong</author><guid>http://devops.alongparty.cn/posts/18798d/</guid><description><![CDATA[<h1 id="envoy-初始化配置文件">Envoy 初始化配置文件</h1>
+<rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title>蜷缩的蜗牛</title><link>http://devops.alongparty.cn/</link><description>云原生时代运维</description><generator>Hugo -- gohugo.io</generator><language>zh-CN</language><managingEditor>kbsonlong@gmail.com (kbsonlong)</managingEditor><webMaster>kbsonlong@gmail.com (kbsonlong)</webMaster><copyright>This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.</copyright><lastBuildDate>Tue, 18 Apr 2023 23:05:14 +0800</lastBuildDate><atom:link href="http://devops.alongparty.cn/index.xml" rel="self" type="application/rss+xml"/><item><title>源码分析 kubernetes hpa controller 水平自动扩缩容的实现原理</title><link>http://devops.alongparty.cn/posts/32dd44/</link><pubDate>Tue, 18 Apr 2023 23:05:14 +0800</pubDate><author>kbsonlong</author><guid>http://devops.alongparty.cn/posts/32dd44/</guid><description>源码分析 kubernetes hpa controller 水平自动扩缩容的实现原理 基于 kubernetes v1.27.0 版本进行 hpa 源码分析. Kubernetes 的 HorizontalPodAutoscaler (hpa) 组件可以根据目标的资源使用率 (cpu, mem 等等), 动态的资源对象进行的合理扩</description></item><item><title>源码分析 kubernetes scheduler 核心调度器的实现原理</title><link>http://devops.alongparty.cn/posts/a3f5fa/</link><pubDate>Tue, 18 Apr 2023 21:53:59 +0800</pubDate><author>kbsonlong</author><guid>http://devops.alongparty.cn/posts/a3f5fa/</guid><description>基于 kubernetes v1.27.0 源码分析 scheduler 调度器 k8s scheduler 的主要职责是为新创建的 pod 寻找一个最合适的 node 节点, 然后进行 bind node 绑定, 后面 kubelet 才会监听到并创建真正的 pod. 那么问题来了, 如</description></item><item><title>深入Istio系列 - Envoy配置分析</title><link>http://devops.alongparty.cn/posts/18798d/</link><pubDate>Tue, 28 Mar 2023 15:10:12 +0800</pubDate><author>kbsonlong</author><guid>http://devops.alongparty.cn/posts/18798d/</guid><description><![CDATA[<h1 id="envoy-初始化配置文件">Envoy 初始化配置文件</h1>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
@@ -111,59 +111,6 @@
 </span></span><span class="line"><span class="cl">ebs-csi-node-cq86s                   3/3     Running   <span class="m">0</span>          101s
 </span></span><span class="line"><span class="cl">ebs-csi-node-jnfxk                   0/3     Pending   <span class="m">0</span>          101s
 </span></span><span class="line"><span class="cl">ebs-csi-node-m48nn                   3/3     Running   <span class="m">0</span>          101s
-</span></span></code></pre></td></tr></table>
-</div>
-</div>]]></description></item><item><title>github工作流</title><link>http://devops.alongparty.cn/posts/f09cdc/</link><pubDate>Fri, 30 Dec 2022 18:26:53 +0800</pubDate><author>kbsonlong</author><guid>http://devops.alongparty.cn/posts/f09cdc/</guid><description><![CDATA[<p></p>
-<h2 id="1-fork-in-the-cloud">1. Fork in the cloud</h2>
-<ol>
-<li>Visit <a
-  href="https://github.com/kubernetes/kubernetes"
-  
-  
-    
-    
-    target="_blank"
-  
-  
-    rel="external nofollow noopener noreferrer"
-  
-  
-  
->https://github.com/kubernetes/kubernetes</a></li>
-<li>Click <code>Fork</code> button (top right) to establish a cloud-based fork.</li>
-</ol>]]></description></item><item><title>OpenEBS性能测试</title><link>http://devops.alongparty.cn/posts/f41ffb/</link><pubDate>Tue, 18 Oct 2022 19:53:40 +0800</pubDate><author>kbsonlong</author><guid>http://devops.alongparty.cn/posts/f41ffb/</guid><description><![CDATA[<h2 id="依赖说明">依赖说明</h2>
-<h3 id="准备裸盘">准备裸盘</h3>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt">1
-</span><span class="lnt">2
-</span><span class="lnt">3
-</span><span class="lnt">4
-</span><span class="lnt">5
-</span><span class="lnt">6
-</span><span class="lnt">7
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">root@ubuntu:~# lsblk
-</span></span><span class="line"><span class="cl">NAME        MAJ:MIN RM  SIZE RO TYPE MOUNTPOINT
-</span></span><span class="line"><span class="cl">nvme2n1     259:2    <span class="m">0</span>   50G  <span class="m">0</span> disk           <span class="c1">### 50G未格式化磁盘</span>
-</span></span><span class="line"><span class="cl">nvme1n1     259:0    <span class="m">0</span>  600G  <span class="m">0</span> disk
-</span></span><span class="line"><span class="cl">└─nvme1n1p1 259:3    <span class="m">0</span>  600G  <span class="m">0</span> part /data
-</span></span><span class="line"><span class="cl">nvme0n1     259:1    <span class="m">0</span>   40G  <span class="m">0</span> disk
-</span></span><span class="line"><span class="cl">└─nvme0n1p1 259:4    <span class="m">0</span>   40G  <span class="m">0</span> part /
-</span></span></code></pre></td></tr></table>
-</div>
-</div><h3 id="安装iscsi">安装iscsi</h3>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt">1
-</span><span class="lnt">2
-</span><span class="lnt">3
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">sudo apt-get update
-</span></span><span class="line"><span class="cl">sudo apt-get install open-iscsi
-</span></span><span class="line"><span class="cl">sudo systemctl <span class="nb">enable</span> --now iscsid
 </span></span></code></pre></td></tr></table>
 </div>
 </div>]]></description></item></channel></rss>
