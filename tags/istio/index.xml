@@ -1,0 +1,124 @@
+<rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title>istio - 标签 - 蜷缩的蜗牛</title><link>http://devops.alongparty.cn/tags/istio/</link><description>istio - 标签 - 蜷缩的蜗牛</description><generator>Hugo -- gohugo.io</generator><language>zh-CN</language><managingEditor>kbsonlong@gmail.com (kbsonlong)</managingEditor><webMaster>kbsonlong@gmail.com (kbsonlong)</webMaster><copyright>This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.</copyright><lastBuildDate>Tue, 28 Mar 2023 15:10:12 +0800</lastBuildDate><atom:link href="http://devops.alongparty.cn/tags/istio/" rel="self" type="application/rss+xml"/><item><title>深入Istio系列 - Envoy配置分析</title><link>http://devops.alongparty.cn/posts/18798d/</link><pubDate>Tue, 28 Mar 2023 15:10:12 +0800</pubDate><author>kbsonlong</author><guid>http://devops.alongparty.cn/posts/18798d/</guid><description><![CDATA[<h1 id="envoy-初始化配置文件">Envoy 初始化配置文件</h1>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">kubectl <span class="nb">exec</span> -ti productpage-v1-d4f8dfd97-p8xlb -c istio-proxy -- cat /etc/istio/proxy/envoy-rev.json
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>配置文件结构</p>
+<p></p>]]></description></item><item><title>深入Istio系列-Sidecar配置模板</title><link>http://devops.alongparty.cn/posts/aaad19/</link><pubDate>Fri, 24 Feb 2023 16:55:03 +0800</pubDate><author>kbsonlong</author><guid>http://devops.alongparty.cn/posts/aaad19/</guid><description><![CDATA[<p>本文不讲源码，来说说 istio sidecar 配置，从而灵活的控制 sidecar 注入、资源修改等场景。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">kubectl get cm -n istio-system istio-sidecar-injector -o yaml
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>先来预览一下 <code>istio-sidecar-injector</code>，主要包含 <code>config</code> 和 values
+</p>
+<h2 id="config">config</h2>
+<p>可以看到配置项有 默认模板 <code>defaultTemplates</code>、注入策略 <code>policy</code>、注入选择器 <code>alwaysInjectSelector</code>、 永不注入选择器 <code>neverInjectSelector</code>、<code>injectedAnnotations</code> 和 模板内容 <code>templates</code> 等</p>
+<p>关于注入策略(policy)、注入选择器(alwaysInjectSelector、neverInjectSelector)和注入注解(injectedAnnotations)可以查看 <a
+  href="https://devops.alongparty.cn/posts/dd0bd7/#injectrequired%E6%96%B9%E6%B3%95"
+  
+  
+    
+    
+    target="_blank"
+  
+  
+    rel="external nofollow noopener noreferrer"
+  
+  
+  
+>Sidecar 自动注入</a> 本文主要来了解 <code>Sidecar</code> 注入的模板，方便后续需要针对<code>Sidecar</code> 的部署调整</p>]]></description></item><item><title>深入Istio系列-Pilot agent</title><link>http://devops.alongparty.cn/posts/3d18d6/</link><pubDate>Fri, 16 Sep 2022 17:25:59 +0800</pubDate><author>kbsonlong</author><guid>http://devops.alongparty.cn/posts/3d18d6/</guid><description><![CDATA[<h3 id="查看监听端口和进程">查看监听端口和进程</h3>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">istio-proxy@istio-ingressgateway-799bbc9474-hf7kv:/$ ss -ntlp
+</span></span><span class="line"><span class="cl">State           Recv-Q          Send-Q                     Local Address:Port                      Peer Address:Port          Process                                       
+</span></span><span class="line"><span class="cl">LISTEN          <span class="m">0</span>               <span class="m">128</span>                            127.0.0.1:15000                          0.0.0.0:*              users:<span class="o">((</span><span class="s2">&#34;envoy&#34;</span>,pid<span class="o">=</span>16,fd<span class="o">=</span>18<span class="o">))</span>               
+</span></span><span class="line"><span class="cl">LISTEN          <span class="m">0</span>               <span class="m">128</span>                            127.0.0.1:15004                          0.0.0.0:*              users:<span class="o">((</span><span class="s2">&#34;pilot-agent&#34;</span>,pid<span class="o">=</span>1,fd<span class="o">=</span>15<span class="o">))</span>          
+</span></span><span class="line"><span class="cl">LISTEN          <span class="m">0</span>               <span class="m">128</span>                              0.0.0.0:15021                          0.0.0.0:*              users:<span class="o">((</span><span class="s2">&#34;envoy&#34;</span>,pid<span class="o">=</span>16,fd<span class="o">=</span>24<span class="o">))</span>               
+</span></span><span class="line"><span class="cl">LISTEN          <span class="m">0</span>               <span class="m">128</span>                              0.0.0.0:15021                          0.0.0.0:*              users:<span class="o">((</span><span class="s2">&#34;envoy&#34;</span>,pid<span class="o">=</span>16,fd<span class="o">=</span>23<span class="o">))</span>               
+</span></span><span class="line"><span class="cl">LISTEN          <span class="m">0</span>               <span class="m">128</span>                              0.0.0.0:8080                           0.0.0.0:*              users:<span class="o">((</span><span class="s2">&#34;envoy&#34;</span>,pid<span class="o">=</span>16,fd<span class="o">=</span>40<span class="o">))</span>               
+</span></span><span class="line"><span class="cl">LISTEN          <span class="m">0</span>               <span class="m">128</span>                              0.0.0.0:8080                           0.0.0.0:*              users:<span class="o">((</span><span class="s2">&#34;envoy&#34;</span>,pid<span class="o">=</span>16,fd<span class="o">=</span>39<span class="o">))</span>               
+</span></span><span class="line"><span class="cl">LISTEN          <span class="m">0</span>               <span class="m">128</span>                              0.0.0.0:15090                          0.0.0.0:*              users:<span class="o">((</span><span class="s2">&#34;envoy&#34;</span>,pid<span class="o">=</span>16,fd<span class="o">=</span>22<span class="o">))</span>               
+</span></span><span class="line"><span class="cl">LISTEN          <span class="m">0</span>               <span class="m">128</span>                              0.0.0.0:15090                          0.0.0.0:*              users:<span class="o">((</span><span class="s2">&#34;envoy&#34;</span>,pid<span class="o">=</span>16,fd<span class="o">=</span>21<span class="o">))</span>               
+</span></span><span class="line"><span class="cl">LISTEN          <span class="m">0</span>               <span class="m">128</span>                                    *:15020                                *:*              users:<span class="o">((</span><span class="s2">&#34;pilot-agent&#34;</span>,pid<span class="o">=</span>1,fd<span class="o">=</span>12<span class="o">))</span>          
+</span></span><span class="line"><span class="cl">istio-proxy@istio-ingressgateway-799bbc9474-hf7kv:/$ ps -ef <span class="p">|</span>grep pilot-agent
+</span></span><span class="line"><span class="cl">istio-p+     <span class="m">1</span>     <span class="m">0</span>  <span class="m">0</span> Sep14 ?        00:01:27 /usr/local/bin/pilot-agent proxy router --domain istio-system.svc.cluster.local --proxyLogLevel<span class="o">=</span>warning --proxyComponentLogLevel<span class="o">=</span>misc:error --log_output_level<span class="o">=</span>default:info
+</span></span><span class="line"><span class="cl">istio-p+    <span class="m">74</span>    <span class="m">30</span>  <span class="m">0</span> 09:37 pts/0    00:00:00 grep --color<span class="o">=</span>auto pilot-agent
+</span></span></code></pre></td></tr></table>
+</div>
+</div><figure>
+</figure>]]></description></item><item><title>Istio性能指标</title><link>http://devops.alongparty.cn/posts/6899d1/</link><pubDate>Tue, 13 Sep 2022 10:56:21 +0800</pubDate><author>kbsonlong</author><guid>http://devops.alongparty.cn/posts/6899d1/</guid><description><![CDATA[<h1 id="istio-指标">Istio 指标</h1>
+<h2 id="istio-自己的-metrics">Istio 自己的 Metrics</h2>
+<h3 id="标准指标说明">标准指标说明</h3>
+<blockquote>
+<p>参考：https://istio.io/latest/docs/reference/config/metrics/</p>
+</blockquote>
+<h4 id="metrics">Metrics</h4>
+<p>对于 HTTP、HTTP/2 和 GRPC 流量，Istio 默认生成以下指标：</p>
+<ul>
+<li><strong>Request Count</strong> (<code>istio_requests_total</code>): This is a <code>COUNTER</code> incremented for every request handled by an Istio proxy.</li>
+<li><strong>Request Duration</strong> (<code>istio_request_duration_milliseconds</code>): This is a <code>DISTRIBUTION</code> which measures the duration of requests.</li>
+<li><strong>Request Size</strong> (<code>istio_request_bytes</code>): This is a <code>DISTRIBUTION</code> which measures HTTP request body sizes.</li>
+<li><strong>Response Size</strong> (<code>istio_response_bytes</code>): This is a <code>DISTRIBUTION</code> which measures HTTP response body sizes.</li>
+<li><strong>gRPC Request Message Count</strong> (<code>istio_request_messages_total</code>): This is a <code>COUNTER</code> incremented for every gRPC message sent from a client.</li>
+<li><strong>gRPC Response Message Count</strong> (<code>istio_response_messages_total</code>): This is a <code>COUNTER</code> incremented for every gRPC message sent from a server.</li>
+</ul>]]></description></item><item><title>Envoy性能指标</title><link>http://devops.alongparty.cn/posts/0affe7/</link><pubDate>Tue, 13 Sep 2022 10:46:39 +0800</pubDate><author>kbsonlong</author><guid>http://devops.alongparty.cn/posts/0affe7/</guid><description><![CDATA[<h1 id="envoy-指标">Envoy 指标</h1>
+<h2 id="envoy-指标概述">Envoy 指标概述</h2>
+<p>Envoy 的主要目标之一是使网络易于理解。 Envoy 会根据其配置方式产生大量统计信息。一般来说，统计数据(指标)分为三类：</p>
+<ul>
+<li><strong>Downstream</strong>：Downstream 指标与外来的连接/请求有关。它们由 <code>listener</code>、<code>HTTP connection manager(HCM)</code>、<code>TCP proxy filter</code> 等产生。</li>
+<li><strong>Upstream</strong>：Upstream 指标与外向的连接/请求有关。它们由 <code>connection pool</code>、<code>router filter</code>、<code>tcp proxy filter</code>等产生。</li>
+<li><strong>Server</strong>：<code>Server</code> 指标信息描述 Envoy 服务器实例的运作情况。服务器正常运行时间或分配的内存量等统计信息。</li>
+</ul>
+<p>在最简单场景下，单个 Envoy Proxy 通常涉及 <code>Downstream</code> 和 <code>Upstream</code> 统计数据。这两种指标反映了取该 <code>网络节点</code> 的运行情况。来自整个网格的统计数据提供了每个<code> 网络节点</code> 和整体网络健康状况的非常详细的汇总信息。Envoy 的文档对这些指标有一些简单的说明。</p>]]></description></item><item><title>Istio组件详解</title><link>http://devops.alongparty.cn/posts/6be15f/</link><pubDate>Mon, 12 Sep 2022 08:19:28 +0800</pubDate><author>kbsonlong</author><guid>http://devops.alongparty.cn/posts/6be15f/</guid><description>在前两篇博客中： Istio 中的 Sidecar 注入、透明流量劫持及流量路由过程详解 Sidecar 中的流量类型及 iptables 规则详解 我向你详细介绍了 Istio 数据平面中的流量，但数据平面并不能孤</description></item><item><title>Istio 中的 Sidecar 注入、透明流量劫持及流量路由过程详解</title><link>http://devops.alongparty.cn/posts/fe0ba1/</link><pubDate>Sun, 11 Sep 2022 14:26:02 +0800</pubDate><author>kbsonlong</author><guid>http://devops.alongparty.cn/posts/fe0ba1/</guid><description>本文最早是基于 Istio 1.11 撰写，之后随着 Istio 的版本陆续更新，最新更新时间为 2022 年 5 月 12 日，关于本文历史版本的更新说明请见文章最后。本文记录了详细的实践过</description></item><item><title>深入Istio系列-Sidecar自动注入</title><link>http://devops.alongparty.cn/posts/dd0bd7/</link><pubDate>Sun, 11 Sep 2022 10:29:36 +0800</pubDate><author>kbsonlong</author><guid>http://devops.alongparty.cn/posts/dd0bd7/</guid><description><![CDATA[<ul>
+<li>
+<p>Sidecar 自动注入机制是将 sidecar 代理自动添加到用户创建的 pod。</p>
+</li>
+<li>
+<p>它使用 MutatingWebhook 机制在 pod 创建的时候将 sidecar 的容器和卷添加到每个 pod 的模版里。</p>
+</li>
+<li>
+<p>用户可以通过 webhooks namespaceSelector 机制来限定需要启动自动注入的范围，也可以通过注解的方式针对每个 pod 来单独启用和禁用自动注入功能。</p>
+</li>
+</ul>
+<p>Sidecar 是否会被自动注入取决于下面 3 条配置和 2 条安全规则：</p>]]></description></item><item><title>Istio性能测试</title><link>http://devops.alongparty.cn/posts/129682/</link><pubDate>Sun, 11 Sep 2022 10:29:02 +0800</pubDate><author>kbsonlong</author><guid>http://devops.alongparty.cn/posts/129682/</guid><description>&lt;h1 id="压测大纲">压测大纲&lt;/h1>
+&lt;p>&lt;/p></description></item><item><title>Istio部署实战</title><link>http://devops.alongparty.cn/posts/bf667a/</link><pubDate>Sun, 11 Sep 2022 10:27:29 +0800</pubDate><author>kbsonlong</author><guid>http://devops.alongparty.cn/posts/bf667a/</guid><description><![CDATA[<h2 id="helm-安装">Helm 安装</h2>
+<h3 id="安装基础资源">安装基础资源</h3>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">helm template istio-base manifests/charts/base <span class="se">\
+</span></span></span><span class="line"><span class="cl"><span class="se"></span>     -n istio-system <span class="se">\
+</span></span></span><span class="line"><span class="cl"><span class="se"></span>     --set base.enableCRDTemplates<span class="o">=</span><span class="nb">true</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div>]]></description></item></channel></rss>
