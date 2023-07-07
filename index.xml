@@ -1,4 +1,71 @@
-<rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title>蜷缩的蜗牛</title><link>https://www.alongparty.cn/</link><description>云原生时代运维</description><generator>Hugo -- gohugo.io</generator><language>zh-CN</language><managingEditor>kbsonlong@gmail.com (kbsonlong)</managingEditor><webMaster>kbsonlong@gmail.com (kbsonlong)</webMaster><copyright>This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.</copyright><lastBuildDate>Fri, 30 Jun 2023 10:31:21 +0800</lastBuildDate><atom:link href="https://www.alongparty.cn/index.xml" rel="self" type="application/rss+xml"/><item><title>karmada快速体验</title><link>https://www.alongparty.cn/posts/02c894/</link><pubDate>Fri, 30 Jun 2023 10:31:21 +0800</pubDate><author>kbsonlong</author><guid>https://www.alongparty.cn/posts/02c894/</guid><description><![CDATA[<h2 id="环境准备">环境准备</h2>
+<rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title>蜷缩的蜗牛</title><link>https://www.alongparty.cn/</link><description>云原生时代运维</description><generator>Hugo -- gohugo.io</generator><language>zh-CN</language><managingEditor>kbsonlong@gmail.com (kbsonlong)</managingEditor><webMaster>kbsonlong@gmail.com (kbsonlong)</webMaster><copyright>This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.</copyright><lastBuildDate>Fri, 07 Jul 2023 16:50:30 +0800</lastBuildDate><atom:link href="https://www.alongparty.cn/index.xml" rel="self" type="application/rss+xml"/><item><title>01-利用vscode与kind搭建kubernetes开发环境</title><link>https://www.alongparty.cn/posts/44f039/</link><pubDate>Fri, 07 Jul 2023 16:50:30 +0800</pubDate><author>kbsonlong</author><guid>https://www.alongparty.cn/posts/44f039/</guid><description><![CDATA[<p>基于<a
+  href="https://github.com/kubernetes/kubernetes/tree/v1.27.0"
+  
+  
+    
+    
+    target="_blank"
+  
+  
+    rel="external nofollow noopener noreferrer"
+  
+  
+  
+>1.27.0</a>版本</p>
+<h2 id="kind-创建集群">Kind 创建集群</h2>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="line"><span class="cl"><span class="l">cat &lt;&lt; EOF &gt; dev.yaml</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l">Cluster</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="s2">&#34;kind.x-k8s.io/v1alpha4&#34;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">kubeadmConfigPatches</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span>- <span class="p">|</span><span class="sd">
+</span></span></span><span class="line"><span class="cl"><span class="sd">  apiVersion: kubeadm.k8s.io/v1beta1
+</span></span></span><span class="line"><span class="cl"><span class="sd">  kind: ClusterConfiguration
+</span></span></span><span class="line"><span class="cl"><span class="sd">  metadata:
+</span></span></span><span class="line"><span class="cl"><span class="sd">    name: dev
+</span></span></span><span class="line"><span class="cl"><span class="sd">  imageRepository: registry.aliyuncs.com/google_containers</span><span class="w">  
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">networking</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">podSubnet</span><span class="p">:</span><span class="w"> </span><span class="s2">&#34;10.8.0.0/16&#34;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">serviceSubnet</span><span class="p">:</span><span class="w"> </span><span class="s2">&#34;10.9.0.0/16&#34;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">nodes</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span>- <span class="nt">role</span><span class="p">:</span><span class="w"> </span><span class="l">control-plane</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l">kindest/node:v1.27.0@sha256:c6b22e613523b1af67d4bc8a0c38a4c3ea3a2b8fbc5b367ae36345c9cb844518</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">extraPortMappings</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span>- <span class="nt">containerPort</span><span class="p">:</span><span class="w"> </span><span class="m">2379</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="nt">hostPort</span><span class="p">:</span><span class="w"> </span><span class="m">2379</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="nt">protocol</span><span class="p">:</span><span class="w"> </span><span class="l">TCP</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="l">EOF</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="l">kind create cluster --name dev --config=dev.yaml</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div>]]></description></item><item><title>karmada快速体验</title><link>https://www.alongparty.cn/posts/02c894/</link><pubDate>Fri, 30 Jun 2023 10:31:21 +0800</pubDate><author>kbsonlong</author><guid>https://www.alongparty.cn/posts/02c894/</guid><description><![CDATA[<h2 id="环境准备">环境准备</h2>
 <p>利用 <code>kind</code> 快速创建 <code>kubernetes</code> 集群环境</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
@@ -198,16 +265,4 @@
 </span></span></code></pre></td></tr></table>
 </div>
 </div>]]></description></item><item><title>Loki系统架构</title><link>https://www.alongparty.cn/posts/c7c7b8/</link><pubDate>Thu, 15 Jun 2023 13:24:56 +0800</pubDate><author>kbsonlong</author><guid>https://www.alongparty.cn/posts/c7c7b8/</guid><description>&lt;h1 id="loki-系统架构">Loki 系统架构&lt;/h1>
-&lt;p>&lt;/p></description></item><item><title>源码分析 kubernetes hpa controller 水平自动扩缩容的实现原理</title><link>https://www.alongparty.cn/posts/32dd44/</link><pubDate>Tue, 18 Apr 2023 23:05:14 +0800</pubDate><author>kbsonlong</author><guid>https://www.alongparty.cn/posts/32dd44/</guid><description>源码分析 kubernetes hpa controller 水平自动扩缩容的实现原理 基于 kubernetes v1.27.0 版本进行 hpa 源码分析. Kubernetes 的 HorizontalPodAutoscaler (hpa) 组件可以根据目标的资源使用率 (cpu, mem 等等), 动态的资源对象进行的合理扩</description></item><item><title>源码分析 kubernetes scheduler 核心调度器的实现原理</title><link>https://www.alongparty.cn/posts/a3f5fa/</link><pubDate>Tue, 18 Apr 2023 21:53:59 +0800</pubDate><author>kbsonlong</author><guid>https://www.alongparty.cn/posts/a3f5fa/</guid><description>基于 kubernetes v1.27.0 源码分析 scheduler 调度器 k8s scheduler 的主要职责是为新创建的 pod 寻找一个最合适的 node 节点, 然后进行 bind node 绑定, 后面 kubelet 才会监听到并创建真正的 pod. 那么问题来了, 如</description></item><item><title>深入Istio系列 - Envoy配置分析</title><link>https://www.alongparty.cn/posts/18798d/</link><pubDate>Tue, 28 Mar 2023 15:10:12 +0800</pubDate><author>kbsonlong</author><guid>https://www.alongparty.cn/posts/18798d/</guid><description><![CDATA[<h1 id="envoy-初始化配置文件">Envoy 初始化配置文件</h1>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt">1
-</span><span class="lnt">2
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl">kubectl <span class="nb">exec</span> -ti productpage-v1-d4f8dfd97-p8xlb -c istio-proxy -- cat /etc/istio/proxy/envoy-rev.json
-</span></span></code></pre></td></tr></table>
-</div>
-</div><p>配置文件结构</p>
-<p></p>]]></description></item></channel></rss>
+&lt;p>&lt;/p></description></item><item><title>源码分析 kubernetes hpa controller 水平自动扩缩容的实现原理</title><link>https://www.alongparty.cn/posts/32dd44/</link><pubDate>Tue, 18 Apr 2023 23:05:14 +0800</pubDate><author>kbsonlong</author><guid>https://www.alongparty.cn/posts/32dd44/</guid><description>源码分析 kubernetes hpa controller 水平自动扩缩容的实现原理 基于 kubernetes v1.27.0 版本进行 hpa 源码分析. Kubernetes 的 HorizontalPodAutoscaler (hpa) 组件可以根据目标的资源使用率 (cpu, mem 等等), 动态的资源对象进行的合理扩</description></item><item><title>源码分析 kubernetes scheduler 核心调度器的实现原理</title><link>https://www.alongparty.cn/posts/a3f5fa/</link><pubDate>Tue, 18 Apr 2023 21:53:59 +0800</pubDate><author>kbsonlong</author><guid>https://www.alongparty.cn/posts/a3f5fa/</guid><description>基于 kubernetes v1.27.0 源码分析 scheduler 调度器 k8s scheduler 的主要职责是为新创建的 pod 寻找一个最合适的 node 节点, 然后进行 bind node 绑定, 后面 kubelet 才会监听到并创建真正的 pod. 那么问题来了, 如</description></item></channel></rss>
