@@ -1,4 +1,41 @@
-<rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title>istio - 标签 - 蜷缩的蜗牛</title><link>https://www.alongparty.cn/tags/istio/</link><description>istio - 标签 - 蜷缩的蜗牛</description><generator>Hugo -- gohugo.io</generator><language>zh-CN</language><managingEditor>kbsonlong@gmail.com (kbsonlong)</managingEditor><webMaster>kbsonlong@gmail.com (kbsonlong)</webMaster><copyright>This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.</copyright><lastBuildDate>Mon, 17 Jul 2023 14:47:39 +0800</lastBuildDate><atom:link href="https://www.alongparty.cn/tags/istio/" rel="self" type="application/rss+xml"/><item><title>istio常用操作</title><link>https://www.alongparty.cn/posts/5890/</link><pubDate>Mon, 17 Jul 2023 14:47:39 +0800</pubDate><author>kbsonlong</author><guid>https://www.alongparty.cn/posts/5890/</guid><description>常用脚本 由于线上主机初始化没有安装 socat, 在使用istioctl是无法转发端口,所以直接导出 Envoy 的配置，然后在使用 istioctl操作。 导出conf</description></item><item><title>深入Istio系列 - Envoy配置分析</title><link>https://www.alongparty.cn/posts/18798d/</link><pubDate>Tue, 28 Mar 2023 15:10:12 +0800</pubDate><author>kbsonlong</author><guid>https://www.alongparty.cn/posts/18798d/</guid><description><![CDATA[<h1 id="envoy-初始化配置文件">Envoy 初始化配置文件</h1>
+<rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title>istio - 标签 - 蜷缩的蜗牛</title><link>https://www.alongparty.cn/tags/istio/</link><description>istio - 标签 - 蜷缩的蜗牛</description><generator>Hugo -- gohugo.io</generator><language>zh-CN</language><managingEditor>kbsonlong@gmail.com (kbsonlong)</managingEditor><webMaster>kbsonlong@gmail.com (kbsonlong)</webMaster><copyright>This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.</copyright><lastBuildDate>Mon, 17 Jul 2023 21:08:20 +0800</lastBuildDate><atom:link href="https://www.alongparty.cn/tags/istio/" rel="self" type="application/rss+xml"/><item><title>istio全局默认配置</title><link>https://www.alongparty.cn/posts/03a16b/</link><pubDate>Mon, 17 Jul 2023 21:08:20 +0800</pubDate><author>kbsonlong</author><guid>https://www.alongparty.cn/posts/03a16b/</guid><description><![CDATA[<h3 id="全局关闭重试">全局关闭重试</h3>
+<p>istio默认重试2次</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span><span class="lnt">9
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="line"><span class="cl"><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l">v1</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">data</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">mesh</span><span class="p">:</span><span class="w"> </span><span class="l">|-</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nn">...</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nn">...</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">defaultHttpRetryPolicy</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="nt">attempts</span><span class="p">:</span><span class="w"> </span><span class="m">0</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nn">...</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nn">...</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div>]]></description></item><item><title>istio常用操作</title><link>https://www.alongparty.cn/posts/5890/</link><pubDate>Mon, 17 Jul 2023 14:47:39 +0800</pubDate><author>kbsonlong</author><guid>https://www.alongparty.cn/posts/5890/</guid><description><![CDATA[<h2 id="常用脚本">常用脚本</h2>
+<p>由于线上主机初始化没有安装 <code>socat</code>, 在使用<code>istioctl</code>是无法转发端口,所以直接导出 <code>Envoy</code> 的配置，然后在使用 <code>istioctl</code>操作。</p>
+<h3 id="导出config">导出config</h3>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">kubectl <span class="nb">exec</span> -ti -n zsl-test mydemo-my-demo-sgcanshu-4vb7b -c istio-proxy -- curl http://127.0.0.1:15000/config_dump &gt; config_dump.json
+</span></span></code></pre></td></tr></table>
+</div>
+</div>]]></description></item><item><title>深入Istio系列 - Envoy配置分析</title><link>https://www.alongparty.cn/posts/18798d/</link><pubDate>Tue, 28 Mar 2023 15:10:12 +0800</pubDate><author>kbsonlong</author><guid>https://www.alongparty.cn/posts/18798d/</guid><description><![CDATA[<h1 id="envoy-初始化配置文件">Envoy 初始化配置文件</h1>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
@@ -106,5 +143,4 @@
 <p>用户可以通过 webhooks namespaceSelector 机制来限定需要启动自动注入的范围，也可以通过注解的方式针对每个 pod 来单独启用和禁用自动注入功能。</p>
 </li>
 </ul>
-<p>Sidecar 是否会被自动注入取决于下面 3 条配置和 2 条安全规则：</p>]]></description></item><item><title>Istio性能测试</title><link>https://www.alongparty.cn/posts/129682/</link><pubDate>Sun, 11 Sep 2022 10:29:02 +0800</pubDate><author>kbsonlong</author><guid>https://www.alongparty.cn/posts/129682/</guid><description>&lt;h1 id="压测大纲">压测大纲&lt;/h1>
-&lt;p>&lt;/p></description></item></channel></rss>
+<p>Sidecar 是否会被自动注入取决于下面 3 条配置和 2 条安全规则：</p>]]></description></item></channel></rss>

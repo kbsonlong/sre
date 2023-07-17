@@ -1,4 +1,41 @@
-<rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title>云原生 - 分类 - 蜷缩的蜗牛</title><link>https://www.alongparty.cn/categories/%E4%BA%91%E5%8E%9F%E7%94%9F/</link><description>云原生 - 分类 - 蜷缩的蜗牛</description><generator>Hugo -- gohugo.io</generator><language>zh-CN</language><managingEditor>kbsonlong@gmail.com (kbsonlong)</managingEditor><webMaster>kbsonlong@gmail.com (kbsonlong)</webMaster><copyright>This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.</copyright><lastBuildDate>Mon, 17 Jul 2023 14:47:39 +0800</lastBuildDate><atom:link href="https://www.alongparty.cn/categories/%E4%BA%91%E5%8E%9F%E7%94%9F/" rel="self" type="application/rss+xml"/><item><title>istio常用操作</title><link>https://www.alongparty.cn/posts/5890/</link><pubDate>Mon, 17 Jul 2023 14:47:39 +0800</pubDate><author>kbsonlong</author><guid>https://www.alongparty.cn/posts/5890/</guid><description>常用脚本 由于线上主机初始化没有安装 socat, 在使用istioctl是无法转发端口,所以直接导出 Envoy 的配置，然后在使用 istioctl操作。 导出conf</description></item><item><title>深入Istio系列-Sidecar配置模板</title><link>https://www.alongparty.cn/posts/aaad19/</link><pubDate>Fri, 24 Feb 2023 16:55:03 +0800</pubDate><author>kbsonlong</author><guid>https://www.alongparty.cn/posts/aaad19/</guid><description><![CDATA[<p>本文不讲源码，来说说 istio sidecar 配置，从而灵活的控制 sidecar 注入、资源修改等场景。</p>
+<rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title>云原生 - 分类 - 蜷缩的蜗牛</title><link>https://www.alongparty.cn/categories/%E4%BA%91%E5%8E%9F%E7%94%9F/</link><description>云原生 - 分类 - 蜷缩的蜗牛</description><generator>Hugo -- gohugo.io</generator><language>zh-CN</language><managingEditor>kbsonlong@gmail.com (kbsonlong)</managingEditor><webMaster>kbsonlong@gmail.com (kbsonlong)</webMaster><copyright>This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.</copyright><lastBuildDate>Mon, 17 Jul 2023 21:08:20 +0800</lastBuildDate><atom:link href="https://www.alongparty.cn/categories/%E4%BA%91%E5%8E%9F%E7%94%9F/" rel="self" type="application/rss+xml"/><item><title>istio全局默认配置</title><link>https://www.alongparty.cn/posts/03a16b/</link><pubDate>Mon, 17 Jul 2023 21:08:20 +0800</pubDate><author>kbsonlong</author><guid>https://www.alongparty.cn/posts/03a16b/</guid><description><![CDATA[<h3 id="全局关闭重试">全局关闭重试</h3>
+<p>istio默认重试2次</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span><span class="lnt">9
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="line"><span class="cl"><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l">v1</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">data</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">mesh</span><span class="p">:</span><span class="w"> </span><span class="l">|-</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nn">...</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nn">...</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">defaultHttpRetryPolicy</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="nt">attempts</span><span class="p">:</span><span class="w"> </span><span class="m">0</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nn">...</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nn">...</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div>]]></description></item><item><title>istio常用操作</title><link>https://www.alongparty.cn/posts/5890/</link><pubDate>Mon, 17 Jul 2023 14:47:39 +0800</pubDate><author>kbsonlong</author><guid>https://www.alongparty.cn/posts/5890/</guid><description><![CDATA[<h2 id="常用脚本">常用脚本</h2>
+<p>由于线上主机初始化没有安装 <code>socat</code>, 在使用<code>istioctl</code>是无法转发端口,所以直接导出 <code>Envoy</code> 的配置，然后在使用 <code>istioctl</code>操作。</p>
+<h3 id="导出config">导出config</h3>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">kubectl <span class="nb">exec</span> -ti -n zsl-test mydemo-my-demo-sgcanshu-4vb7b -c istio-proxy -- curl http://127.0.0.1:15000/config_dump &gt; config_dump.json
+</span></span></code></pre></td></tr></table>
+</div>
+</div>]]></description></item><item><title>深入Istio系列-Sidecar配置模板</title><link>https://www.alongparty.cn/posts/aaad19/</link><pubDate>Fri, 24 Feb 2023 16:55:03 +0800</pubDate><author>kbsonlong</author><guid>https://www.alongparty.cn/posts/aaad19/</guid><description><![CDATA[<p>本文不讲源码，来说说 istio sidecar 配置，从而灵活的控制 sidecar 注入、资源修改等场景。</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
@@ -186,4 +223,4 @@
 <li><strong>Upstream</strong>：Upstream 指标与外向的连接/请求有关。它们由 <code>connection pool</code>、<code>router filter</code>、<code>tcp proxy filter</code>等产生。</li>
 <li><strong>Server</strong>：<code>Server</code> 指标信息描述 Envoy 服务器实例的运作情况。服务器正常运行时间或分配的内存量等统计信息。</li>
 </ul>
-<p>在最简单场景下，单个 Envoy Proxy 通常涉及 <code>Downstream</code> 和 <code>Upstream</code> 统计数据。这两种指标反映了取该 <code>网络节点</code> 的运行情况。来自整个网格的统计数据提供了每个<code> 网络节点</code> 和整体网络健康状况的非常详细的汇总信息。Envoy 的文档对这些指标有一些简单的说明。</p>]]></description></item><item><title>Istio组件详解</title><link>https://www.alongparty.cn/posts/6be15f/</link><pubDate>Mon, 12 Sep 2022 08:19:28 +0800</pubDate><author>kbsonlong</author><guid>https://www.alongparty.cn/posts/6be15f/</guid><description>在前两篇博客中： Istio 中的 Sidecar 注入、透明流量劫持及流量路由过程详解 Sidecar 中的流量类型及 iptables 规则详解 我向你详细介绍了 Istio 数据平面中的流量，但数据平面并不能孤</description></item></channel></rss>
+<p>在最简单场景下，单个 Envoy Proxy 通常涉及 <code>Downstream</code> 和 <code>Upstream</code> 统计数据。这两种指标反映了取该 <code>网络节点</code> 的运行情况。来自整个网格的统计数据提供了每个<code> 网络节点</code> 和整体网络健康状况的非常详细的汇总信息。Envoy 的文档对这些指标有一些简单的说明。</p>]]></description></item></channel></rss>
