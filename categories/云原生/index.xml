@@ -35,7 +35,7 @@
 <pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">kubectl <span class="nb">exec</span> -ti -n zsl-test mydemo-my-demo-sgcanshu-4vb7b -c istio-proxy -- curl http://127.0.0.1:15000/config_dump &gt; config_dump.json
 </span></span></code></pre></td></tr></table>
 </div>
-</div>]]></description></item><item><title>深入Istio系列-Sidecar配置模板</title><link>https://www.alongparty.cn/posts/aaad19/</link><pubDate>Fri, 24 Feb 2023 16:55:03 +0800</pubDate><author>kbsonlong</author><guid>https://www.alongparty.cn/posts/aaad19/</guid><description><![CDATA[<p>本文不讲源码，来说说 istio sidecar 配置，从而灵活的控制 sidecar 注入、资源修改等场景。</p>
+</div>]]></description></item><item><title>Istio故障排除常用指令</title><link>https://www.alongparty.cn/posts/ba614f/</link><pubDate>Fri, 31 Mar 2023 21:13:29 +0800</pubDate><author>kbsonlong</author><guid>https://www.alongparty.cn/posts/ba614f/</guid><description>局部开启 Access 日志 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 export NAMESPACE=default export WORKLOAD=details cat &amp;lt;&amp;lt; EOF | kubectl apply -f - apiVersion: networking.istio.io/v1alpha3 kind: EnvoyFilter metadata: name: enable-accesslog namespace: ${NAMESPACE} spec: configPatches: - applyTo: NETWORK_FILTER match: context: ANY listener: filterChain: filter:</description></item><item><title>深入Istio系列-Sidecar配置模板</title><link>https://www.alongparty.cn/posts/aaad19/</link><pubDate>Fri, 24 Feb 2023 16:55:03 +0800</pubDate><author>kbsonlong</author><guid>https://www.alongparty.cn/posts/aaad19/</guid><description><![CDATA[<p>本文不讲源码，来说说 istio sidecar 配置，从而灵活的控制 sidecar 注入、资源修改等场景。</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
@@ -215,12 +215,4 @@
 <li><strong>Response Size</strong> (<code>istio_response_bytes</code>): This is a <code>DISTRIBUTION</code> which measures HTTP response body sizes.</li>
 <li><strong>gRPC Request Message Count</strong> (<code>istio_request_messages_total</code>): This is a <code>COUNTER</code> incremented for every gRPC message sent from a client.</li>
 <li><strong>gRPC Response Message Count</strong> (<code>istio_response_messages_total</code>): This is a <code>COUNTER</code> incremented for every gRPC message sent from a server.</li>
-</ul>]]></description></item><item><title>Envoy性能指标</title><link>https://www.alongparty.cn/posts/0affe7/</link><pubDate>Tue, 13 Sep 2022 10:46:39 +0800</pubDate><author>kbsonlong</author><guid>https://www.alongparty.cn/posts/0affe7/</guid><description><![CDATA[<h1 id="envoy-指标">Envoy 指标</h1>
-<h2 id="envoy-指标概述">Envoy 指标概述</h2>
-<p>Envoy 的主要目标之一是使网络易于理解。 Envoy 会根据其配置方式产生大量统计信息。一般来说，统计数据(指标)分为三类：</p>
-<ul>
-<li><strong>Downstream</strong>：Downstream 指标与外来的连接/请求有关。它们由 <code>listener</code>、<code>HTTP connection manager(HCM)</code>、<code>TCP proxy filter</code> 等产生。</li>
-<li><strong>Upstream</strong>：Upstream 指标与外向的连接/请求有关。它们由 <code>connection pool</code>、<code>router filter</code>、<code>tcp proxy filter</code>等产生。</li>
-<li><strong>Server</strong>：<code>Server</code> 指标信息描述 Envoy 服务器实例的运作情况。服务器正常运行时间或分配的内存量等统计信息。</li>
-</ul>
-<p>在最简单场景下，单个 Envoy Proxy 通常涉及 <code>Downstream</code> 和 <code>Upstream</code> 统计数据。这两种指标反映了取该 <code>网络节点</code> 的运行情况。来自整个网格的统计数据提供了每个<code> 网络节点</code> 和整体网络健康状况的非常详细的汇总信息。Envoy 的文档对这些指标有一些简单的说明。</p>]]></description></item></channel></rss>
+</ul>]]></description></item></channel></rss>

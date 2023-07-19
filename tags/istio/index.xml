@@ -35,7 +35,7 @@
 <pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">kubectl <span class="nb">exec</span> -ti -n zsl-test mydemo-my-demo-sgcanshu-4vb7b -c istio-proxy -- curl http://127.0.0.1:15000/config_dump &gt; config_dump.json
 </span></span></code></pre></td></tr></table>
 </div>
-</div>]]></description></item><item><title>深入Istio系列 - Envoy配置分析</title><link>https://www.alongparty.cn/posts/18798d/</link><pubDate>Tue, 28 Mar 2023 15:10:12 +0800</pubDate><author>kbsonlong</author><guid>https://www.alongparty.cn/posts/18798d/</guid><description><![CDATA[<h1 id="envoy-初始化配置文件">Envoy 初始化配置文件</h1>
+</div>]]></description></item><item><title>Istio故障排除常用指令</title><link>https://www.alongparty.cn/posts/ba614f/</link><pubDate>Fri, 31 Mar 2023 21:13:29 +0800</pubDate><author>kbsonlong</author><guid>https://www.alongparty.cn/posts/ba614f/</guid><description>局部开启 Access 日志 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 export NAMESPACE=default export WORKLOAD=details cat &amp;lt;&amp;lt; EOF | kubectl apply -f - apiVersion: networking.istio.io/v1alpha3 kind: EnvoyFilter metadata: name: enable-accesslog namespace: ${NAMESPACE} spec: configPatches: - applyTo: NETWORK_FILTER match: context: ANY listener: filterChain: filter:</description></item><item><title>深入Istio系列 - Envoy配置分析</title><link>https://www.alongparty.cn/posts/18798d/</link><pubDate>Tue, 28 Mar 2023 15:10:12 +0800</pubDate><author>kbsonlong</author><guid>https://www.alongparty.cn/posts/18798d/</guid><description><![CDATA[<h1 id="envoy-初始化配置文件">Envoy 初始化配置文件</h1>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
@@ -132,15 +132,4 @@
 <li><strong>Upstream</strong>：Upstream 指标与外向的连接/请求有关。它们由 <code>connection pool</code>、<code>router filter</code>、<code>tcp proxy filter</code>等产生。</li>
 <li><strong>Server</strong>：<code>Server</code> 指标信息描述 Envoy 服务器实例的运作情况。服务器正常运行时间或分配的内存量等统计信息。</li>
 </ul>
-<p>在最简单场景下，单个 Envoy Proxy 通常涉及 <code>Downstream</code> 和 <code>Upstream</code> 统计数据。这两种指标反映了取该 <code>网络节点</code> 的运行情况。来自整个网格的统计数据提供了每个<code> 网络节点</code> 和整体网络健康状况的非常详细的汇总信息。Envoy 的文档对这些指标有一些简单的说明。</p>]]></description></item><item><title>Istio组件详解</title><link>https://www.alongparty.cn/posts/6be15f/</link><pubDate>Mon, 12 Sep 2022 08:19:28 +0800</pubDate><author>kbsonlong</author><guid>https://www.alongparty.cn/posts/6be15f/</guid><description>在前两篇博客中： Istio 中的 Sidecar 注入、透明流量劫持及流量路由过程详解 Sidecar 中的流量类型及 iptables 规则详解 我向你详细介绍了 Istio 数据平面中的流量，但数据平面并不能孤</description></item><item><title>Istio 中的 Sidecar 注入、透明流量劫持及流量路由过程详解</title><link>https://www.alongparty.cn/posts/fe0ba1/</link><pubDate>Sun, 11 Sep 2022 14:26:02 +0800</pubDate><author>kbsonlong</author><guid>https://www.alongparty.cn/posts/fe0ba1/</guid><description>本文最早是基于 Istio 1.11 撰写，之后随着 Istio 的版本陆续更新，最新更新时间为 2022 年 5 月 12 日，关于本文历史版本的更新说明请见文章最后。本文记录了详细的实践过</description></item><item><title>深入Istio系列-Sidecar自动注入</title><link>https://www.alongparty.cn/posts/dd0bd7/</link><pubDate>Sun, 11 Sep 2022 10:29:36 +0800</pubDate><author>kbsonlong</author><guid>https://www.alongparty.cn/posts/dd0bd7/</guid><description><![CDATA[<ul>
-<li>
-<p>Sidecar 自动注入机制是将 sidecar 代理自动添加到用户创建的 pod。</p>
-</li>
-<li>
-<p>它使用 MutatingWebhook 机制在 pod 创建的时候将 sidecar 的容器和卷添加到每个 pod 的模版里。</p>
-</li>
-<li>
-<p>用户可以通过 webhooks namespaceSelector 机制来限定需要启动自动注入的范围，也可以通过注解的方式针对每个 pod 来单独启用和禁用自动注入功能。</p>
-</li>
-</ul>
-<p>Sidecar 是否会被自动注入取决于下面 3 条配置和 2 条安全规则：</p>]]></description></item></channel></rss>
+<p>在最简单场景下，单个 Envoy Proxy 通常涉及 <code>Downstream</code> 和 <code>Upstream</code> 统计数据。这两种指标反映了取该 <code>网络节点</code> 的运行情况。来自整个网格的统计数据提供了每个<code> 网络节点</code> 和整体网络健康状况的非常详细的汇总信息。Envoy 的文档对这些指标有一些简单的说明。</p>]]></description></item><item><title>Istio组件详解</title><link>https://www.alongparty.cn/posts/6be15f/</link><pubDate>Mon, 12 Sep 2022 08:19:28 +0800</pubDate><author>kbsonlong</author><guid>https://www.alongparty.cn/posts/6be15f/</guid><description>在前两篇博客中： Istio 中的 Sidecar 注入、透明流量劫持及流量路由过程详解 Sidecar 中的流量类型及 iptables 规则详解 我向你详细介绍了 Istio 数据平面中的流量，但数据平面并不能孤</description></item><item><title>Istio 中的 Sidecar 注入、透明流量劫持及流量路由过程详解</title><link>https://www.alongparty.cn/posts/fe0ba1/</link><pubDate>Sun, 11 Sep 2022 14:26:02 +0800</pubDate><author>kbsonlong</author><guid>https://www.alongparty.cn/posts/fe0ba1/</guid><description>本文最早是基于 Istio 1.11 撰写，之后随着 Istio 的版本陆续更新，最新更新时间为 2022 年 5 月 12 日，关于本文历史版本的更新说明请见文章最后。本文记录了详细的实践过</description></item></channel></rss>
