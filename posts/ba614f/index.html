@@ -224,7 +224,6 @@ active loggers:
 
 
 
-
 1
 2
 3
@@ -474,7 +473,6 @@ active loggers:
   hystrix: warning
 ...
 ...
-
 
 
 
@@ -732,7 +730,6 @@ active loggers:
 
 
 
-
 1
 2
 3
@@ -986,7 +983,6 @@ active loggers:
 
 
 
-
 1
 2
 3
@@ -1025,7 +1021,7 @@ kubectl exec -ti -n zsl-test mydemo-my-demo-sgcanshu-4vb7b -c istio-proxy -- cur
 <span class=post-category>收录于 <a href=/categories/%E4%BA%91%E5%8E%9F%E7%94%9F/><i class="fa-regular fa-folder fa-fw"></i>&nbsp;云原生</a></span></div><div class=post-meta-line><span title="2023-03-31 21:13:29"><i class="fa-regular fa-calendar-alt fa-fw"></i>&nbsp;<time datetime=2023-03-31>2023-03-31</time>
 </span>&nbsp;<i class="fa-solid fa-pencil-alt fa-fw"></i>&nbsp;约 1704 字&nbsp;
 <i class="fa-regular fa-clock fa-fw"></i>&nbsp;预计阅读 4 分钟&nbsp;</div></div><div class="details toc" id=toc-static kept=false><div class="details-summary toc-title"><span>目录</span>
-<span><i class="details-icon fa-solid fa-angle-right"></i></span></div><div class="details-content toc-content" id=toc-content-static><nav id=TableOfContents><ul><li><a href=#局部开启-access-日志>局部开启 Access 日志</a></li><li><a href=#修改-envoy-日志级别>修改 Envoy 日志级别</a><ul><li><a href=#修改所有-logger>修改所有 logger</a></li><li><a href=#修改其中一个-logger-级别>修改其中一个 logger 级别</a></li></ul></li><li><a href=#heading></a></li><li><a href=#常用脚本>常用脚本</a><ul><li><a href=#导出config>导出config</a></li><li><a href=#查看sidecar证书是否正常>查看sidecar证书是否正常</a></li><li><a href=#查看sidecar证书详细>查看sidecar证书详细</a></li></ul></li><li><a href=#常用yaml>常用yaml</a><ul><li><a href=#sidecar-注入相关>sidecar 注入相关</a></li><li><a href=#proxy-相关>proxy 相关</a><ul><li><a href=#自定义资源>自定义资源</a></li><li><a href=#自定义日志级别>自定义日志级别</a></li><li><a href=#不劫持部分流量>不劫持部分流量</a></li></ul></li><li><a href=#全局禁用mtls>全局禁用<code>mTLS</code></a></li></ul></li><li><a href=#常用envoyfilter>常用<code>EnvoyFilter</code></a><ul><li><a href=#请求限制>请求限制</a></li><li><a href=#保留请求头大小写>保留请求头大小写</a></li></ul></li><li><a href=#高频使用链接>高频使用链接</a><ul><li><a href=#istio-相关>istio 相关</a></li><li><a href=#envoy-相关>Envoy 相关</a></li></ul></li></ul></nav></div></div><div class=content id=content><h2 id=局部开启-access-日志>局部开启 Access 日志</h2><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+<span><i class="details-icon fa-solid fa-angle-right"></i></span></div><div class="details-content toc-content" id=toc-content-static><nav id=TableOfContents><ul><li><a href=#局部开启-access-日志>局部开启 Access 日志</a></li><li><a href=#修改-envoy-日志级别>修改 Envoy 日志级别</a><ul><li><a href=#修改所有-logger>修改所有 logger</a></li><li><a href=#修改其中一个-logger-级别>修改其中一个 logger 级别</a></li></ul></li><li><a href=#常用脚本>常用脚本</a><ul><li><a href=#导出config>导出config</a></li><li><a href=#查看sidecar证书是否正常>查看sidecar证书是否正常</a></li><li><a href=#查看sidecar证书详细>查看sidecar证书详细</a></li></ul></li><li><a href=#常用yaml>常用yaml</a><ul><li><a href=#sidecar-注入相关>sidecar 注入相关</a></li><li><a href=#proxy-相关>proxy 相关</a><ul><li><a href=#自定义资源>自定义资源</a></li><li><a href=#自定义日志级别>自定义日志级别</a></li><li><a href=#不劫持部分流量>不劫持部分流量</a></li></ul></li><li><a href=#全局禁用mtls>全局禁用<code>mTLS</code></a></li></ul></li><li><a href=#常用envoyfilter>常用<code>EnvoyFilter</code></a><ul><li><a href=#请求限制>请求限制</a></li><li><a href=#保留请求头大小写>保留请求头大小写</a></li></ul></li><li><a href=#高频使用链接>高频使用链接</a><ul><li><a href=#istio-相关>istio 相关</a></li><li><a href=#envoy-相关>Envoy 相关</a></li></ul></li></ul></nav></div></div><div class=content id=content><h2 id=局部开启-access-日志>局部开启 Access 日志</h2><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
 </span><span class=lnt> 2
 </span><span class=lnt> 3
 </span><span class=lnt> 4
@@ -1215,7 +1211,7 @@ kubectl exec -ti -n zsl-test mydemo-my-demo-sgcanshu-4vb7b -c istio-proxy -- cur
 </span></span><span class=line><span class=cl>  hystrix: warning
 </span></span><span class=line><span class=cl>...
 </span></span><span class=line><span class=cl>...
-</span></span></code></pre></td></tr></table></div></div><h2 id=heading></h2><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span></span></code></pre></td></tr></table></div></div><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
 </span><span class=lnt>2
 </span><span class=lnt>3
 </span><span class=lnt>4
