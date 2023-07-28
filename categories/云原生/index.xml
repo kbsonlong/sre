@@ -1,4 +1,136 @@
-<rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title>云原生 - 分类 - 蜷缩的蜗牛</title><link>https://kbsonlong.github.io/sre/categories/%E4%BA%91%E5%8E%9F%E7%94%9F/</link><description>云原生 - 分类 - 蜷缩的蜗牛</description><generator>Hugo -- gohugo.io</generator><language>zh-CN</language><managingEditor>kbsonlong@gmail.com (kbsonlong)</managingEditor><webMaster>kbsonlong@gmail.com (kbsonlong)</webMaster><copyright>This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.</copyright><lastBuildDate>Wed, 26 Jul 2023 10:33:16 +0800</lastBuildDate><atom:link href="https://kbsonlong.github.io/sre/categories/%E4%BA%91%E5%8E%9F%E7%94%9F/" rel="self" type="application/rss+xml"/><item><title>istio常见问题</title><link>https://kbsonlong.github.io/sre/posts/41b9fe/</link><pubDate>Wed, 26 Jul 2023 10:33:16 +0800</pubDate><author>kbsonlong</author><guid>https://kbsonlong.github.io/sre/posts/41b9fe/</guid><description>503 UF TLS upstream_reset_before_response_started{connection_failure,TLS_error:_268435703:SSL_routines:OPENSSL_internal:WRONG_VERSION_NUMBER} 故障原因 默认情况下，Istio 使用 PERMISSIVE 模式配置目标工作负载。 当启用 PERMISSIVE 模式时，服务可以接受明文和双向 TLS 流量。当两边开启 istio-proxy 之后，Istio</description></item><item><title>istio全局配置</title><link>https://kbsonlong.github.io/sre/posts/03a16b/</link><pubDate>Mon, 17 Jul 2023 21:08:20 +0800</pubDate><author>kbsonlong</author><guid>https://kbsonlong.github.io/sre/posts/03a16b/</guid><description><![CDATA[<h3 id="全局关闭重试">全局关闭重试</h3>
+<rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title>云原生 - 分类 - 蜷缩的蜗牛</title><link>https://kbsonlong.github.io/sre/categories/%E4%BA%91%E5%8E%9F%E7%94%9F/</link><description>云原生 - 分类 - 蜷缩的蜗牛</description><generator>Hugo -- gohugo.io</generator><language>zh-CN</language><managingEditor>kbsonlong@gmail.com (kbsonlong)</managingEditor><webMaster>kbsonlong@gmail.com (kbsonlong)</webMaster><copyright>This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.</copyright><lastBuildDate>Fri, 28 Jul 2023 17:19:10 +0800</lastBuildDate><atom:link href="https://kbsonlong.github.io/sre/categories/%E4%BA%91%E5%8E%9F%E7%94%9F/" rel="self" type="application/rss+xml"/><item><title>02-kube-controller-manager源码分析(主流程)</title><link>https://kbsonlong.github.io/sre/posts/c1cfca/</link><pubDate>Fri, 28 Jul 2023 17:19:10 +0800</pubDate><author>kbsonlong</author><guid>https://kbsonlong.github.io/sre/posts/c1cfca/</guid><description><![CDATA[<p>本文基于<a
+  href="https://github.com/kubernetes/kubernetes/tree/v1.27.0"
+  
+  
+    
+    
+    target="_blank"
+  
+  
+    rel="external nofollow noopener noreferrer"
+  
+  
+  
+>1.27.0</a>版本
+本文主要分析 kubernetes/cmd/kube-controller-manager 部分，该部分主要涉及各种类型的controller的参数解析，及初始化，例如 deployment controller 和statefulset controller。</p>
+<h1 id="代码结构">代码结构</h1>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span><span class="lnt">36
+</span><span class="lnt">37
+</span><span class="lnt">38
+</span><span class="lnt">39
+</span><span class="lnt">40
+</span><span class="lnt">41
+</span><span class="lnt">42
+</span><span class="lnt">43
+</span><span class="lnt">44
+</span><span class="lnt">45
+</span><span class="lnt">46
+</span><span class="lnt">47
+</span><span class="lnt">48
+</span><span class="lnt">49
+</span><span class="lnt">50
+</span><span class="lnt">51
+</span><span class="lnt">52
+</span><span class="lnt">53
+</span><span class="lnt">54
+</span><span class="lnt">55
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">kubernetes git:<span class="o">(</span>annotaion-1.27.0<span class="o">)</span> ✗ tree  cmd/kube-controller-manager 
+</span></span><span class="line"><span class="cl">cmd/kube-controller-manager
+</span></span><span class="line"><span class="cl">├── OWNERS
+</span></span><span class="line"><span class="cl">├── app
+</span></span><span class="line"><span class="cl">│   ├── apps.go  <span class="c1"># 包含:startDeploymentController、startReplicaSetController、startStatefulSetController、startDaemonSetController</span>
+</span></span><span class="line"><span class="cl">│   ├── autoscaling.go  <span class="c1"># startHPAController</span>
+</span></span><span class="line"><span class="cl">│   ├── batch.go <span class="c1"># startJobController、startCronJobController</span>
+</span></span><span class="line"><span class="cl">│   ├── bootstrap.go
+</span></span><span class="line"><span class="cl">│   ├── certificates.go
+</span></span><span class="line"><span class="cl">│   ├── certificates_test.go
+</span></span><span class="line"><span class="cl">│   ├── cloudproviders.go
+</span></span><span class="line"><span class="cl">│   ├── config
+</span></span><span class="line"><span class="cl">│   │   └── config.go   <span class="c1"># config: controller manager执行的上下文</span>
+</span></span><span class="line"><span class="cl">│   ├── controllermanager.go  <span class="c1"># 包含:NewControllerManagerCommand、Run、NewControllerInitializers、StartControllers等</span>
+</span></span><span class="line"><span class="cl">│   ├── core.go  <span class="c1"># startServiceController、startNodeIpamController、startPersistentVolumeBinderController、startNamespaceController等</span>
+</span></span><span class="line"><span class="cl">│   ├── core_test.go
+</span></span><span class="line"><span class="cl">│   ├── discovery.go
+</span></span><span class="line"><span class="cl">│   ├── flags_providerless.go
+</span></span><span class="line"><span class="cl">│   ├── flags_providers.go
+</span></span><span class="line"><span class="cl">│   ├── import_known_versions.go
+</span></span><span class="line"><span class="cl">│   ├── options   <span class="c1"># 包含不同controller的option参数</span>
+</span></span><span class="line"><span class="cl">│   │   ├── attachdetachcontroller.go
+</span></span><span class="line"><span class="cl">│   │   ├── cronjobcontroller.go
+</span></span><span class="line"><span class="cl">│   │   ├── csrsigningcontroller.go
+</span></span><span class="line"><span class="cl">│   │   ├── daemonsetcontroller.go
+</span></span><span class="line"><span class="cl">│   │   ├── deploymentcontroller.go
+</span></span><span class="line"><span class="cl">│   │   ├── deprecatedcontroller.go
+</span></span><span class="line"><span class="cl">│   │   ├── endpointcontroller.go
+</span></span><span class="line"><span class="cl">│   │   ├── endpointslicecontroller.go
+</span></span><span class="line"><span class="cl">│   │   ├── endpointslicemirroringcontroller.go
+</span></span><span class="line"><span class="cl">│   │   ├── ephemeralcontroller.go
+</span></span><span class="line"><span class="cl">│   │   ├── garbagecollectorcontroller.go
+</span></span><span class="line"><span class="cl">│   │   ├── hpacontroller.go
+</span></span><span class="line"><span class="cl">│   │   ├── jobcontroller.go
+</span></span><span class="line"><span class="cl">│   │   ├── namespacecontroller.go
+</span></span><span class="line"><span class="cl">│   │   ├── nodeipamcontroller.go
+</span></span><span class="line"><span class="cl">│   │   ├── nodelifecyclecontroller.go
+</span></span><span class="line"><span class="cl">│   │   ├── options.go
+</span></span><span class="line"><span class="cl">│   │   ├── options_test.go
+</span></span><span class="line"><span class="cl">│   │   ├── persistentvolumebindercontroller.go
+</span></span><span class="line"><span class="cl">│   │   ├── podgccontroller.go
+</span></span><span class="line"><span class="cl">│   │   ├── replicasetcontroller.go
+</span></span><span class="line"><span class="cl">│   │   ├── replicationcontroller.go
+</span></span><span class="line"><span class="cl">│   │   ├── resourcequotacontroller.go
+</span></span><span class="line"><span class="cl">│   │   ├── serviceaccountcontroller.go
+</span></span><span class="line"><span class="cl">│   │   ├── statefulsetcontroller.go
+</span></span><span class="line"><span class="cl">│   │   └── ttlafterfinishedcontroller.go
+</span></span><span class="line"><span class="cl">│   ├── plugins.go
+</span></span><span class="line"><span class="cl">│   ├── plugins_providerless.go
+</span></span><span class="line"><span class="cl">│   ├── plugins_providers.go
+</span></span><span class="line"><span class="cl">│   ├── policy.go
+</span></span><span class="line"><span class="cl">│   ├── rbac.go
+</span></span><span class="line"><span class="cl">│   └── testing
+</span></span><span class="line"><span class="cl">│       └── testserver.go
+</span></span><span class="line"><span class="cl">└── controller-manager.go  <span class="c1"># main入口函数</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div>]]></description></item><item><title>istio常见问题</title><link>https://kbsonlong.github.io/sre/posts/41b9fe/</link><pubDate>Wed, 26 Jul 2023 10:33:16 +0800</pubDate><author>kbsonlong</author><guid>https://kbsonlong.github.io/sre/posts/41b9fe/</guid><description>503 UF TLS upstream_reset_before_response_started{connection_failure,TLS_error:_268435703:SSL_routines:OPENSSL_internal:WRONG_VERSION_NUMBER} 故障原因 默认情况下，Istio 使用 PERMISSIVE 模式配置目标工作负载。 当启用 PERMISSIVE 模式时，服务可以接受明文和双向 TLS 流量。当两边开启 istio-proxy 之后，Istio</description></item><item><title>istio全局配置</title><link>https://kbsonlong.github.io/sre/posts/03a16b/</link><pubDate>Mon, 17 Jul 2023 21:08:20 +0800</pubDate><author>kbsonlong</author><guid>https://kbsonlong.github.io/sre/posts/03a16b/</guid><description><![CDATA[<h3 id="全局关闭重试">全局关闭重试</h3>
 <p>istio默认重试2次</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
@@ -452,30 +584,4 @@
 </div><blockquote>
 <p>从上面可以看出整个Ingress Nginx Controller Pod 包含两部分 nginx-ingress-controller 和 Nginx</p>
 </blockquote>
-<p></p>]]></description></item><item><title>Grafana Mimir 和 VictoriaMetrics 之间的性能测试</title><link>https://kbsonlong.github.io/sre/posts/6650ff/</link><pubDate>Wed, 14 Sep 2022 12:20:51 +0800</pubDate><author>kbsonlong</author><guid>https://kbsonlong.github.io/sre/posts/6650ff/</guid><description>Grafana 实验室的 Mimir 是一个在 AGPLv3 许可下新的时间序列数据库，该工程团队从 Cortex TSDB 中汲取精华，同时降低了复杂性并提高了可扩展性。 根据 Grafana 实验室的测试，Mimir</description></item><item><title>Prometheus Operator 常用指标</title><link>https://kbsonlong.github.io/sre/posts/adb863/</link><pubDate>Tue, 13 Sep 2022 17:53:07 +0800</pubDate><author>kbsonlong</author><guid>https://kbsonlong.github.io/sre/posts/adb863/</guid><description><![CDATA[<p>Prometheus Operator 安装完成后会有很多默认的监控指标，一不注意就大量的报警产生，所以我们非常有必要了解下这些常用的监控指标，有部分指标很有可能对于我们自己的业务可有可无，所以可以适当的进行修改，这里我们就来对常用的几个指标进行简单的说明。</p>
-<h2 id="1-kubernetes-资源相关">1. Kubernetes 资源相关</h2>
-<h3 id="11-cputhrottlinghigh">1.1 CPUThrottlingHigh</h3>
-<p>关于 CPU 的 limit 合理性指标。查出最近5分钟，超过25%的 CPU 执行周期受到限制的容器。表达式：</p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt">1
-</span><span class="lnt">2
-</span><span class="lnt">3
-</span><span class="lnt">4
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-sql" data-lang="sql"><span class="line"><span class="cl"><span class="k">sum</span><span class="p">(</span><span class="n">increase</span><span class="p">(</span><span class="n">container_cpu_cfs_throttled_periods_total</span><span class="err">{</span><span class="n">container</span><span class="o">!=</span><span class="s2">&#34;&#34;</span><span class="p">,</span><span class="w"> </span><span class="err">}</span><span class="p">[</span><span class="mi">5</span><span class="n">m</span><span class="p">]))</span><span class="w"> </span><span class="k">by</span><span class="w"> </span><span class="p">(</span><span class="n">container</span><span class="p">,</span><span class="w"> </span><span class="n">pod</span><span class="p">,</span><span class="w"> </span><span class="n">namespace</span><span class="p">)</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">          </span><span class="o">/</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="k">sum</span><span class="p">(</span><span class="n">increase</span><span class="p">(</span><span class="n">container_cpu_cfs_periods_total</span><span class="err">{}</span><span class="p">[</span><span class="mi">5</span><span class="n">m</span><span class="p">]))</span><span class="w"> </span><span class="k">by</span><span class="w"> </span><span class="p">(</span><span class="n">container</span><span class="p">,</span><span class="w"> </span><span class="n">pod</span><span class="p">,</span><span class="w"> </span><span class="n">namespace</span><span class="p">)</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">          </span><span class="o">&gt;</span><span class="w"> </span><span class="p">(</span><span class="w"> </span><span class="mi">25</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="mi">100</span><span class="w"> </span><span class="p">)</span><span class="w">
-</span></span></span></code></pre></td></tr></table>
-</div>
-</div><p>相关指标：</p>
-<ul>
-<li>
-<ul>
-<li>container_cpu_cfs_periods_total：容器生命周期中度过的 cpu 周期总数</li>
-</ul>
-</li>
-<li>container_cpu_cfs_throttled_periods_total：容器生命周期中度过的受限的 cpu 周期总数</li>
-</ul>]]></description></item></channel></rss>
+<p></p>]]></description></item><item><title>Grafana Mimir 和 VictoriaMetrics 之间的性能测试</title><link>https://kbsonlong.github.io/sre/posts/6650ff/</link><pubDate>Wed, 14 Sep 2022 12:20:51 +0800</pubDate><author>kbsonlong</author><guid>https://kbsonlong.github.io/sre/posts/6650ff/</guid><description>Grafana 实验室的 Mimir 是一个在 AGPLv3 许可下新的时间序列数据库，该工程团队从 Cortex TSDB 中汲取精华，同时降低了复杂性并提高了可扩展性。 根据 Grafana 实验室的测试，Mimir</description></item></channel></rss>
