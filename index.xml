@@ -24,7 +24,7 @@
 </span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nn">...</span><span class="w">
 </span></span></span></code></pre></td></tr></table>
 </div>
-</div>]]></description></item><item><title>01-利用vscode与kind搭建kubernetes开发环境</title><link>https://kbsonlong.github.io/sre/posts/44f039/</link><pubDate>Fri, 07 Jul 2023 16:50:30 +0800</pubDate><author>kbsonlong</author><guid>https://kbsonlong.github.io/sre/posts/44f039/</guid><description><![CDATA[<p>基于<a
+</div>]]></description></item><item><title>01-利用vscode与kind搭建kubernetes开发环境</title><link>https://kbsonlong.github.io/sre/posts/44f039/</link><pubDate>Fri, 07 Jul 2023 16:50:30 +0800</pubDate><author>kbsonlong</author><guid>https://kbsonlong.github.io/sre/posts/44f039/</guid><description><![CDATA[<p>本文基于<a
   href="https://github.com/kubernetes/kubernetes/tree/v1.27.0"
   
   
