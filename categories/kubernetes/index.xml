@@ -13,7 +13,7 @@
   
 >1.27.0</a>版本</p>
 <p>本文主要分析 kubernetes/cmd/kube-controller-manager 部分，该部分主要涉及各种类型的controller的参数解析，及初始化，例如 deployment controller 和statefulset controller。</p>
-<h1 id="代码结构">代码结构</h1>
+<h2 id="代码结构">代码结构</h2>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt"> 1

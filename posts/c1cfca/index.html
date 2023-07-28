@@ -485,7 +485,7 @@ cmd/kube-controller-manager
 <span class=post-category>收录于 <a href=/sre/categories/%E4%BA%91%E5%8E%9F%E7%94%9F/><i class="fa-regular fa-folder fa-fw"></i>&nbsp;云原生</a>&ensp;<a href=/sre/categories/kubernetes/><i class="fa-regular fa-folder fa-fw"></i>&nbsp;kubernetes</a></span></div><div class=post-meta-line><span title="2023-07-28 17:19:10"><i class="fa-regular fa-calendar-alt fa-fw"></i>&nbsp;<time datetime=2023-07-28>2023-07-28</time>
 </span>&nbsp;<i class="fa-solid fa-pencil-alt fa-fw"></i>&nbsp;约 2748 字&nbsp;
 <i class="fa-regular fa-clock fa-fw"></i>&nbsp;预计阅读 6 分钟&nbsp;</div></div><div class="details toc" id=toc-static kept=false><div class="details-summary toc-title"><span>目录</span>
-<span><i class="details-icon fa-solid fa-angle-right"></i></span></div><div class="details-content toc-content" id=toc-content-static><nav id=TableOfContents><ul><li><a href=#newkubecontrollermanageroptions>NewKubeControllerManagerOptions</a></li></ul><ul><li><a href=#createcontrollercontext>CreateControllerContext</a></li><li><a href=#newcontrollerinitializers>NewControllerInitializers</a></li><li><a href=#startcontrollers>StartControllers</a></li></ul></nav></div></div><div class=content id=content><p>本文基于<a href=https://github.com/kubernetes/kubernetes/tree/v1.27.0 target=_blank rel="external nofollow noopener noreferrer">1.27.0</a>版本</p><p>本文主要分析 kubernetes/cmd/kube-controller-manager 部分，该部分主要涉及各种类型的controller的参数解析，及初始化，例如 deployment controller 和statefulset controller。</p><h1 id=代码结构>代码结构</h1><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+<span><i class="details-icon fa-solid fa-angle-right"></i></span></div><div class="details-content toc-content" id=toc-content-static><nav id=TableOfContents><ul><li><a href=#代码结构>代码结构</a></li><li><a href=#main函数>Main函数</a></li><li><a href=#newcontrollermanagercommand-函数>NewControllerManagerCommand 函数</a><ul><li><a href=#newkubecontrollermanageroptions>NewKubeControllerManagerOptions</a></li></ul></li><li><a href=#run-函数>Run 函数</a><ul><li><a href=#createcontrollercontext>CreateControllerContext</a></li><li><a href=#newcontrollerinitializers>NewControllerInitializers</a></li><li><a href=#startcontrollers>StartControllers</a></li></ul></li><li><a href=#调用流程>调用流程</a></li></ul></nav></div></div><div class=content id=content><p>本文基于<a href=https://github.com/kubernetes/kubernetes/tree/v1.27.0 target=_blank rel="external nofollow noopener noreferrer">1.27.0</a>版本</p><p>本文主要分析 kubernetes/cmd/kube-controller-manager 部分，该部分主要涉及各种类型的controller的参数解析，及初始化，例如 deployment controller 和statefulset controller。</p><h2 id=代码结构>代码结构</h2><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
 </span><span class=lnt> 2
 </span><span class=lnt> 3
 </span><span class=lnt> 4
@@ -595,7 +595,7 @@ cmd/kube-controller-manager
 </span></span><span class=line><span class=cl>│   └── testing
 </span></span><span class=line><span class=cl>│       └── testserver.go
 </span></span><span class=line><span class=cl>└── controller-manager.go  <span class=c1># main入口函数</span>
-</span></span></code></pre></td></tr></table></div></div><h1 id=main函数>Main函数</h1><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span></span></code></pre></td></tr></table></div></div><h2 id=main函数>Main函数</h2><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
 </span><span class=lnt>2
 </span><span class=lnt>3
 </span><span class=lnt>4
@@ -605,7 +605,7 @@ cmd/kube-controller-manager
 </span></span><span class=line><span class=cl>	<span class=nx>code</span> <span class=o>:=</span> <span class=nx>cli</span><span class=p>.</span><span class=nf>Run</span><span class=p>(</span><span class=nx>command</span><span class=p>)</span>
 </span></span><span class=line><span class=cl>	<span class=nx>os</span><span class=p>.</span><span class=nf>Exit</span><span class=p>(</span><span class=nx>code</span><span class=p>)</span>
 </span></span><span class=line><span class=cl><span class=p>}</span>
-</span></span></code></pre></td></tr></table></div></div><h1 id=newcontrollermanagercommand-函数>NewControllerManagerCommand 函数</h1><p><code>NewControllerManagerCommand</code> 使用 <code>Cobra</code> 命令行框架。</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span></span></code></pre></td></tr></table></div></div><h2 id=newcontrollermanagercommand-函数>NewControllerManagerCommand 函数</h2><p><code>NewControllerManagerCommand</code> 使用 <code>Cobra</code> 命令行框架。</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
 </span><span class=lnt> 2
 </span><span class=lnt> 3
 </span><span class=lnt> 4
@@ -675,7 +675,7 @@ cmd/kube-controller-manager
 </span></span><span class=line><span class=cl>	<span class=p>}</span>
 </span></span><span class=line><span class=cl>    <span class=o>...</span>
 </span></span><span class=line><span class=cl><span class=p>}</span>
-</span></span></code></pre></td></tr></table></div></div><h2 id=newkubecontrollermanageroptions>NewKubeControllerManagerOptions</h2><p>初始化controllerManager的参数,例如ServiceControllerOptions、DaemonSetControllerOptions等</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span></span></code></pre></td></tr></table></div></div><h3 id=newkubecontrollermanageroptions>NewKubeControllerManagerOptions</h3><p>初始化controllerManager的参数,例如ServiceControllerOptions、DaemonSetControllerOptions等</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
 </span><span class=lnt>2
 </span><span class=lnt>3
 </span><span class=lnt>4
@@ -685,7 +685,7 @@ cmd/kube-controller-manager
 </span></span><span class=line><span class=cl>		<span class=nx>klog</span><span class=p>.</span><span class=nf>Background</span><span class=p>().</span><span class=nf>Error</span><span class=p>(</span><span class=nx>err</span><span class=p>,</span> <span class=s>&#34;Unable to initialize command options&#34;</span><span class=p>)</span>
 </span></span><span class=line><span class=cl>		<span class=nx>klog</span><span class=p>.</span><span class=nf>FlushAndExit</span><span class=p>(</span><span class=nx>klog</span><span class=p>.</span><span class=nx>ExitFlushTimeout</span><span class=p>,</span> <span class=mi>1</span><span class=p>)</span>
 </span></span><span class=line><span class=cl>	<span class=p>}</span>
-</span></span></code></pre></td></tr></table></div></div><h1 id=run-函数>Run 函数</h1><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span></span></code></pre></td></tr></table></div></div><h2 id=run-函数>Run 函数</h2><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
 </span><span class=lnt> 2
 </span><span class=lnt> 3
 </span><span class=lnt> 4
@@ -811,7 +811,7 @@ cmd/kube-controller-manager
 </span></span><span class=line><span class=cl>			<span class=nx>logger</span><span class=p>.</span><span class=nf>Error</span><span class=p>(</span><span class=nx>err</span><span class=p>,</span> <span class=s>&#34;Error starting controllers&#34;</span><span class=p>)</span>
 </span></span><span class=line><span class=cl>			<span class=nx>klog</span><span class=p>.</span><span class=nf>FlushAndExit</span><span class=p>(</span><span class=nx>klog</span><span class=p>.</span><span class=nx>ExitFlushTimeout</span><span class=p>,</span> <span class=mi>1</span><span class=p>)</span>
 </span></span><span class=line><span class=cl>		<span class=p>}</span>
-</span></span></code></pre></td></tr></table></div></div><h2 id=createcontrollercontext>CreateControllerContext</h2><p>构建了各个 <code>controller</code> 所需的资源的上下文，各个 <code>controller</code> 在启动时，入参为该 <code>context</code>。</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span></span></code></pre></td></tr></table></div></div><h3 id=createcontrollercontext>CreateControllerContext</h3><p>构建了各个 <code>controller</code> 所需的资源的上下文，各个 <code>controller</code> 在启动时，入参为该 <code>context</code>。</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
 </span><span class=lnt> 2
 </span><span class=lnt> 3
 </span><span class=lnt> 4
@@ -913,7 +913,7 @@ cmd/kube-controller-manager
 </span></span><span class=line><span class=cl>	<span class=nx>controllersmetrics</span><span class=p>.</span><span class=nf>Register</span><span class=p>()</span>
 </span></span><span class=line><span class=cl>	<span class=k>return</span> <span class=nx>ctx</span><span class=p>,</span> <span class=kc>nil</span>
 </span></span><span class=line><span class=cl><span class=p>}</span>
-</span></span></code></pre></td></tr></table></div></div><h2 id=newcontrollerinitializers>NewControllerInitializers</h2><p><code>StartController</code>的入参，定义了各种controller的类型和其对于的启动函数</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span></span></code></pre></td></tr></table></div></div><h3 id=newcontrollerinitializers>NewControllerInitializers</h3><p><code>StartController</code>的入参，定义了各种controller的类型和其对于的启动函数</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
 </span><span class=lnt> 2
 </span><span class=lnt> 3
 </span><span class=lnt> 4
@@ -1053,7 +1053,7 @@ cmd/kube-controller-manager
 </span></span><span class=line><span class=cl>
 </span></span><span class=line><span class=cl>	<span class=k>return</span> <span class=nx>controllers</span>
 </span></span><span class=line><span class=cl><span class=p>}</span>
-</span></span></code></pre></td></tr></table></div></div><h2 id=startcontrollers>StartControllers</h2><p>启动各个控制器</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span></span></code></pre></td></tr></table></div></div><h3 id=startcontrollers>StartControllers</h3><p>启动各个控制器</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
 </span><span class=lnt> 2
 </span><span class=lnt> 3
 </span><span class=lnt> 4
@@ -1155,7 +1155,7 @@ cmd/kube-controller-manager
 </span></span><span class=line><span class=cl>    <span class=o>...</span>
 </span></span><span class=line><span class=cl>	<span class=k>return</span> <span class=kc>nil</span>
 </span></span><span class=line><span class=cl><span class=p>}</span>
-</span></span></code></pre></td></tr></table></div></div><h1 id=调用流程>调用流程</h1><p>Main &ndash;> NewControllerManagerCommand &ndash;> Run(context.Background(), c.Complete())<br>&ndash;> run &ndash;> StartControllers &ndash;> initFn(ctx) &ndash;> start&lt;Deployment|StatefulSet>Controller<br>&ndash;> New&lt;Deployment|StatefulSet>Controller.Run &ndash;> pkg/controller</p></div><div class=post-footer id=post-footer><div class=post-info><div class=post-info-line><div class=post-info-mod><span title="2023-07-28 17:19:10">更新于 2023-07-28</span></div><div class=post-info-license><span><a rel="license external nofollow noopener noreffer" href=https://creativecommons.org/licenses/by-nc/4.0/ target=_blank>CC BY-NC 4.0</a></span></div></div><div class=post-info-line><div class=post-info-md><span><a href=/sre/posts/c1cfca/index.md title=阅读原始文档 class=link-to-markdown>阅读原始文档</a></span></div><div class=post-info-share><span><a href=javascript:void(0); title="分享到 Twitter" data-sharer=twitter data-url=https://kbsonlong.github.io/sre/posts/c1cfca/ data-title=02-kube-controller-manager源码分析(主流程) data-hashtags=源码分析,kube-controller-manager><i class="fa-brands fa-twitter fa-fw"></i></a>
+</span></span></code></pre></td></tr></table></div></div><h2 id=调用流程>调用流程</h2><p>Main &ndash;> NewControllerManagerCommand &ndash;> Run(context.Background(), c.Complete())<br>&ndash;> run &ndash;> StartControllers &ndash;> initFn(ctx) &ndash;> start&lt;Deployment|StatefulSet>Controller<br>&ndash;> New&lt;Deployment|StatefulSet>Controller.Run &ndash;> pkg/controller</p></div><div class=post-footer id=post-footer><div class=post-info><div class=post-info-line><div class=post-info-mod><span title="2023-07-28 17:19:10">更新于 2023-07-28</span></div><div class=post-info-license><span><a rel="license external nofollow noopener noreffer" href=https://creativecommons.org/licenses/by-nc/4.0/ target=_blank>CC BY-NC 4.0</a></span></div></div><div class=post-info-line><div class=post-info-md><span><a href=/sre/posts/c1cfca/index.md title=阅读原始文档 class=link-to-markdown>阅读原始文档</a></span></div><div class=post-info-share><span><a href=javascript:void(0); title="分享到 Twitter" data-sharer=twitter data-url=https://kbsonlong.github.io/sre/posts/c1cfca/ data-title=02-kube-controller-manager源码分析(主流程) data-hashtags=源码分析,kube-controller-manager><i class="fa-brands fa-twitter fa-fw"></i></a>
 <a href=javascript:void(0); title="分享到 Facebook" data-sharer=facebook data-url=https://kbsonlong.github.io/sre/posts/c1cfca/ data-hashtag=源码分析><i class="fa-brands fa-facebook-square fa-fw"></i></a>
 <a href=javascript:void(0); title="分享到 WhatsApp" data-sharer=whatsapp data-url=https://kbsonlong.github.io/sre/posts/c1cfca/ data-title=02-kube-controller-manager源码分析(主流程) data-web><i class="fa-brands fa-whatsapp fa-fw"></i></a>
 <a href=javascript:void(0); title="分享到 Line" data-sharer=line data-url=https://kbsonlong.github.io/sre/posts/c1cfca/ data-title=02-kube-controller-manager源码分析(主流程)><i data-svg-src=/sre/lib/simple-icons/icons/line.min.svg></i></a>
