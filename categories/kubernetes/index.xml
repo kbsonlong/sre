@@ -130,4 +130,71 @@
 </span></span><span class="line"><span class="cl">└── controller-manager.go  <span class="c1"># main入口函数</span>
 </span></span></code></pre></td></tr></table>
 </div>
-</div>]]></description></item><item><title>源码分析 kubernetes hpa controller 水平自动扩缩容的实现原理</title><link>https://kbsonlong.github.io/sre/posts/32dd44/</link><pubDate>Tue, 18 Apr 2023 23:05:14 +0800</pubDate><author>kbsonlong</author><guid>https://kbsonlong.github.io/sre/posts/32dd44/</guid><description>源码分析 kubernetes hpa controller 水平自动扩缩容的实现原理 基于 kubernetes v1.27.0 版本进行 hpa 源码分析. Kubernetes 的 HorizontalPodAutoscaler (hpa) 组件可以根据目标的资源使用率 (cpu, mem 等等), 动态的资源对象进行的合理扩</description></item><item><title>源码分析 kubernetes scheduler 核心调度器的实现原理</title><link>https://kbsonlong.github.io/sre/posts/a3f5fa/</link><pubDate>Tue, 18 Apr 2023 21:53:59 +0800</pubDate><author>kbsonlong</author><guid>https://kbsonlong.github.io/sre/posts/a3f5fa/</guid><description>基于 kubernetes v1.27.0 源码分析 scheduler 调度器 k8s scheduler 的主要职责是为新创建的 pod 寻找一个最合适的 node 节点, 然后进行 bind node 绑定, 后面 kubelet 才会监听到并创建真正的 pod. 那么问题来了, 如</description></item><item><title>如何选择最佳的Kubernetes集群自动伸缩策略</title><link>https://kbsonlong.github.io/sre/posts/a18401/</link><pubDate>Thu, 16 Mar 2023 14:55:47 +0800</pubDate><author>kbsonlong</author><guid>https://kbsonlong.github.io/sre/posts/a18401/</guid><description>前言 这篇内容篇幅比较长，如果不想深入探讨或时间有限，这是全文简述： 在默认设置下，扩展 Kubernetes 集群中的 pod 和节点可能需要几分钟时间。 了解如何调整集群节</description></item></channel></rss>
+</div>]]></description></item><item><title>01-利用vscode与kind搭建kubernetes开发环境</title><link>https://kbsonlong.github.io/sre/posts/44f039/</link><pubDate>Fri, 07 Jul 2023 16:50:30 +0800</pubDate><author>kbsonlong</author><guid>https://kbsonlong.github.io/sre/posts/44f039/</guid><description><![CDATA[<p>本文基于<a
+  href="https://github.com/kubernetes/kubernetes/tree/v1.27.0"
+  
+  
+    
+    
+    target="_blank"
+  
+  
+    rel="external nofollow noopener noreferrer"
+  
+  
+  
+>1.27.0</a>版本</p>
+<h2 id="kind-创建集群">Kind 创建集群</h2>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="line"><span class="cl"><span class="l">cat &lt;&lt; EOF &gt; dev.yaml</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l">Cluster</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="s2">&#34;kind.x-k8s.io/v1alpha4&#34;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">kubeadmConfigPatches</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span>- <span class="p">|</span><span class="sd">
+</span></span></span><span class="line"><span class="cl"><span class="sd">  apiVersion: kubeadm.k8s.io/v1beta1
+</span></span></span><span class="line"><span class="cl"><span class="sd">  kind: ClusterConfiguration
+</span></span></span><span class="line"><span class="cl"><span class="sd">  metadata:
+</span></span></span><span class="line"><span class="cl"><span class="sd">    name: dev
+</span></span></span><span class="line"><span class="cl"><span class="sd">  imageRepository: registry.aliyuncs.com/google_containers</span><span class="w">  
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">networking</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">podSubnet</span><span class="p">:</span><span class="w"> </span><span class="s2">&#34;10.8.0.0/16&#34;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">serviceSubnet</span><span class="p">:</span><span class="w"> </span><span class="s2">&#34;10.9.0.0/16&#34;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">nodes</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span>- <span class="nt">role</span><span class="p">:</span><span class="w"> </span><span class="l">control-plane</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l">kindest/node:v1.27.0@sha256:c6b22e613523b1af67d4bc8a0c38a4c3ea3a2b8fbc5b367ae36345c9cb844518</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">extraPortMappings</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span>- <span class="nt">containerPort</span><span class="p">:</span><span class="w"> </span><span class="m">2379</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="nt">hostPort</span><span class="p">:</span><span class="w"> </span><span class="m">2379</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="nt">protocol</span><span class="p">:</span><span class="w"> </span><span class="l">TCP</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="l">EOF</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="l">kind create cluster --name dev --config=dev.yaml</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div>]]></description></item><item><title>源码分析 kubernetes hpa controller 水平自动扩缩容的实现原理</title><link>https://kbsonlong.github.io/sre/posts/32dd44/</link><pubDate>Tue, 18 Apr 2023 23:05:14 +0800</pubDate><author>kbsonlong</author><guid>https://kbsonlong.github.io/sre/posts/32dd44/</guid><description>源码分析 kubernetes hpa controller 水平自动扩缩容的实现原理 基于 kubernetes v1.27.0 版本进行 hpa 源码分析. Kubernetes 的 HorizontalPodAutoscaler (hpa) 组件可以根据目标的资源使用率 (cpu, mem 等等), 动态的资源对象进行的合理扩</description></item><item><title>源码分析 kubernetes scheduler 核心调度器的实现原理</title><link>https://kbsonlong.github.io/sre/posts/a3f5fa/</link><pubDate>Tue, 18 Apr 2023 21:53:59 +0800</pubDate><author>kbsonlong</author><guid>https://kbsonlong.github.io/sre/posts/a3f5fa/</guid><description>基于 kubernetes v1.27.0 源码分析 scheduler 调度器 k8s scheduler 的主要职责是为新创建的 pod 寻找一个最合适的 node 节点, 然后进行 bind node 绑定, 后面 kubelet 才会监听到并创建真正的 pod. 那么问题来了, 如</description></item><item><title>如何选择最佳的Kubernetes集群自动伸缩策略</title><link>https://kbsonlong.github.io/sre/posts/a18401/</link><pubDate>Thu, 16 Mar 2023 14:55:47 +0800</pubDate><author>kbsonlong</author><guid>https://kbsonlong.github.io/sre/posts/a18401/</guid><description>前言 这篇内容篇幅比较长，如果不想深入探讨或时间有限，这是全文简述： 在默认设置下，扩展 Kubernetes 集群中的 pod 和节点可能需要几分钟时间。 了解如何调整集群节</description></item><item><title>Kubernetes创建只读用户</title><link>https://kbsonlong.github.io/sre/posts/358ab4/</link><pubDate>Thu, 12 Jan 2023 13:05:10 +0800</pubDate><author>kbsonlong</author><guid>https://kbsonlong.github.io/sre/posts/358ab4/</guid><description>1 安装cfssl 1 2 3 4 5 6 7 8 9 mkdir -p /nfs/k8s-backup/readonly cd /nfs/k8s-backup/readonly wget https://pkg.cfssl.org/R1.2/cfssl_linux-amd64 mv cfssl_linux-amd64 cfssl wget https://pkg.cfssl.org/R1.2/cfssljson_linux-amd64 mv cfssljson_linux-amd64 cfssljson wget https://pkg.cfssl.org/R1.2/cfssl-certinfo_linux-amd64 mv cfssl-certinfo_linux-amd64 cfssl-certinfo chmod +x * 2 签发客户端证书 根据ca证书和秘钥签发用户证书，kubead</description></item></channel></rss>
