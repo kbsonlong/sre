@@ -1,4 +1,140 @@
-<rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title>所有文章 - 蜷缩的蜗牛</title><link>https://kbsonlong.github.io/sre/posts/</link><description>所有文章 | 蜷缩的蜗牛</description><generator>Hugo -- gohugo.io</generator><language>zh-CN</language><managingEditor>kbsonlong@gmail.com (kbsonlong)</managingEditor><webMaster>kbsonlong@gmail.com (kbsonlong)</webMaster><copyright>This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.</copyright><lastBuildDate>Fri, 28 Jul 2023 17:19:10 +0800</lastBuildDate><atom:link href="https://kbsonlong.github.io/sre/posts/" rel="self" type="application/rss+xml"/><item><title>02-kube-controller-manager源码分析(主流程)</title><link>https://kbsonlong.github.io/sre/posts/c1cfca/</link><pubDate>Fri, 28 Jul 2023 17:19:10 +0800</pubDate><author>kbsonlong</author><guid>https://kbsonlong.github.io/sre/posts/c1cfca/</guid><description><![CDATA[<p>本文基于<a
+<rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title>所有文章 - 蜷缩的蜗牛</title><link>https://kbsonlong.github.io/sre/posts/</link><description>所有文章 | 蜷缩的蜗牛</description><generator>Hugo -- gohugo.io</generator><language>zh-CN</language><managingEditor>kbsonlong@gmail.com (kbsonlong)</managingEditor><webMaster>kbsonlong@gmail.com (kbsonlong)</webMaster><copyright>This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.</copyright><lastBuildDate>Tue, 01 Aug 2023 17:38:45 +0800</lastBuildDate><atom:link href="https://kbsonlong.github.io/sre/posts/" rel="self" type="application/rss+xml"/><item><title>基于Coredns多集群服务发现</title><link>https://kbsonlong.github.io/sre/posts/17feed/</link><pubDate>Tue, 01 Aug 2023 17:38:45 +0800</pubDate><author>kbsonlong</author><guid>https://kbsonlong.github.io/sre/posts/17feed/</guid><description><![CDATA[<p>在<a
+  href="https://kbsonlong.github.io/sre/posts/2296fc/"
+  
+  
+    
+    
+    target="_blank"
+  
+  
+    rel="external nofollow noopener noreferrer"
+  
+  
+  
+>Karmada 多集群服务发现</a>一文中跨集群调用时有个派生的前缀  <code>derived-&lt;service name&gt;</code>, 对于应用调用上有感知，本文介绍如何让应用在调用本地集群或者跨集群都是用同一个service。</p>
+<h2 id="kind-快速创建集群">Kind 快速创建集群</h2>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="line"><span class="cl"><span class="l">cat &lt;&lt; EOF &gt; member1.yaml</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l">Cluster</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="s2">&#34;kind.x-k8s.io/v1alpha4&#34;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">networking</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">apiServerAddress</span><span class="p">:</span><span class="w"> </span><span class="s2">&#34;172.25.163.181&#34;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">podSubnet</span><span class="p">:</span><span class="w"> </span><span class="s2">&#34;10.10.0.0/16&#34;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">serviceSubnet</span><span class="p">:</span><span class="w"> </span><span class="s2">&#34;10.11.0.0/16&#34;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">nodes</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span>- <span class="nt">role</span><span class="p">:</span><span class="w"> </span><span class="l">control-plane</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l">registry.cn-hangzhou.aliyuncs.com/seam/node:v1.26.0</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="l">EOF</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="l">cat &lt;&lt; EOF &gt; member2.yaml</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l">Cluster</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="s2">&#34;kind.x-k8s.io/v1alpha4&#34;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">networking</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">apiServerAddress</span><span class="p">:</span><span class="w"> </span><span class="s2">&#34;172.25.163.181&#34;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">podSubnet</span><span class="p">:</span><span class="w"> </span><span class="s2">&#34;10.12.0.0/16&#34;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">serviceSubnet</span><span class="p">:</span><span class="w"> </span><span class="s2">&#34;10.13.0.0/16&#34;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">nodes</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span>- <span class="nt">role</span><span class="p">:</span><span class="w"> </span><span class="l">control-plane</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l">registry.cn-hangzhou.aliyuncs.com/seam/node:v1.26.0</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="l">EOF</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">kind create cluster --name member1 --kubeconfig<span class="o">=</span>kubeconfig-member1  --config<span class="o">=</span>member1.yaml 
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">kind create cluster --name member2 --kubeconfig<span class="o">=</span>kubeconfig-member2  --config<span class="o">=</span>member2.yaml 
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h2 id="打通集群网络">打通集群网络</h2>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="cp">#!/bin/bash
+</span></span></span><span class="line"><span class="cl"><span class="cp"></span><span class="c1"># add_routes will add routes for given kind cluster</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># Parameters:</span>
+</span></span><span class="line"><span class="cl"><span class="c1">#  - $1: name of the kind cluster want to add routes</span>
+</span></span><span class="line"><span class="cl"><span class="c1">#  - $2: the kubeconfig path of the cluster wanted to be connected</span>
+</span></span><span class="line"><span class="cl"><span class="c1">#  - $3: the context in kubeconfig of the cluster wanted to be connected</span>
+</span></span><span class="line"><span class="cl"><span class="k">function</span> add_routes<span class="o">()</span> <span class="o">{</span>
+</span></span><span class="line"><span class="cl">  <span class="nb">unset</span> IFS
+</span></span><span class="line"><span class="cl">  <span class="nv">routes</span><span class="o">=</span><span class="k">$(</span>kubectl --kubeconfig <span class="si">${</span><span class="nv">2</span><span class="si">}</span> --context <span class="si">${</span><span class="nv">3</span><span class="si">}</span> get nodes -o <span class="nv">jsonpath</span><span class="o">=</span><span class="s1">&#39;{range .items[*]}ip route add {.spec.podCIDR} via {.status.addresses[?(.type==&#34;InternalIP&#34;)].address}{&#34;\n&#34;}{end}&#39;</span><span class="k">)</span>
+</span></span><span class="line"><span class="cl">  <span class="nb">echo</span> <span class="s2">&#34;Connecting cluster </span><span class="si">${</span><span class="nv">1</span><span class="si">}</span><span class="s2"> to </span><span class="si">${</span><span class="nv">2</span><span class="si">}</span><span class="s2">&#34;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">  <span class="nv">IFS</span><span class="o">=</span><span class="s1">$&#39;\n&#39;</span>
+</span></span><span class="line"><span class="cl">  <span class="k">for</span> n in <span class="k">$(</span>kind get nodes --name <span class="s2">&#34;</span><span class="si">${</span><span class="nv">1</span><span class="si">}</span><span class="s2">&#34;</span><span class="k">)</span><span class="p">;</span> <span class="k">do</span>
+</span></span><span class="line"><span class="cl">    <span class="k">for</span> r in <span class="nv">$routes</span><span class="p">;</span> <span class="k">do</span>
+</span></span><span class="line"><span class="cl">      <span class="nb">echo</span> <span class="s2">&#34;exec cmd in docker </span><span class="nv">$n</span><span class="s2"> </span><span class="nv">$r</span><span class="s2">&#34;</span>
+</span></span><span class="line"><span class="cl">      <span class="nb">eval</span> <span class="s2">&#34;docker exec </span><span class="nv">$n</span><span class="s2"> </span><span class="nv">$r</span><span class="s2">&#34;</span>
+</span></span><span class="line"><span class="cl">    <span class="k">done</span>
+</span></span><span class="line"><span class="cl">  <span class="k">done</span>
+</span></span><span class="line"><span class="cl">  <span class="nb">unset</span> IFS
+</span></span><span class="line"><span class="cl"><span class="o">}</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">add_routes member1 kubeconfig-member2 member2
+</span></span><span class="line"><span class="cl">add_routes member2 kubeconfig-member1 member1
+</span></span></code></pre></td></tr></table>
+</div>
+</div>]]></description></item><item><title>02-kube-controller-manager源码分析(主流程)</title><link>https://kbsonlong.github.io/sre/posts/c1cfca/</link><pubDate>Fri, 28 Jul 2023 17:19:10 +0800</pubDate><author>kbsonlong</author><guid>https://kbsonlong.github.io/sre/posts/c1cfca/</guid><description><![CDATA[<p>本文基于<a
   href="https://github.com/kubernetes/kubernetes/tree/v1.27.0"
   
   
@@ -409,17 +545,4 @@
   
 >Shell Operator</a> 是个冷僻又有点用的东西。方便运维监听kubernetes事件，并基于这些事件做一些简单任务处理；并且shell语言基本上大部分运维人员都懂，而不需要太高的学习成本。</p>
 <h2 id="运行原理">运行原理</h2>
-<p><code>shell-operator</code> 部署在 <code>Pod</code> 中。在 <code>Pod</code> 中有一个 <code>/hooks</code> 的一个子目录，其中存储了可执行文件，它们可以用 Bash、Python、Ruby等编写的，我们称这些可执行文件为hooks。<code>Shell-opeator</code> 订阅 <code>Kubernetes</code> 事件并执行这些钩子来响应我们感兴趣的事件。</p>]]></description></item><item><title>Loki快速使用</title><link>https://kbsonlong.github.io/sre/posts/81200000/</link><pubDate>Thu, 15 Jun 2023 13:25:52 +0800</pubDate><author>kbsonlong</author><guid>https://kbsonlong.github.io/sre/posts/81200000/</guid><description><![CDATA[<h1 id="轻量日志采集loki快速入门">轻量日志采集Loki快速入门</h1>
-<h2 id="安装-loki">安装 <code>Loki</code></h2>
-<h3 id="添加-helm-仓库">添加 <code>Helm</code> 仓库</h3>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt">1
-</span><span class="lnt">2
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">helm repo add grafana https://grafana.github.io/helm-charts
-</span></span><span class="line"><span class="cl">helm repo update
-</span></span></code></pre></td></tr></table>
-</div>
-</div>]]></description></item></channel></rss>
+<p><code>shell-operator</code> 部署在 <code>Pod</code> 中。在 <code>Pod</code> 中有一个 <code>/hooks</code> 的一个子目录，其中存储了可执行文件，它们可以用 Bash、Python、Ruby等编写的，我们称这些可执行文件为hooks。<code>Shell-opeator</code> 订阅 <code>Kubernetes</code> 事件并执行这些钩子来响应我们感兴趣的事件。</p>]]></description></item></channel></rss>
