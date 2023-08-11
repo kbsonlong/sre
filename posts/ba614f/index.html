@@ -1584,7 +1584,7 @@ kubectl exec -ti -n zsl-test mydemo-my-demo-sgcanshu-4vb7b -c istio-proxy -- cur
 </span></span></span><span class=line><span class=cl><span class=w>      </span><span class=nt>listener</span><span class=p>:</span><span class=w>
 </span></span></span><span class=line><span class=cl><span class=w>        </span><span class=nt>filterChain</span><span class=p>:</span><span class=w>
 </span></span></span><span class=line><span class=cl><span class=w>          </span><span class=nt>filter</span><span class=p>:</span><span class=w>
-</span></span></span><span class=line><span class=cl><span class=w>            </span><span class=nt>name</span><span class=p>:</span><span class=w> </span><span class=s2>&#34;envoy.http_connection_manager&#34;</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>            </span><span class=nt>name</span><span class=p>:</span><span class=w> </span><span class=s2>&#34;envoy.filters.network.http_connection_manager&#34;</span><span class=w>
 </span></span></span><span class=line><span class=cl><span class=w>    </span><span class=nt>patch</span><span class=p>:</span><span class=w>
 </span></span></span><span class=line><span class=cl><span class=w>      </span><span class=nt>operation</span><span class=p>:</span><span class=w> </span><span class=l>MERGE</span><span class=w>
 </span></span></span><span class=line><span class=cl><span class=w>      </span><span class=nt>value</span><span class=p>:</span><span class=w>
@@ -1597,7 +1597,7 @@ kubectl exec -ti -n zsl-test mydemo-my-demo-sgcanshu-4vb7b -c istio-proxy -- cur
 </span></span></span><span class=line><span class=cl><span class=w>      </span><span class=nt>listener</span><span class=p>:</span><span class=w>
 </span></span></span><span class=line><span class=cl><span class=w>        </span><span class=nt>filterChain</span><span class=p>:</span><span class=w>
 </span></span></span><span class=line><span class=cl><span class=w>          </span><span class=nt>filter</span><span class=p>:</span><span class=w>
-</span></span></span><span class=line><span class=cl><span class=w>            </span><span class=nt>name</span><span class=p>:</span><span class=w> </span><span class=s2>&#34;envoy.http_connection_manager&#34;</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>            </span><span class=nt>name</span><span class=p>:</span><span class=w> </span><span class=s2>&#34;envoy.filters.network.http_connection_manager&#34;</span><span class=w>
 </span></span></span><span class=line><span class=cl><span class=w>    </span><span class=nt>patch</span><span class=p>:</span><span class=w>
 </span></span></span><span class=line><span class=cl><span class=w>      </span><span class=nt>operation</span><span class=p>:</span><span class=w> </span><span class=l>INSERT_BEFORE</span><span class=w>
 </span></span></span><span class=line><span class=cl><span class=w>      </span><span class=nt>value</span><span class=p>:</span><span class=w>
