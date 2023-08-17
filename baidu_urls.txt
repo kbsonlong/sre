@@ -77,3 +77,4 @@ https://kbsonlong.github.io/sre/posts/%E5%B8%B8%E7%94%A8git%E5%91%BD%E4%BB%A4%E6
 https://kbsonlong.github.io/sre/posts/understand-kubernetes-affinity/
 https://kbsonlong.github.io/sre/offline/
 https://kbsonlong.github.io/sre/posts/
+https://kbsonlong.github.io/sre/posts/
