@@ -297,9 +297,7 @@ EOF
 <span class=post-category>收录于 <a href=/sre/categories/%E4%BA%91%E5%8E%9F%E7%94%9F/><i class="fa-regular fa-folder fa-fw"></i>&nbsp;云原生</a></span></div><div class=post-meta-line><span title="2023-08-17 09:50:13"><i class="fa-regular fa-calendar-alt fa-fw"></i>&nbsp;<time datetime=2023-08-17>2023-08-17</time>
 </span>&nbsp;<i class="fa-solid fa-pencil-alt fa-fw"></i>&nbsp;约 1220 字&nbsp;
 <i class="fa-regular fa-clock fa-fw"></i>&nbsp;预计阅读 3 分钟&nbsp;</div></div><div class="details toc" id=toc-static kept=false><div class="details-summary toc-title"><span>目录</span>
-<span><i class="details-icon fa-solid fa-angle-right"></i></span></div><div class="details-content toc-content" id=toc-content-static><nav id=TableOfContents><ul><li><ul><li><a href=#kind配置>kind配置</a></li><li><a href=#创建集群>创建集群</a></li></ul></li></ul><ul><li><ul><li><a href=#创建-sleep-部署>创建 <code>sleep</code> 部署</a></li><li><a href=#创建-helloworld-部署>创建 <code>helloworld</code> 部署</a></li></ul></li></ul><ul><li><ul><li><a href=#配置规则>配置规则</a></li><li><a href=#驱逐-envoy-sidecar-代理>驱逐 Envoy Sidecar 代理</a></li></ul></li></ul></nav></div></div><div class=content id=content><p>基于安全容灾考虑，生产K8S集群是多可用区。多可用区集群必然涉及跨可用区调用，由于是海外业务，使用的是AWS云，AWS内部跨可用区流量不像国内云厂商跨可用区流量不收费，是需要收费而且特贵。
-基于成本和容灾考虑使用Istio的地域负载均衡功能，优先调度到同可用区，出现问题时调度到另一可用区。</p><blockquote><p>现使用 kind 在本地创建一套多节点集群，通过标签模拟多可用区场景。
-由于办公电脑是M1，而Istio1.13并不支持M1,所以选用Istio1.16，K8S1.24版本</p></blockquote><h1 id=创建多节点集群模拟跨az>创建多节点集群模拟跨AZ</h1><h3 id=kind配置>kind配置</h3><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+<span><i class="details-icon fa-solid fa-angle-right"></i></span></div><div class="details-content toc-content" id=toc-content-static><nav id=TableOfContents><ul><li><a href=#创建多节点集群模拟跨az>创建多节点集群模拟跨AZ</a><ul><li><a href=#kind配置>kind配置</a></li><li><a href=#创建集群>创建集群</a></li></ul></li><li><a href=#部署服务>部署服务</a><ul><li><a href=#创建-sleep-部署>创建 <code>sleep</code> 部署</a></li><li><a href=#创建-helloworld-部署>创建 <code>helloworld</code> 部署</a></li></ul></li><li><a href=#验证流量>验证流量</a><ul><li><a href=#配置规则>配置规则</a></li><li><a href=#驱逐-envoy-sidecar-代理>驱逐 Envoy Sidecar 代理</a></li></ul></li></ul></nav></div></div><div class=content id=content><p>基于安全容灾考虑，生产K8S集群是多可用区。多可用区集群必然涉及跨可用区调用，由于是海外业务，使用的是AWS云，AWS内部跨可用区流量不像国内云厂商跨可用区流量不收费，是需要收费而且特贵。</p><p>基于成本和容灾考虑使用Istio的地域负载均衡功能，优先调度到同可用区，出现问题时调度到另一可用区。</p><blockquote><p>现使用 kind 在本地创建一套多节点集群，通过标签模拟多可用区场景。</p><p>由于办公电脑是M1，而Istio1.13并不支持M1,所以选用Istio1.16，K8S1.24版本</p></blockquote><h2 id=创建多节点集群模拟跨az>创建多节点集群模拟跨AZ</h2><h3 id=kind配置>kind配置</h3><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
 </span><span class=lnt> 2
 </span><span class=lnt> 3
 </span><span class=lnt> 4
@@ -361,7 +359,7 @@ EOF
 </span><span class=lnt>2
 </span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl>kind create cluster --name cluster1 --kubeconfig<span class=o>=</span>istio --config<span class=o>=</span>kind-cluster1.yaml
 </span></span><span class=line><span class=cl>kubectl config rename-context kind-cluster1  cluster1 --kubeconfig istio
-</span></span></code></pre></td></tr></table></div></div><h1 id=部署服务>部署服务</h1><p>sleep发起调用，访问helloworld</p><h3 id=创建-sleep-部署>创建 <code>sleep</code> 部署</h3><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span></span></code></pre></td></tr></table></div></div><h2 id=部署服务>部署服务</h2><p>sleep发起调用，访问helloworld</p><h3 id=创建-sleep-部署>创建 <code>sleep</code> 部署</h3><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
 </span><span class=lnt> 2
 </span><span class=lnt> 3
 </span><span class=lnt> 4
@@ -631,7 +629,7 @@ EOF
 </span></span></span><span class=line><span class=cl><span class=w>        </span><span class=nt>ports</span><span class=p>:</span><span class=w>
 </span></span></span><span class=line><span class=cl><span class=w>        </span>- <span class=nt>containerPort</span><span class=p>:</span><span class=w> </span><span class=m>5000</span><span class=w>
 </span></span></span><span class=line><span class=cl><span class=w></span><span class=l>EOF</span><span class=w>
-</span></span></span></code></pre></td></tr></table></div></div><h1 id=验证流量>验证流量</h1><p>可以看到请求默认是轮询</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span></span></span></code></pre></td></tr></table></div></div><h2 id=验证流量>验证流量</h2><p>可以看到请求默认是轮询</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
 </span><span class=lnt> 2
 </span><span class=lnt> 3
 </span><span class=lnt> 4
