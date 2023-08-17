@@ -1,4 +1,76 @@
-<rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title>multicluster - 标签 - 蜷缩的蜗牛</title><link>https://kbsonlong.github.io/sre/tags/multicluster/</link><description>multicluster - 标签 - 蜷缩的蜗牛</description><generator>Hugo -- gohugo.io</generator><language>zh-CN</language><managingEditor>kbsonlong@gmail.com (kbsonlong)</managingEditor><webMaster>kbsonlong@gmail.com (kbsonlong)</webMaster><copyright>This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.</copyright><lastBuildDate>Wed, 16 Aug 2023 11:07:53 +0800</lastBuildDate><atom:link href="https://kbsonlong.github.io/sre/tags/multicluster/" rel="self" type="application/rss+xml"/><item><title>Istio多集群系列-同一网络多控制面部署</title><link>https://kbsonlong.github.io/sre/posts/d09106/</link><pubDate>Wed, 16 Aug 2023 11:07:53 +0800</pubDate><author>kbsonlong</author><guid>https://kbsonlong.github.io/sre/posts/d09106/</guid><description><![CDATA[( 本文基于Istio 1.16.2，k8s 1.24 创建两套k8s集群 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 mkdir -p multicluster cd multicluster cat &lt;&lt; EOF &gt; kind-cluster1.yaml kind: Cluster apiVersion: &#34;kind.x-k8s.io/v1alpha4&#34; networking:]]></description></item><item><title>基于Coredns多集群服务发现</title><link>https://kbsonlong.github.io/sre/posts/17feed/</link><pubDate>Tue, 01 Aug 2023 17:38:45 +0800</pubDate><author>kbsonlong</author><guid>https://kbsonlong.github.io/sre/posts/17feed/</guid><description><![CDATA[<p>在<a
+<rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title>multicluster - 标签 - 蜷缩的蜗牛</title><link>https://kbsonlong.github.io/sre/tags/multicluster/</link><description>multicluster - 标签 - 蜷缩的蜗牛</description><generator>Hugo -- gohugo.io</generator><language>zh-CN</language><managingEditor>kbsonlong@gmail.com (kbsonlong)</managingEditor><webMaster>kbsonlong@gmail.com (kbsonlong)</webMaster><copyright>This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.</copyright><lastBuildDate>Thu, 17 Aug 2023 09:50:13 +0800</lastBuildDate><atom:link href="https://kbsonlong.github.io/sre/tags/multicluster/" rel="self" type="application/rss+xml"/><item><title>Istio多集群系列-单控制面跨AZ集群区域负载均衡</title><link>https://kbsonlong.github.io/sre/posts/b2138b/</link><pubDate>Thu, 17 Aug 2023 09:50:13 +0800</pubDate><author>kbsonlong</author><guid>https://kbsonlong.github.io/sre/posts/b2138b/</guid><description><![CDATA[<p>基于安全容灾考虑，生产K8S集群是多可用区。多可用区集群必然涉及跨可用区调用，由于是海外业务，使用的是AWS云，AWS内部跨可用区流量不像国内云厂商跨可用区流量不收费，是需要收费而且特贵。
+基于成本和容灾考虑使用Istio的地域负载均衡功能，优先调度到同可用区，出现问题时调度到另一可用区。</p>
+<blockquote>
+<p>现使用 kind 在本地创建一套多节点集群，通过标签模拟多可用区场景。
+由于办公电脑是M1，而Istio1.13并不支持M1,所以选用Istio1.16，K8S1.24版本</p>
+</blockquote>
+<h1 id="创建多节点集群模拟跨az">创建多节点集群模拟跨AZ</h1>
+<h3 id="kind配置">kind配置</h3>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="line"><span class="cl"><span class="l">mkdir -p multicluster</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="l">cd multicluster</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="l">cat &lt;&lt; EOF &gt; kind-cluster1.yaml</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l">Cluster</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="s2">&#34;kind.x-k8s.io/v1alpha4&#34;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">networking</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">apiServerAddress</span><span class="p">:</span><span class="w"> </span><span class="s2">&#34;172.26.128.224&#34;</span><span class="w"> </span><span class="c"># 本机IP，可不设置。</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">podSubnet</span><span class="p">:</span><span class="w"> </span><span class="s2">&#34;10.10.0.0/16&#34;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">serviceSubnet</span><span class="p">:</span><span class="w"> </span><span class="s2">&#34;10.11.0.0/16&#34;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">nodes</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span>- <span class="nt">role</span><span class="p">:</span><span class="w"> </span><span class="l">control-plane</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l">registry.cn-hangzhou.aliyuncs.com/seam/node:v1.24.15</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span>- <span class="nt">role</span><span class="p">:</span><span class="w"> </span><span class="l">worker</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l">registry.cn-hangzhou.aliyuncs.com/seam/node:v1.24.15</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">kubeadmConfigPatches</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span>- <span class="p">|</span><span class="sd">
+</span></span></span><span class="line"><span class="cl"><span class="sd">      kind: JoinConfiguration
+</span></span></span><span class="line"><span class="cl"><span class="sd">      nodeRegistration:
+</span></span></span><span class="line"><span class="cl"><span class="sd">        kubeletExtraArgs:
+</span></span></span><span class="line"><span class="cl"><span class="sd">          node-labels: &#34;topology.kubernetes.io/region=sg,topology.kubernetes.io/zone=az01&#34;</span><span class="w">      
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span>- <span class="nt">role</span><span class="p">:</span><span class="w"> </span><span class="l">worker</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l">registry.cn-hangzhou.aliyuncs.com/seam/node:v1.24.15</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">kubeadmConfigPatches</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span>- <span class="p">|</span><span class="sd">
+</span></span></span><span class="line"><span class="cl"><span class="sd">      kind: JoinConfiguration
+</span></span></span><span class="line"><span class="cl"><span class="sd">      nodeRegistration:
+</span></span></span><span class="line"><span class="cl"><span class="sd">        kubeletExtraArgs:
+</span></span></span><span class="line"><span class="cl"><span class="sd">          node-labels: &#34;topology.kubernetes.io/region=sg,topology.kubernetes.io/zone=az02&#34;</span><span class="w">      
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="l">EOF</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div>]]></description></item><item><title>Istio多集群系列-同一网络多控制面部署</title><link>https://kbsonlong.github.io/sre/posts/d09106/</link><pubDate>Wed, 16 Aug 2023 11:07:53 +0800</pubDate><author>kbsonlong</author><guid>https://kbsonlong.github.io/sre/posts/d09106/</guid><description><![CDATA[( 本文基于Istio 1.16.2，k8s 1.24 创建两套k8s集群 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 mkdir -p multicluster cd multicluster cat &lt;&lt; EOF &gt; kind-cluster1.yaml kind: Cluster apiVersion: &#34;kind.x-k8s.io/v1alpha4&#34; networking:]]></description></item><item><title>基于Coredns多集群服务发现</title><link>https://kbsonlong.github.io/sre/posts/17feed/</link><pubDate>Tue, 01 Aug 2023 17:38:45 +0800</pubDate><author>kbsonlong</author><guid>https://kbsonlong.github.io/sre/posts/17feed/</guid><description><![CDATA[<p>在<a
   href="https://kbsonlong.github.io/sre/posts/2296fc/"
   
   

@@ -1,4 +1,76 @@
-<rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title>istio - 标签 - 蜷缩的蜗牛</title><link>https://kbsonlong.github.io/sre/tags/istio/</link><description>istio - 标签 - 蜷缩的蜗牛</description><generator>Hugo -- gohugo.io</generator><language>zh-CN</language><managingEditor>kbsonlong@gmail.com (kbsonlong)</managingEditor><webMaster>kbsonlong@gmail.com (kbsonlong)</webMaster><copyright>This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.</copyright><lastBuildDate>Wed, 16 Aug 2023 11:07:53 +0800</lastBuildDate><atom:link href="https://kbsonlong.github.io/sre/tags/istio/" rel="self" type="application/rss+xml"/><item><title>Istio多集群系列-同一网络多控制面部署</title><link>https://kbsonlong.github.io/sre/posts/d09106/</link><pubDate>Wed, 16 Aug 2023 11:07:53 +0800</pubDate><author>kbsonlong</author><guid>https://kbsonlong.github.io/sre/posts/d09106/</guid><description><![CDATA[( 本文基于Istio 1.16.2，k8s 1.24 创建两套k8s集群 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 mkdir -p multicluster cd multicluster cat &lt;&lt; EOF &gt; kind-cluster1.yaml kind: Cluster apiVersion: &#34;kind.x-k8s.io/v1alpha4&#34; networking:]]></description></item><item><title>istio常见问题</title><link>https://kbsonlong.github.io/sre/posts/41b9fe/</link><pubDate>Wed, 26 Jul 2023 10:33:16 +0800</pubDate><author>kbsonlong</author><guid>https://kbsonlong.github.io/sre/posts/41b9fe/</guid><description>503 UF TLS upstream_reset_before_response_started{connection_failure,TLS_error:_268435703:SSL_routines:OPENSSL_internal:WRONG_VERSION_NUMBER} 故障原因 默认情况下，Istio 使用 PERMISSIVE 模式配置目标工作负载。 当启用 PERMISSIVE 模式时，服务可以接受明文和双向 TLS 流量。当两边开启 istio-proxy 之后，Istio</description></item><item><title>istio全局配置</title><link>https://kbsonlong.github.io/sre/posts/03a16b/</link><pubDate>Mon, 17 Jul 2023 21:08:20 +0800</pubDate><author>kbsonlong</author><guid>https://kbsonlong.github.io/sre/posts/03a16b/</guid><description><![CDATA[<h3 id="全局关闭重试">全局关闭重试</h3>
+<rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title>istio - 标签 - 蜷缩的蜗牛</title><link>https://kbsonlong.github.io/sre/tags/istio/</link><description>istio - 标签 - 蜷缩的蜗牛</description><generator>Hugo -- gohugo.io</generator><language>zh-CN</language><managingEditor>kbsonlong@gmail.com (kbsonlong)</managingEditor><webMaster>kbsonlong@gmail.com (kbsonlong)</webMaster><copyright>This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.</copyright><lastBuildDate>Thu, 17 Aug 2023 09:50:13 +0800</lastBuildDate><atom:link href="https://kbsonlong.github.io/sre/tags/istio/" rel="self" type="application/rss+xml"/><item><title>Istio多集群系列-单控制面跨AZ集群区域负载均衡</title><link>https://kbsonlong.github.io/sre/posts/b2138b/</link><pubDate>Thu, 17 Aug 2023 09:50:13 +0800</pubDate><author>kbsonlong</author><guid>https://kbsonlong.github.io/sre/posts/b2138b/</guid><description><![CDATA[<p>基于安全容灾考虑，生产K8S集群是多可用区。多可用区集群必然涉及跨可用区调用，由于是海外业务，使用的是AWS云，AWS内部跨可用区流量不像国内云厂商跨可用区流量不收费，是需要收费而且特贵。
+基于成本和容灾考虑使用Istio的地域负载均衡功能，优先调度到同可用区，出现问题时调度到另一可用区。</p>
+<blockquote>
+<p>现使用 kind 在本地创建一套多节点集群，通过标签模拟多可用区场景。
+由于办公电脑是M1，而Istio1.13并不支持M1,所以选用Istio1.16，K8S1.24版本</p>
+</blockquote>
+<h1 id="创建多节点集群模拟跨az">创建多节点集群模拟跨AZ</h1>
+<h3 id="kind配置">kind配置</h3>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="line"><span class="cl"><span class="l">mkdir -p multicluster</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="l">cd multicluster</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="l">cat &lt;&lt; EOF &gt; kind-cluster1.yaml</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l">Cluster</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="s2">&#34;kind.x-k8s.io/v1alpha4&#34;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">networking</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">apiServerAddress</span><span class="p">:</span><span class="w"> </span><span class="s2">&#34;172.26.128.224&#34;</span><span class="w"> </span><span class="c"># 本机IP，可不设置。</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">podSubnet</span><span class="p">:</span><span class="w"> </span><span class="s2">&#34;10.10.0.0/16&#34;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">serviceSubnet</span><span class="p">:</span><span class="w"> </span><span class="s2">&#34;10.11.0.0/16&#34;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">nodes</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span>- <span class="nt">role</span><span class="p">:</span><span class="w"> </span><span class="l">control-plane</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l">registry.cn-hangzhou.aliyuncs.com/seam/node:v1.24.15</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span>- <span class="nt">role</span><span class="p">:</span><span class="w"> </span><span class="l">worker</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l">registry.cn-hangzhou.aliyuncs.com/seam/node:v1.24.15</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">kubeadmConfigPatches</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span>- <span class="p">|</span><span class="sd">
+</span></span></span><span class="line"><span class="cl"><span class="sd">      kind: JoinConfiguration
+</span></span></span><span class="line"><span class="cl"><span class="sd">      nodeRegistration:
+</span></span></span><span class="line"><span class="cl"><span class="sd">        kubeletExtraArgs:
+</span></span></span><span class="line"><span class="cl"><span class="sd">          node-labels: &#34;topology.kubernetes.io/region=sg,topology.kubernetes.io/zone=az01&#34;</span><span class="w">      
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span>- <span class="nt">role</span><span class="p">:</span><span class="w"> </span><span class="l">worker</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l">registry.cn-hangzhou.aliyuncs.com/seam/node:v1.24.15</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">kubeadmConfigPatches</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span>- <span class="p">|</span><span class="sd">
+</span></span></span><span class="line"><span class="cl"><span class="sd">      kind: JoinConfiguration
+</span></span></span><span class="line"><span class="cl"><span class="sd">      nodeRegistration:
+</span></span></span><span class="line"><span class="cl"><span class="sd">        kubeletExtraArgs:
+</span></span></span><span class="line"><span class="cl"><span class="sd">          node-labels: &#34;topology.kubernetes.io/region=sg,topology.kubernetes.io/zone=az02&#34;</span><span class="w">      
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="l">EOF</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div>]]></description></item><item><title>Istio多集群系列-同一网络多控制面部署</title><link>https://kbsonlong.github.io/sre/posts/d09106/</link><pubDate>Wed, 16 Aug 2023 11:07:53 +0800</pubDate><author>kbsonlong</author><guid>https://kbsonlong.github.io/sre/posts/d09106/</guid><description><![CDATA[( 本文基于Istio 1.16.2，k8s 1.24 创建两套k8s集群 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 mkdir -p multicluster cd multicluster cat &lt;&lt; EOF &gt; kind-cluster1.yaml kind: Cluster apiVersion: &#34;kind.x-k8s.io/v1alpha4&#34; networking:]]></description></item><item><title>istio常见问题</title><link>https://kbsonlong.github.io/sre/posts/41b9fe/</link><pubDate>Wed, 26 Jul 2023 10:33:16 +0800</pubDate><author>kbsonlong</author><guid>https://kbsonlong.github.io/sre/posts/41b9fe/</guid><description>503 UF TLS upstream_reset_before_response_started{connection_failure,TLS_error:_268435703:SSL_routines:OPENSSL_internal:WRONG_VERSION_NUMBER} 故障原因 默认情况下，Istio 使用 PERMISSIVE 模式配置目标工作负载。 当启用 PERMISSIVE 模式时，服务可以接受明文和双向 TLS 流量。当两边开启 istio-proxy 之后，Istio</description></item><item><title>istio全局配置</title><link>https://kbsonlong.github.io/sre/posts/03a16b/</link><pubDate>Mon, 17 Jul 2023 21:08:20 +0800</pubDate><author>kbsonlong</author><guid>https://kbsonlong.github.io/sre/posts/03a16b/</guid><description><![CDATA[<h3 id="全局关闭重试">全局关闭重试</h3>
 <p>istio默认重试2次</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
@@ -422,12 +494,4 @@
 <li><strong>Response Size</strong> (<code>istio_response_bytes</code>): This is a <code>DISTRIBUTION</code> which measures HTTP response body sizes.</li>
 <li><strong>gRPC Request Message Count</strong> (<code>istio_request_messages_total</code>): This is a <code>COUNTER</code> incremented for every gRPC message sent from a client.</li>
 <li><strong>gRPC Response Message Count</strong> (<code>istio_response_messages_total</code>): This is a <code>COUNTER</code> incremented for every gRPC message sent from a server.</li>
-</ul>]]></description></item><item><title>Envoy性能指标</title><link>https://kbsonlong.github.io/sre/posts/0affe7/</link><pubDate>Tue, 13 Sep 2022 10:46:39 +0800</pubDate><author>kbsonlong</author><guid>https://kbsonlong.github.io/sre/posts/0affe7/</guid><description><![CDATA[<h1 id="envoy-指标">Envoy 指标</h1>
-<h2 id="envoy-指标概述">Envoy 指标概述</h2>
-<p>Envoy 的主要目标之一是使网络易于理解。 Envoy 会根据其配置方式产生大量统计信息。一般来说，统计数据(指标)分为三类：</p>
-<ul>
-<li><strong>Downstream</strong>：Downstream 指标与外来的连接/请求有关。它们由 <code>listener</code>、<code>HTTP connection manager(HCM)</code>、<code>TCP proxy filter</code> 等产生。</li>
-<li><strong>Upstream</strong>：Upstream 指标与外向的连接/请求有关。它们由 <code>connection pool</code>、<code>router filter</code>、<code>tcp proxy filter</code>等产生。</li>
-<li><strong>Server</strong>：<code>Server</code> 指标信息描述 Envoy 服务器实例的运作情况。服务器正常运行时间或分配的内存量等统计信息。</li>
-</ul>
-<p>在最简单场景下，单个 Envoy Proxy 通常涉及 <code>Downstream</code> 和 <code>Upstream</code> 统计数据。这两种指标反映了取该 <code>网络节点</code> 的运行情况。来自整个网格的统计数据提供了每个<code> 网络节点</code> 和整体网络健康状况的非常详细的汇总信息。Envoy 的文档对这些指标有一些简单的说明。</p>]]></description></item></channel></rss>
+</ul>]]></description></item></channel></rss>
