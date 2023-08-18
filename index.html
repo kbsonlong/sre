@@ -56,7 +56,7 @@
 </span></span></span><span class=line><span class=cl><span class=sd>      kind: JoinConfiguration
 </span></span></span><span class=line><span class=cl><span class=sd>      nodeRegistration:
 </span></span></span><span class=line><span class=cl><span class=sd>        kubeletExtraArgs:
-</span></span></span><span class=line><span class=cl><span class=sd>          node-labels: &#34;topology.kubernetes.io/region=sg,topology.kubernetes.io/zone=az01&#34;</span><span class=w>      
+</span></span></span><span class=line><span class=cl><span class=sd>          node-labels: &#34;topology.kubernetes.io/region=az01,topology.kubernetes.io/zone=az01&#34;</span><span class=w>      
 </span></span></span><span class=line><span class=cl><span class=w>  </span>- <span class=nt>role</span><span class=p>:</span><span class=w> </span><span class=l>worker</span><span class=w>
 </span></span></span><span class=line><span class=cl><span class=w>    </span><span class=nt>image</span><span class=p>:</span><span class=w> </span><span class=l>registry.cn-hangzhou.aliyuncs.com/seam/node:v1.24.15</span><span class=w>
 </span></span></span><span class=line><span class=cl><span class=w>    </span><span class=nt>kubeadmConfigPatches</span><span class=p>:</span><span class=w>
@@ -64,7 +64,7 @@
 </span></span></span><span class=line><span class=cl><span class=sd>      kind: JoinConfiguration
 </span></span></span><span class=line><span class=cl><span class=sd>      nodeRegistration:
 </span></span></span><span class=line><span class=cl><span class=sd>        kubeletExtraArgs:
-</span></span></span><span class=line><span class=cl><span class=sd>          node-labels: &#34;topology.kubernetes.io/region=sg,topology.kubernetes.io/zone=az02&#34;</span><span class=w>      
+</span></span></span><span class=line><span class=cl><span class=sd>          node-labels: &#34;topology.kubernetes.io/region=az02,topology.kubernetes.io/zone=az02&#34;</span><span class=w>      
 </span></span></span><span class=line><span class=cl><span class=w></span><span class=l>EOF</span><span class=w>
 </span></span></span></code></pre></td></tr></table></div></div></div><div class=post-footer><a href=/sre/posts/b2138b/>阅读全文</a><div class=post-tags><i class="fa-solid fa-tags fa-fw"></i>&nbsp;<a href=/sre/tags/istio/>istio</a>,&nbsp;<a href=/sre/tags/multicluster/>multicluster</a></div></div></article><article class="single summary" itemscope itemtype=http://schema.org/Article><h1 class=single-title itemprop="name headline"><a href=/sre/posts/d09106/>Istio多集群系列-同一网络多控制面部署</a></h1><div class=post-meta><span class=post-author><span class=author><img class="lazyload avatar" src=/sre/svg/loading.min.svg data-src="https://gravatar.loli.net/avatar/598872715ec08296cf1e1806135cd518?s=32&amp;d=mp" data-srcset="https://gravatar.loli.net/avatar/598872715ec08296cf1e1806135cd518?s=32&amp;d=mp, https://gravatar.loli.net/avatar/598872715ec08296cf1e1806135cd518?s=32&amp;d=mp 1.5x, https://gravatar.loli.net/avatar/598872715ec08296cf1e1806135cd518?s=32&amp;d=mp 2x" data-sizes=auto alt=kbsonlong title=kbsonlong>&nbsp;kbsonlong</span></span>&nbsp;<span class=post-publish title='2023-08-16 11:07:53'>发布于 <time datetime=2023-08-16>2023-08-16</time></span>&nbsp;<span class=post-category>收录于 <a href=/sre/categories/%E4%BA%91%E5%8E%9F%E7%94%9F/><i class="fa-regular fa-folder fa-fw"></i>&nbsp;云原生</a></span></div><div class=content><p>(<img class=lazyload src=/sre/svg/loading.min.svg data-src=https://raw.githubusercontent.com/kbsonlong/notes_statics/master/images/20230816174138.png data-srcset="https://raw.githubusercontent.com/kbsonlong/notes_statics/master/images/20230816174138.png, https://raw.githubusercontent.com/kbsonlong/notes_statics/master/images/20230816174138.png 1.5x, https://raw.githubusercontent.com/kbsonlong/notes_statics/master/images/20230816174138.png 2x" data-sizes=auto alt=https://raw.githubusercontent.com/kbsonlong/notes_statics/master/images/20230816174138.png title=多集群网络架构></p><blockquote><p>本文基于Istio 1.16.2，k8s 1.24</p></blockquote><h2 id=创建两套k8s集群>创建两套k8s集群</h2><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
 </span><span class=lnt> 2
@@ -91,6 +91,22 @@
 </span><span class=lnt>23
 </span><span class=lnt>24
 </span><span class=lnt>25
+</span><span class=lnt>26
+</span><span class=lnt>27
+</span><span class=lnt>28
+</span><span class=lnt>29
+</span><span class=lnt>30
+</span><span class=lnt>31
+</span><span class=lnt>32
+</span><span class=lnt>33
+</span><span class=lnt>34
+</span><span class=lnt>35
+</span><span class=lnt>36
+</span><span class=lnt>37
+</span><span class=lnt>38
+</span><span class=lnt>39
+</span><span class=lnt>40
+</span><span class=lnt>41
 </span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-yaml data-lang=yaml><span class=line><span class=cl><span class=l>mkdir -p multicluster</span><span class=w>
 </span></span></span><span class=line><span class=cl><span class=w></span><span class=l>cd multicluster</span><span class=w>
 </span></span></span><span class=line><span class=cl><span class=w></span><span class=l>cat &lt;&lt; EOF &gt; kind-cluster1.yaml</span><span class=w>
@@ -103,6 +119,14 @@
 </span></span></span><span class=line><span class=cl><span class=w></span><span class=nt>nodes</span><span class=p>:</span><span class=w>
 </span></span></span><span class=line><span class=cl><span class=w>  </span>- <span class=nt>role</span><span class=p>:</span><span class=w> </span><span class=l>control-plane</span><span class=w>
 </span></span></span><span class=line><span class=cl><span class=w>    </span><span class=nt>image</span><span class=p>:</span><span class=w> </span><span class=l>registry.cn-hangzhou.aliyuncs.com/seam/node:v1.24.15</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>  </span>- <span class=nt>role</span><span class=p>:</span><span class=w> </span><span class=l>worker</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=nt>image</span><span class=p>:</span><span class=w> </span><span class=l>registry.cn-hangzhou.aliyuncs.com/seam/node:v1.24.15</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=nt>kubeadmConfigPatches</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span>- <span class=p>|</span><span class=sd>
+</span></span></span><span class=line><span class=cl><span class=sd>      kind: JoinConfiguration
+</span></span></span><span class=line><span class=cl><span class=sd>      nodeRegistration:
+</span></span></span><span class=line><span class=cl><span class=sd>        kubeletExtraArgs:
+</span></span></span><span class=line><span class=cl><span class=sd>          node-labels: &#34;topology.kubernetes.io/region=sg,topology.kubernetes.io/zone=az01&#34;</span><span class=w>      
 </span></span></span><span class=line><span class=cl><span class=w></span><span class=l>EOF</span><span class=w>
 </span></span></span><span class=line><span class=cl><span class=w>
 </span></span></span><span class=line><span class=cl><span class=w></span><span class=l>cat &lt;&lt; EOF &gt; kind-cluster2.yaml</span><span class=w>
@@ -115,6 +139,14 @@
 </span></span></span><span class=line><span class=cl><span class=w></span><span class=nt>nodes</span><span class=p>:</span><span class=w>
 </span></span></span><span class=line><span class=cl><span class=w>  </span>- <span class=nt>role</span><span class=p>:</span><span class=w> </span><span class=l>control-plane</span><span class=w>
 </span></span></span><span class=line><span class=cl><span class=w>    </span><span class=nt>image</span><span class=p>:</span><span class=w> </span><span class=l>registry.cn-hangzhou.aliyuncs.com/seam/node:v1.24.15</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>  </span>- <span class=nt>role</span><span class=p>:</span><span class=w> </span><span class=l>worker</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=nt>image</span><span class=p>:</span><span class=w> </span><span class=l>registry.cn-hangzhou.aliyuncs.com/seam/node:v1.24.15</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=nt>kubeadmConfigPatches</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span>- <span class=p>|</span><span class=sd>
+</span></span></span><span class=line><span class=cl><span class=sd>      kind: JoinConfiguration
+</span></span></span><span class=line><span class=cl><span class=sd>      nodeRegistration:
+</span></span></span><span class=line><span class=cl><span class=sd>        kubeletExtraArgs:
+</span></span></span><span class=line><span class=cl><span class=sd>          node-labels: &#34;topology.kubernetes.io/region=sg,topology.kubernetes.io/zone=az02&#34;</span><span class=w>      
 </span></span></span><span class=line><span class=cl><span class=w></span><span class=l>EOF</span><span class=w>
 </span></span></span></code></pre></td></tr></table></div></div><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
 </span><span class=lnt>2

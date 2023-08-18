@@ -58,7 +58,7 @@ nodes:
       kind: JoinConfiguration
       nodeRegistration:
         kubeletExtraArgs:
-          node-labels: &#34;topology.kubernetes.io/region=sg,topology.kubernetes.io/zone=az01&#34;      
+          node-labels: &#34;topology.kubernetes.io/region=az01,topology.kubernetes.io/zone=az01&#34;      
   - role: worker
     image: registry.cn-hangzhou.aliyuncs.com/seam/node:v1.24.15
     kubeadmConfigPatches:
@@ -66,7 +66,7 @@ nodes:
       kind: JoinConfiguration
       nodeRegistration:
         kubeletExtraArgs:
-          node-labels: &#34;topology.kubernetes.io/region=sg,topology.kubernetes.io/zone=az02&#34;      
+          node-labels: &#34;topology.kubernetes.io/region=az02,topology.kubernetes.io/zone=az02&#34;      
 EOF
 
 
@@ -130,7 +130,7 @@ nodes:
       kind: JoinConfiguration
       nodeRegistration:
         kubeletExtraArgs:
-          node-labels: &#34;topology.kubernetes.io/region=sg,topology.kubernetes.io/zone=az01&#34;      
+          node-labels: &#34;topology.kubernetes.io/region=az01,topology.kubernetes.io/zone=az01&#34;      
   - role: worker
     image: registry.cn-hangzhou.aliyuncs.com/seam/node:v1.24.15
     kubeadmConfigPatches:
@@ -138,11 +138,11 @@ nodes:
       kind: JoinConfiguration
       nodeRegistration:
         kubeletExtraArgs:
-          node-labels: &#34;topology.kubernetes.io/region=sg,topology.kubernetes.io/zone=az02&#34;      
+          node-labels: &#34;topology.kubernetes.io/region=az02,topology.kubernetes.io/zone=az02&#34;      
 EOF
 
 
-"><meta itemprop=datePublished content="2023-08-17T09:50:13+08:00"><meta itemprop=dateModified content="2023-08-17T09:50:13+08:00"><meta itemprop=wordCount content="1220"><meta itemprop=image content="https://kbsonlong.github.io/logo_transparent.png"><meta itemprop=keywords content="istio,multicluster,"><meta property="og:title" content="Istio多集群系列-单控制面跨AZ集群区域负载均衡"><meta property="og:description" content="基于安全容灾考虑，生产K8S集群是多可用区。多可用区集群必然涉及跨可用区调用，由于是海外业务，使用的是AWS云，AWS内部跨可用区流量不像国内云厂商跨可用区流量不收费，是需要收费而且特贵。
+"><meta itemprop=datePublished content="2023-08-17T09:50:13+08:00"><meta itemprop=dateModified content="2023-08-17T09:50:13+08:00"><meta itemprop=wordCount content="1888"><meta itemprop=image content="https://kbsonlong.github.io/logo_transparent.png"><meta itemprop=keywords content="istio,multicluster,"><meta property="og:title" content="Istio多集群系列-单控制面跨AZ集群区域负载均衡"><meta property="og:description" content="基于安全容灾考虑，生产K8S集群是多可用区。多可用区集群必然涉及跨可用区调用，由于是海外业务，使用的是AWS云，AWS内部跨可用区流量不像国内云厂商跨可用区流量不收费，是需要收费而且特贵。
 基于成本和容灾考虑使用Istio的地域负载均衡功能，优先调度到同可用区，出现问题时调度到另一可用区。
 
 现使用 kind 在本地创建一套多节点集群，通过标签模拟多可用区场景。
@@ -202,7 +202,7 @@ nodes:
       kind: JoinConfiguration
       nodeRegistration:
         kubeletExtraArgs:
-          node-labels: &#34;topology.kubernetes.io/region=sg,topology.kubernetes.io/zone=az01&#34;      
+          node-labels: &#34;topology.kubernetes.io/region=az01,topology.kubernetes.io/zone=az01&#34;      
   - role: worker
     image: registry.cn-hangzhou.aliyuncs.com/seam/node:v1.24.15
     kubeadmConfigPatches:
@@ -210,7 +210,7 @@ nodes:
       kind: JoinConfiguration
       nodeRegistration:
         kubeletExtraArgs:
-          node-labels: &#34;topology.kubernetes.io/region=sg,topology.kubernetes.io/zone=az02&#34;      
+          node-labels: &#34;topology.kubernetes.io/region=az02,topology.kubernetes.io/zone=az02&#34;      
 EOF
 
 
@@ -274,7 +274,7 @@ nodes:
       kind: JoinConfiguration
       nodeRegistration:
         kubeletExtraArgs:
-          node-labels: &#34;topology.kubernetes.io/region=sg,topology.kubernetes.io/zone=az01&#34;      
+          node-labels: &#34;topology.kubernetes.io/region=az01,topology.kubernetes.io/zone=az01&#34;      
   - role: worker
     image: registry.cn-hangzhou.aliyuncs.com/seam/node:v1.24.15
     kubeadmConfigPatches:
@@ -282,11 +282,11 @@ nodes:
       kind: JoinConfiguration
       nodeRegistration:
         kubeletExtraArgs:
-          node-labels: &#34;topology.kubernetes.io/region=sg,topology.kubernetes.io/zone=az02&#34;      
+          node-labels: &#34;topology.kubernetes.io/region=az02,topology.kubernetes.io/zone=az02&#34;      
 EOF
 
 
-"><meta name=application-name content="FixIt"><meta name=apple-mobile-web-app-title content="FixIt"><meta name=theme-color media="(prefers-color-scheme: light)" content="#ffffff"><meta name=theme-color media="(prefers-color-scheme: dark)" content="#252627"><meta name=msapplication-TileColor content="#da532c"><link rel="shortcut icon" type=image/x-icon href=/favicon.ico><link rel=icon type=image/png sizes=32x32 href=/favicon-32x32.png><link rel=icon type=image/png sizes=16x16 href=/favicon-16x16.png><link rel=apple-touch-icon sizes=180x180 href=/apple-touch-icon.png><link rel=mask-icon href=/safari-pinned-tab.svg color=#5bbad5><link rel=manifest href=/site.webmanifest><link rel=canonical href=https://kbsonlong.github.io/sre/posts/b2138b/><link rel=prev href=https://kbsonlong.github.io/sre/posts/d09106/><link rel=stylesheet href=/sre/lib/normalize/normalize.min.css><link rel=stylesheet href=/sre/css/style.min.css><link rel=stylesheet href=/sre/lib/fontawesome-free/all.min.css><link rel=stylesheet href=/sre/lib/animate/animate.min.css><script type=application/ld+json>{"@context":"http://schema.org","@type":"BlogPosting","headline":"Istio多集群系列-单控制面跨AZ集群区域负载均衡","inLanguage":"zh-CN","mainEntityOfPage":{"@type":"WebPage","@id":"https:\/\/kbsonlong.github.io\/sre\/posts\/b2138b\/"},"genre":"posts","keywords":"istio, multicluster","wordcount":1220,"url":"https:\/\/kbsonlong.github.io\/sre\/posts\/b2138b\/","datePublished":"2023-08-17T09:50:13+08:00","dateModified":"2023-08-17T09:50:13+08:00","license":"This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.","publisher":{"@type":"Organization","name":""},"author":{"@type":"Person","name":"kbsonlong"},"description":""}</script></head><body header-desktop=sticky header-mobile=auto><script type=text/javascript>(window.localStorage&&localStorage.getItem("theme")?localStorage.getItem("theme")==="dark":"auto"==="auto"?window.matchMedia("(prefers-color-scheme: dark)").matches:"auto"==="dark")&&document.body.setAttribute("theme","dark")</script><div class=wrapper><header class=desktop id=header-desktop><div class=header-wrapper github-corner=right><div class=header-title><a href=/sre/ title=蜷缩的蜗牛><img class="lazyload logo" src=/sre/svg/loading.min.svg data-src=/logo_transparent.png data-srcset="/logo_transparent.png, /logo_transparent.png 1.5x, /logo_transparent.png 2x" data-sizes=auto alt=蜷缩的蜗牛 title=蜷缩的蜗牛><span class=header-title-text>蜷缩的蜗牛</span></a><span class=header-subtitle></span></div><nav><ul class=menu><li class=menu-item><a class=menu-link href=/sre/posts/><i class='fa-solid fa-archive fa-fw fa-sm'></i> 文章</a></li><li class=menu-item><a class=menu-link href=/sre/categories/><i class='fa-solid fa-th fa-fw fa-sm'></i> 分类</a></li><li class=menu-item><a class=menu-link href=/sre/tags/><i class='fa-solid fa-tags fa-fw fa-sm'></i> 标签</a></li><li class=menu-item><a class=menu-link href=/sre/friends/ title=友情链接><i class='fa-solid fa-users fa-fw fa-sm'></i> 友链</a></li><li class=menu-item><a class=menu-link href=/sre/about/><i class='fa-solid fa-info-circle fa-fw fa-sm'></i> 关于</a></li><li class="menu-item d-none-desktop text-center"><a class=menu-link href=https://github.com/kbsonlong/ title=GitHub rel="noopener noreferrer" target=_blank><i class='fa-brands fa-github fa-fw'></i></a></li><li class="menu-item d-none-desktop text-center"><a class=menu-link href=/sre/messages/><i class='fa-solid fa-messages'></i> 留言板</a></li><li class=menu-item><a class=menu-link href=/sre/messages/ title=留言板>留言板</a></li><li class="menu-item delimiter"></li><li class="menu-item language"><span title=选择语言>简体中文<i class="dropdown-icon fa-solid fa-chevron-down"></i></span><ul class=sub-menu><li class=menu-item>没有更多翻译</li></ul></li><li class="menu-item search" id=search-desktop><input type=text placeholder="搜索文章标题或内容 ..." id=search-input-desktop>
+"><meta name=application-name content="FixIt"><meta name=apple-mobile-web-app-title content="FixIt"><meta name=theme-color media="(prefers-color-scheme: light)" content="#ffffff"><meta name=theme-color media="(prefers-color-scheme: dark)" content="#252627"><meta name=msapplication-TileColor content="#da532c"><link rel="shortcut icon" type=image/x-icon href=/favicon.ico><link rel=icon type=image/png sizes=32x32 href=/favicon-32x32.png><link rel=icon type=image/png sizes=16x16 href=/favicon-16x16.png><link rel=apple-touch-icon sizes=180x180 href=/apple-touch-icon.png><link rel=mask-icon href=/safari-pinned-tab.svg color=#5bbad5><link rel=manifest href=/site.webmanifest><link rel=canonical href=https://kbsonlong.github.io/sre/posts/b2138b/><link rel=prev href=https://kbsonlong.github.io/sre/posts/d09106/><link rel=stylesheet href=/sre/lib/normalize/normalize.min.css><link rel=stylesheet href=/sre/css/style.min.css><link rel=stylesheet href=/sre/lib/fontawesome-free/all.min.css><link rel=stylesheet href=/sre/lib/animate/animate.min.css><script type=application/ld+json>{"@context":"http://schema.org","@type":"BlogPosting","headline":"Istio多集群系列-单控制面跨AZ集群区域负载均衡","inLanguage":"zh-CN","mainEntityOfPage":{"@type":"WebPage","@id":"https:\/\/kbsonlong.github.io\/sre\/posts\/b2138b\/"},"genre":"posts","keywords":"istio, multicluster","wordcount":1888,"url":"https:\/\/kbsonlong.github.io\/sre\/posts\/b2138b\/","datePublished":"2023-08-17T09:50:13+08:00","dateModified":"2023-08-17T09:50:13+08:00","license":"This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.","publisher":{"@type":"Organization","name":""},"author":{"@type":"Person","name":"kbsonlong"},"description":""}</script></head><body header-desktop=sticky header-mobile=auto><script type=text/javascript>(window.localStorage&&localStorage.getItem("theme")?localStorage.getItem("theme")==="dark":"auto"==="auto"?window.matchMedia("(prefers-color-scheme: dark)").matches:"auto"==="dark")&&document.body.setAttribute("theme","dark")</script><div class=wrapper><header class=desktop id=header-desktop><div class=header-wrapper github-corner=right><div class=header-title><a href=/sre/ title=蜷缩的蜗牛><img class="lazyload logo" src=/sre/svg/loading.min.svg data-src=/logo_transparent.png data-srcset="/logo_transparent.png, /logo_transparent.png 1.5x, /logo_transparent.png 2x" data-sizes=auto alt=蜷缩的蜗牛 title=蜷缩的蜗牛><span class=header-title-text>蜷缩的蜗牛</span></a><span class=header-subtitle></span></div><nav><ul class=menu><li class=menu-item><a class=menu-link href=/sre/posts/><i class='fa-solid fa-archive fa-fw fa-sm'></i> 文章</a></li><li class=menu-item><a class=menu-link href=/sre/categories/><i class='fa-solid fa-th fa-fw fa-sm'></i> 分类</a></li><li class=menu-item><a class=menu-link href=/sre/tags/><i class='fa-solid fa-tags fa-fw fa-sm'></i> 标签</a></li><li class=menu-item><a class=menu-link href=/sre/friends/ title=友情链接><i class='fa-solid fa-users fa-fw fa-sm'></i> 友链</a></li><li class=menu-item><a class=menu-link href=/sre/about/><i class='fa-solid fa-info-circle fa-fw fa-sm'></i> 关于</a></li><li class="menu-item d-none-desktop text-center"><a class=menu-link href=https://github.com/kbsonlong/ title=GitHub rel="noopener noreferrer" target=_blank><i class='fa-brands fa-github fa-fw'></i></a></li><li class="menu-item d-none-desktop text-center"><a class=menu-link href=/sre/messages/><i class='fa-solid fa-messages'></i> 留言板</a></li><li class=menu-item><a class=menu-link href=/sre/messages/ title=留言板>留言板</a></li><li class="menu-item delimiter"></li><li class="menu-item language"><span title=选择语言>简体中文<i class="dropdown-icon fa-solid fa-chevron-down"></i></span><ul class=sub-menu><li class=menu-item>没有更多翻译</li></ul></li><li class="menu-item search" id=search-desktop><input type=text placeholder="搜索文章标题或内容 ..." id=search-input-desktop>
 <a href=javascript:void(0); class="search-button search-toggle" id=search-toggle-desktop title=搜索><i class="fa-solid fa-search fa-fw"></i></a>
 <a href=javascript:void(0); class="search-button search-clear" id=search-clear-desktop title=清空><i class="fa-solid fa-times-circle fa-fw"></i></a>
 <span class="search-button search-loading" id=search-loading-desktop><i class="fa-solid fa-spinner fa-fw fa-spin"></i></span></li><li class="menu-item theme-switch" title=切换主题><i class="fa-solid fa-adjust fa-fw"></i></li></ul></nav></div></header><header class=mobile id=header-mobile><div class=header-container><div class=header-wrapper><div class=header-title><a href=/sre/ title=蜷缩的蜗牛><img class="lazyload logo" src=/sre/svg/loading.min.svg data-src=/logo_transparent.png data-srcset="/logo_transparent.png, /logo_transparent.png 1.5x, /logo_transparent.png 2x" data-sizes=auto alt=/logo_transparent.png title=/logo_transparent.png><span class=header-title-text>蜷缩的蜗牛</span></a><span class=header-subtitle></span></div><div class=menu-toggle id=menu-toggle-mobile><span></span><span></span><span></span></div></div><nav><ul class=menu id=menu-mobile><li class=search-wrapper><div class="search mobile" id=search-mobile><input type=text placeholder="搜索文章标题或内容 ..." id=search-input-mobile>
@@ -295,9 +295,9 @@ EOF
 <span class="search-button search-loading" id=search-loading-mobile><i class="fa-solid fa-spinner fa-fw fa-spin"></i></span></div><a href=javascript:void(0); class=search-cancel id=search-cancel-mobile>取消</a></li><li class=menu-item><a class=menu-link href=/sre/posts/><i class='fa-solid fa-archive fa-fw fa-sm'></i> 文章</a></li><li class=menu-item><a class=menu-link href=/sre/categories/><i class='fa-solid fa-th fa-fw fa-sm'></i> 分类</a></li><li class=menu-item><a class=menu-link href=/sre/tags/><i class='fa-solid fa-tags fa-fw fa-sm'></i> 标签</a></li><li class=menu-item><a class=menu-link href=/sre/friends/ title=友情链接><i class='fa-solid fa-users fa-fw fa-sm'></i> 友链</a></li><li class=menu-item><a class=menu-link href=/sre/about/><i class='fa-solid fa-info-circle fa-fw fa-sm'></i> 关于</a></li><li class="menu-item d-none-desktop text-center"><a class=menu-link href=https://github.com/kbsonlong/ title=GitHub rel="noopener noreferrer" target=_blank><i class='fa-brands fa-github fa-fw'></i></a></li><li class="menu-item d-none-desktop text-center"><a class=menu-link href=/sre/messages/><i class='fa-solid fa-messages'></i> 留言板</a></li><li class=menu-item><a class=menu-link href=/sre/messages/ title=留言板>留言板</a></li><li class="menu-item theme-switch" title=切换主题><i class="fa-solid fa-adjust fa-fw"></i></li><li class="menu-item language"><span title=选择语言>简体中文<i class="dropdown-icon fa-solid fa-chevron-down"></i></span>
 <select class=language-select onchange="location=this.value"><option disabled>没有更多翻译</option></select></li></ul></nav></div></header><div class="search-dropdown desktop"><div id=search-dropdown-desktop></div></div><div class="search-dropdown mobile"><div id=search-dropdown-mobile></div></div><main class=container page-style=normal><aside class=toc id=toc-auto><h2 class=toc-title>目录 <i class="toc-icon fa-solid fa-angle-down fa-fw"></i></h2><div class=toc-content id=toc-content-auto></div></aside><aside class=aside-custom></aside><article class="page single"><div class=header><h1 class="single-title animate__animated animate__flipInX"><span>Istio多集群系列-单控制面跨AZ集群区域负载均衡</span></h1></div><div class=post-meta><div class=post-meta-line><span class=post-author><span class=author><img class="lazyload avatar" src=/sre/svg/loading.min.svg data-src="https://gravatar.loli.net/avatar/598872715ec08296cf1e1806135cd518?s=32&amp;d=mp" data-srcset="https://gravatar.loli.net/avatar/598872715ec08296cf1e1806135cd518?s=32&amp;d=mp, https://gravatar.loli.net/avatar/598872715ec08296cf1e1806135cd518?s=32&amp;d=mp 1.5x, https://gravatar.loli.net/avatar/598872715ec08296cf1e1806135cd518?s=32&amp;d=mp 2x" data-sizes=auto alt=kbsonlong title=kbsonlong>&nbsp;kbsonlong</span></span>
 <span class=post-category>收录于 <a href=/sre/categories/%E4%BA%91%E5%8E%9F%E7%94%9F/><i class="fa-regular fa-folder fa-fw"></i>&nbsp;云原生</a></span></div><div class=post-meta-line><span title="2023-08-17 09:50:13"><i class="fa-regular fa-calendar-alt fa-fw"></i>&nbsp;<time datetime=2023-08-17>2023-08-17</time>
-</span>&nbsp;<i class="fa-solid fa-pencil-alt fa-fw"></i>&nbsp;约 1220 字&nbsp;
-<i class="fa-regular fa-clock fa-fw"></i>&nbsp;预计阅读 3 分钟&nbsp;</div></div><div class="details toc" id=toc-static kept=false><div class="details-summary toc-title"><span>目录</span>
-<span><i class="details-icon fa-solid fa-angle-right"></i></span></div><div class="details-content toc-content" id=toc-content-static><nav id=TableOfContents><ul><li><a href=#创建多节点集群模拟跨az>创建多节点集群模拟跨AZ</a><ul><li><a href=#kind配置>kind配置</a></li><li><a href=#创建集群>创建集群</a></li></ul></li><li><a href=#部署服务>部署服务</a><ul><li><a href=#创建-sleep-部署>创建 <code>sleep</code> 部署</a></li><li><a href=#创建-helloworld-部署>创建 <code>helloworld</code> 部署</a></li></ul></li><li><a href=#验证流量>验证流量</a><ul><li><a href=#配置规则>配置规则</a></li><li><a href=#驱逐-envoy-sidecar-代理>驱逐 Envoy Sidecar 代理</a></li></ul></li></ul></nav></div></div><div class=content id=content><p>基于安全容灾考虑，生产K8S集群是多可用区。多可用区集群必然涉及跨可用区调用，由于是海外业务，使用的是AWS云，AWS内部跨可用区流量不像国内云厂商跨可用区流量不收费，是需要收费而且特贵。</p><p>基于成本和容灾考虑使用Istio的地域负载均衡功能，优先调度到同可用区，出现问题时调度到另一可用区。</p><blockquote><p>现使用 kind 在本地创建一套多节点集群，通过标签模拟多可用区场景。</p><p>由于办公电脑是M1，而Istio1.13并不支持M1,所以选用Istio1.16，K8S1.24版本</p></blockquote><h2 id=创建多节点集群模拟跨az>创建多节点集群模拟跨AZ</h2><h3 id=kind配置>kind配置</h3><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span>&nbsp;<i class="fa-solid fa-pencil-alt fa-fw"></i>&nbsp;约 1888 字&nbsp;
+<i class="fa-regular fa-clock fa-fw"></i>&nbsp;预计阅读 4 分钟&nbsp;</div></div><div class="details toc" id=toc-static kept=false><div class="details-summary toc-title"><span>目录</span>
+<span><i class="details-icon fa-solid fa-angle-right"></i></span></div><div class="details-content toc-content" id=toc-content-static><nav id=TableOfContents><ul><li><a href=#创建多节点集群模拟跨az>创建多节点集群模拟跨AZ</a><ul><li><a href=#kind配置>kind配置</a></li><li><a href=#创建集群>创建集群</a></li></ul></li><li><a href=#部署istio>部署Istio</a></li><li><a href=#部署服务>部署服务</a><ul><li><a href=#创建-sleep-部署>创建 <code>sleep</code> 部署</a></li><li><a href=#创建-helloworld-部署>创建 <code>helloworld</code> 部署</a></li></ul></li><li><a href=#验证流量>验证流量</a><ul><li><a href=#配置规则>配置规则</a></li><li><a href=#驱逐-envoy-sidecar-代理>驱逐 Envoy Sidecar 代理</a></li></ul></li><li><a href=#按地域设置权重>按地域设置权重</a></li><li><a href=#地域感知失效可能原因>地域感知失效可能原因</a><ul><li><a href=#destinationrule-未配置-outlierdetection>DestinationRule 未配置 outlierDetection</a></li><li><a href=#client-没配置-service>client 没配置 service</a></li><li><a href=#使用了-headless-service>使用了 headless service</a></li></ul></li></ul></nav></div></div><div class=content id=content><p>基于安全容灾考虑，生产K8S集群是多可用区。多可用区集群必然涉及跨可用区调用，由于是海外业务，使用的是AWS云，AWS内部跨可用区流量不像国内云厂商跨可用区流量不收费，是需要收费而且特贵。</p><p>基于成本和容灾考虑使用Istio的地域负载均衡功能，优先调度到同可用区，出现问题时调度到另一可用区。</p><blockquote><p>现使用 kind 在本地创建一套多节点集群，通过标签模拟多可用区场景。</p><p>由于办公电脑是M1，而Istio1.13并不支持M1,所以选用Istio1.16，K8S1.24版本</p></blockquote><h2 id=创建多节点集群模拟跨az>创建多节点集群模拟跨AZ</h2><h3 id=kind配置>kind配置</h3><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
 </span><span class=lnt> 2
 </span><span class=lnt> 3
 </span><span class=lnt> 4
@@ -345,7 +345,7 @@ EOF
 </span></span></span><span class=line><span class=cl><span class=sd>      kind: JoinConfiguration
 </span></span></span><span class=line><span class=cl><span class=sd>      nodeRegistration:
 </span></span></span><span class=line><span class=cl><span class=sd>        kubeletExtraArgs:
-</span></span></span><span class=line><span class=cl><span class=sd>          node-labels: &#34;topology.kubernetes.io/region=sg,topology.kubernetes.io/zone=az01&#34;</span><span class=w>      
+</span></span></span><span class=line><span class=cl><span class=sd>          node-labels: &#34;topology.kubernetes.io/region=az01,topology.kubernetes.io/zone=az01&#34;</span><span class=w>      
 </span></span></span><span class=line><span class=cl><span class=w>  </span>- <span class=nt>role</span><span class=p>:</span><span class=w> </span><span class=l>worker</span><span class=w>
 </span></span></span><span class=line><span class=cl><span class=w>    </span><span class=nt>image</span><span class=p>:</span><span class=w> </span><span class=l>registry.cn-hangzhou.aliyuncs.com/seam/node:v1.24.15</span><span class=w>
 </span></span></span><span class=line><span class=cl><span class=w>    </span><span class=nt>kubeadmConfigPatches</span><span class=p>:</span><span class=w>
@@ -353,12 +353,24 @@ EOF
 </span></span></span><span class=line><span class=cl><span class=sd>      kind: JoinConfiguration
 </span></span></span><span class=line><span class=cl><span class=sd>      nodeRegistration:
 </span></span></span><span class=line><span class=cl><span class=sd>        kubeletExtraArgs:
-</span></span></span><span class=line><span class=cl><span class=sd>          node-labels: &#34;topology.kubernetes.io/region=sg,topology.kubernetes.io/zone=az02&#34;</span><span class=w>      
+</span></span></span><span class=line><span class=cl><span class=sd>          node-labels: &#34;topology.kubernetes.io/region=az02,topology.kubernetes.io/zone=az02&#34;</span><span class=w>      
 </span></span></span><span class=line><span class=cl><span class=w></span><span class=l>EOF</span><span class=w>
 </span></span></span></code></pre></td></tr></table></div></div><h3 id=创建集群>创建集群</h3><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
 </span><span class=lnt>2
-</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl>kind create cluster --name cluster1 --kubeconfig<span class=o>=</span>istio --config<span class=o>=</span>kind-cluster1.yaml
-</span></span><span class=line><span class=cl>kubectl config rename-context kind-cluster1  cluster1 --kubeconfig istio
+</span><span class=lnt>3
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl>kind create cluster --name cluster1 --kubeconfig<span class=o>=</span>istio-kubeconfig --config<span class=o>=</span>kind-cluster1.yaml
+</span></span><span class=line><span class=cl>kubectl config rename-context kind-cluster1  cluster1 --kubeconfig istio-kubeconfig
+</span></span><span class=line><span class=cl><span class=nb>export</span> <span class=nv>KUBECONFIG</span><span class=o>=</span><span class=sb>`</span><span class=nb>pwd</span><span class=sb>`</span>/istio-kubeconfig
+</span></span></code></pre></td></tr></table></div></div><h2 id=部署istio>部署Istio</h2><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl>curl -L https://istio.io/downloadIstio <span class=p>|</span> <span class=nv>ISTIO_VERSION</span><span class=o>=</span>1.16.2 sh -
+</span></span><span class=line><span class=cl><span class=nb>cd</span> istio-1.16.2
+</span></span><span class=line><span class=cl><span class=nb>export</span> <span class=nv>PATH</span><span class=o>=</span><span class=s2>&#34;</span><span class=nv>$PATH</span><span class=s2>:`pwd`/bin&#34;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>istioctl install --set <span class=nv>profile</span><span class=o>=</span>demo -y
 </span></span></code></pre></td></tr></table></div></div><h2 id=部署服务>部署服务</h2><p>sleep发起调用，访问helloworld</p><h3 id=创建-sleep-部署>创建 <code>sleep</code> 部署</h3><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
 </span><span class=lnt> 2
 </span><span class=lnt> 3
@@ -407,54 +419,80 @@ EOF
 </span><span class=lnt>46
 </span><span class=lnt>47
 </span><span class=lnt>48
-</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-yaml data-lang=yaml><span class=line><span class=cl><span class=nt>apiVersion</span><span class=p>:</span><span class=w> </span><span class=l>apps/v1</span><span class=w>
+</span><span class=lnt>49
+</span><span class=lnt>50
+</span><span class=lnt>51
+</span><span class=lnt>52
+</span><span class=lnt>53
+</span><span class=lnt>54
+</span><span class=lnt>55
+</span><span class=lnt>56
+</span><span class=lnt>57
+</span><span class=lnt>58
+</span><span class=lnt>59
+</span><span class=lnt>60
+</span><span class=lnt>61
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-yaml data-lang=yaml><span class=line><span class=cl><span class=l>cat &lt;&lt; EOF | kubectl apply -f -</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w></span><span class=nt>apiVersion</span><span class=p>:</span><span class=w> </span><span class=l>v1</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w></span><span class=nt>kind</span><span class=p>:</span><span class=w> </span><span class=l>Namespace</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w></span><span class=nt>metadata</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>  </span><span class=nt>name</span><span class=p>:</span><span class=w> </span><span class=l>sample</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>  </span><span class=nt>labels</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=nt>istio-injection</span><span class=p>:</span><span class=w> </span><span class=l>enabled</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w></span><span class=l>EOF</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w></span><span class=l>cat &lt;&lt; EOF | kubectl apply -f - -n sample</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w></span><span class=nt>apiVersion</span><span class=p>:</span><span class=w> </span><span class=l>v1</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w></span><span class=nt>kind</span><span class=p>:</span><span class=w> </span><span class=l>ServiceAccount</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w></span><span class=nt>metadata</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>  </span><span class=nt>name</span><span class=p>:</span><span class=w> </span><span class=l>sleep</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w></span><span class=nn>---</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w></span><span class=nt>apiVersion</span><span class=p>:</span><span class=w> </span><span class=l>v1</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w></span><span class=nt>kind</span><span class=p>:</span><span class=w> </span><span class=l>Service</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w></span><span class=nt>metadata</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>  </span><span class=nt>name</span><span class=p>:</span><span class=w> </span><span class=l>sleep</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>  </span><span class=nt>labels</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=nt>app</span><span class=p>:</span><span class=w> </span><span class=l>sleep</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=nt>service</span><span class=p>:</span><span class=w> </span><span class=l>sleep</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w></span><span class=nt>spec</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>  </span><span class=nt>ports</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>  </span>- <span class=nt>port</span><span class=p>:</span><span class=w> </span><span class=m>80</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=nt>name</span><span class=p>:</span><span class=w> </span><span class=l>http</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>  </span><span class=nt>selector</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=nt>app</span><span class=p>:</span><span class=w> </span><span class=l>sleep</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w></span><span class=nn>---</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w></span><span class=nt>apiVersion</span><span class=p>:</span><span class=w> </span><span class=l>apps/v1</span><span class=w>
 </span></span></span><span class=line><span class=cl><span class=w></span><span class=nt>kind</span><span class=p>:</span><span class=w> </span><span class=l>Deployment</span><span class=w>
 </span></span></span><span class=line><span class=cl><span class=w></span><span class=nt>metadata</span><span class=p>:</span><span class=w>
 </span></span></span><span class=line><span class=cl><span class=w>  </span><span class=nt>name</span><span class=p>:</span><span class=w> </span><span class=l>sleep</span><span class=w>
-</span></span></span><span class=line><span class=cl><span class=w>  </span><span class=nt>namespace</span><span class=p>:</span><span class=w> </span><span class=l>sample</span><span class=w>
 </span></span></span><span class=line><span class=cl><span class=w></span><span class=nt>spec</span><span class=p>:</span><span class=w>
-</span></span></span><span class=line><span class=cl><span class=w>  </span><span class=nt>progressDeadlineSeconds</span><span class=p>:</span><span class=w> </span><span class=m>600</span><span class=w>
 </span></span></span><span class=line><span class=cl><span class=w>  </span><span class=nt>replicas</span><span class=p>:</span><span class=w> </span><span class=m>1</span><span class=w>
-</span></span></span><span class=line><span class=cl><span class=w>  </span><span class=nt>revisionHistoryLimit</span><span class=p>:</span><span class=w> </span><span class=m>10</span><span class=w>
 </span></span></span><span class=line><span class=cl><span class=w>  </span><span class=nt>selector</span><span class=p>:</span><span class=w>
 </span></span></span><span class=line><span class=cl><span class=w>    </span><span class=nt>matchLabels</span><span class=p>:</span><span class=w>
 </span></span></span><span class=line><span class=cl><span class=w>      </span><span class=nt>app</span><span class=p>:</span><span class=w> </span><span class=l>sleep</span><span class=w>
-</span></span></span><span class=line><span class=cl><span class=w>  </span><span class=nt>strategy</span><span class=p>:</span><span class=w>
-</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=nt>rollingUpdate</span><span class=p>:</span><span class=w>
-</span></span></span><span class=line><span class=cl><span class=w>      </span><span class=nt>maxSurge</span><span class=p>:</span><span class=w> </span><span class=m>25</span><span class=l>%</span><span class=w>
-</span></span></span><span class=line><span class=cl><span class=w>      </span><span class=nt>maxUnavailable</span><span class=p>:</span><span class=w> </span><span class=m>25</span><span class=l>%</span><span class=w>
-</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=nt>type</span><span class=p>:</span><span class=w> </span><span class=l>RollingUpdate</span><span class=w>
 </span></span></span><span class=line><span class=cl><span class=w>  </span><span class=nt>template</span><span class=p>:</span><span class=w>
 </span></span></span><span class=line><span class=cl><span class=w>    </span><span class=nt>metadata</span><span class=p>:</span><span class=w>
 </span></span></span><span class=line><span class=cl><span class=w>      </span><span class=nt>labels</span><span class=p>:</span><span class=w>
 </span></span></span><span class=line><span class=cl><span class=w>        </span><span class=nt>app</span><span class=p>:</span><span class=w> </span><span class=l>sleep</span><span class=w>
 </span></span></span><span class=line><span class=cl><span class=w>    </span><span class=nt>spec</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>      </span><span class=nt>terminationGracePeriodSeconds</span><span class=p>:</span><span class=w> </span><span class=m>0</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>      </span><span class=nt>serviceAccountName</span><span class=p>:</span><span class=w> </span><span class=l>sleep</span><span class=w>
 </span></span></span><span class=line><span class=cl><span class=w>      </span><span class=nt>containers</span><span class=p>:</span><span class=w>
-</span></span></span><span class=line><span class=cl><span class=w>      </span>- <span class=nt>command</span><span class=p>:</span><span class=w>
-</span></span></span><span class=line><span class=cl><span class=w>        </span>- <span class=l>/bin/sleep</span><span class=w>
-</span></span></span><span class=line><span class=cl><span class=w>        </span>- <span class=l>infinity</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>      </span>- <span class=nt>name</span><span class=p>:</span><span class=w> </span><span class=l>sleep</span><span class=w>
 </span></span></span><span class=line><span class=cl><span class=w>        </span><span class=nt>image</span><span class=p>:</span><span class=w> </span><span class=l>curlimages/curl</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>        </span><span class=nt>command</span><span class=p>:</span><span class=w> </span><span class=p>[</span><span class=s2>&#34;/bin/sleep&#34;</span><span class=p>,</span><span class=w> </span><span class=s2>&#34;infinity&#34;</span><span class=p>]</span><span class=w>
 </span></span></span><span class=line><span class=cl><span class=w>        </span><span class=nt>imagePullPolicy</span><span class=p>:</span><span class=w> </span><span class=l>IfNotPresent</span><span class=w>
-</span></span></span><span class=line><span class=cl><span class=w>        </span><span class=nt>name</span><span class=p>:</span><span class=w> </span><span class=l>sleep</span><span class=w>
-</span></span></span><span class=line><span class=cl><span class=w>        </span><span class=nt>resources</span><span class=p>:</span><span class=w> </span>{}<span class=w>
-</span></span></span><span class=line><span class=cl><span class=w>        </span><span class=nt>terminationMessagePath</span><span class=p>:</span><span class=w> </span><span class=l>/dev/termination-log</span><span class=w>
-</span></span></span><span class=line><span class=cl><span class=w>        </span><span class=nt>terminationMessagePolicy</span><span class=p>:</span><span class=w> </span><span class=l>File</span><span class=w>
 </span></span></span><span class=line><span class=cl><span class=w>        </span><span class=nt>volumeMounts</span><span class=p>:</span><span class=w>
 </span></span></span><span class=line><span class=cl><span class=w>        </span>- <span class=nt>mountPath</span><span class=p>:</span><span class=w> </span><span class=l>/etc/sleep/tls</span><span class=w>
 </span></span></span><span class=line><span class=cl><span class=w>          </span><span class=nt>name</span><span class=p>:</span><span class=w> </span><span class=l>secret-volume</span><span class=w>
-</span></span></span><span class=line><span class=cl><span class=w>      </span><span class=nt>dnsPolicy</span><span class=p>:</span><span class=w> </span><span class=l>ClusterFirst</span><span class=w>
-</span></span></span><span class=line><span class=cl><span class=w>      </span><span class=nt>restartPolicy</span><span class=p>:</span><span class=w> </span><span class=l>Always</span><span class=w>
-</span></span></span><span class=line><span class=cl><span class=w>      </span><span class=nt>schedulerName</span><span class=p>:</span><span class=w> </span><span class=l>default-scheduler</span><span class=w>
-</span></span></span><span class=line><span class=cl><span class=w>      </span><span class=nt>securityContext</span><span class=p>:</span><span class=w> </span>{}<span class=w>
-</span></span></span><span class=line><span class=cl><span class=w>      </span><span class=nt>serviceAccount</span><span class=p>:</span><span class=w> </span><span class=l>sleep</span><span class=w>
-</span></span></span><span class=line><span class=cl><span class=w>      </span><span class=nt>serviceAccountName</span><span class=p>:</span><span class=w> </span><span class=l>sleep</span><span class=w>
-</span></span></span><span class=line><span class=cl><span class=w>      </span><span class=nt>terminationGracePeriodSeconds</span><span class=p>:</span><span class=w> </span><span class=m>0</span><span class=w>
 </span></span></span><span class=line><span class=cl><span class=w>      </span><span class=nt>volumes</span><span class=p>:</span><span class=w>
 </span></span></span><span class=line><span class=cl><span class=w>      </span>- <span class=nt>name</span><span class=p>:</span><span class=w> </span><span class=l>secret-volume</span><span class=w>
 </span></span></span><span class=line><span class=cl><span class=w>        </span><span class=nt>secret</span><span class=p>:</span><span class=w>
-</span></span></span><span class=line><span class=cl><span class=w>          </span><span class=nt>defaultMode</span><span class=p>:</span><span class=w> </span><span class=m>420</span><span class=w>
-</span></span></span><span class=line><span class=cl><span class=w>          </span><span class=nt>optional</span><span class=p>:</span><span class=w> </span><span class=kc>true</span><span class=w>
 </span></span></span><span class=line><span class=cl><span class=w>          </span><span class=nt>secretName</span><span class=p>:</span><span class=w> </span><span class=l>sleep-secret</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>          </span><span class=nt>optional</span><span class=p>:</span><span class=w> </span><span class=kc>true</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w></span><span class=nn>---</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w></span><span class=l>EOF</span><span class=w>
 </span></span></span></code></pre></td></tr></table></div></div><h3 id=创建-helloworld-部署>创建 <code>helloworld</code> 部署</h3><p>生产环境目前只有部分业务开启mesh，所以为尽量模拟生产一致，关闭被调用端 helloworld 注入。</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
 </span><span class=lnt> 2
 </span><span class=lnt> 3
@@ -765,7 +803,85 @@ EOF
 </span></span><span class=line><span class=cl>helloworld-az01-5dd7bfb647-4zrpg   2/2     Running   <span class=m>0</span>          4m5s
 </span></span><span class=line><span class=cl><span class=c1># kubectl exec -ti -n sample helloworld-az01-5dd7bfb647-4zrpg -c istio-proxy -- curl -sSL -X POST 127.0.0.1:15000/drain_listeners</span>
 </span></span><span class=line><span class=cl>OK
-</span></span></code></pre></td></tr></table></div></div><p><img class=lazyload src=/sre/svg/loading.min.svg data-src=https://raw.githubusercontent.com/kbsonlong/notes_statics/master/images/20230817105320.png data-srcset="https://raw.githubusercontent.com/kbsonlong/notes_statics/master/images/20230817105320.png, https://raw.githubusercontent.com/kbsonlong/notes_statics/master/images/20230817105320.png 1.5x, https://raw.githubusercontent.com/kbsonlong/notes_statics/master/images/20230817105320.png 2x" data-sizes=auto alt=https://raw.githubusercontent.com/kbsonlong/notes_statics/master/images/20230817105320.png title=20230817105320></p><p><img class=lazyload src=/sre/svg/loading.min.svg data-src=https://raw.githubusercontent.com/kbsonlong/notes_statics/master/images/20230817112032.png data-srcset="https://raw.githubusercontent.com/kbsonlong/notes_statics/master/images/20230817112032.png, https://raw.githubusercontent.com/kbsonlong/notes_statics/master/images/20230817112032.png 1.5x, https://raw.githubusercontent.com/kbsonlong/notes_statics/master/images/20230817112032.png 2x" data-sizes=auto alt=https://raw.githubusercontent.com/kbsonlong/notes_statics/master/images/20230817112032.png title=20230817112032></p><p><img class=lazyload src=/sre/svg/loading.min.svg data-src=https://raw.githubusercontent.com/kbsonlong/notes_statics/master/images/20230817111955.png data-srcset="https://raw.githubusercontent.com/kbsonlong/notes_statics/master/images/20230817111955.png, https://raw.githubusercontent.com/kbsonlong/notes_statics/master/images/20230817111955.png 1.5x, https://raw.githubusercontent.com/kbsonlong/notes_statics/master/images/20230817111955.png 2x" data-sizes=auto alt=https://raw.githubusercontent.com/kbsonlong/notes_statics/master/images/20230817111955.png title=20230817111955></p></div><div class=post-footer id=post-footer><div class=post-info><div class=post-info-line><div class=post-info-mod><span title="2023-08-17 09:50:13">更新于 2023-08-17</span></div><div class=post-info-license><span><a rel="license external nofollow noopener noreffer" href=https://creativecommons.org/licenses/by-nc/4.0/ target=_blank>CC BY-NC 4.0</a></span></div></div><div class=post-info-line><div class=post-info-md><span><a href=/sre/posts/b2138b/index.md title=阅读原始文档 class=link-to-markdown>阅读原始文档</a></span></div><div class=post-info-share><span><a href=javascript:void(0); title="分享到 Twitter" data-sharer=twitter data-url=https://kbsonlong.github.io/sre/posts/b2138b/ data-title=Istio多集群系列-单控制面跨AZ集群区域负载均衡 data-hashtags=istio,multicluster><i class="fa-brands fa-twitter fa-fw"></i></a>
+</span></span></code></pre></td></tr></table></div></div><p><img class=lazyload src=/sre/svg/loading.min.svg data-src=https://raw.githubusercontent.com/kbsonlong/notes_statics/master/images/20230817105320.png data-srcset="https://raw.githubusercontent.com/kbsonlong/notes_statics/master/images/20230817105320.png, https://raw.githubusercontent.com/kbsonlong/notes_statics/master/images/20230817105320.png 1.5x, https://raw.githubusercontent.com/kbsonlong/notes_statics/master/images/20230817105320.png 2x" data-sizes=auto alt=https://raw.githubusercontent.com/kbsonlong/notes_statics/master/images/20230817105320.png title=20230817105320></p><p><img class=lazyload src=/sre/svg/loading.min.svg data-src=https://raw.githubusercontent.com/kbsonlong/notes_statics/master/images/20230817112032.png data-srcset="https://raw.githubusercontent.com/kbsonlong/notes_statics/master/images/20230817112032.png, https://raw.githubusercontent.com/kbsonlong/notes_statics/master/images/20230817112032.png 1.5x, https://raw.githubusercontent.com/kbsonlong/notes_statics/master/images/20230817112032.png 2x" data-sizes=auto alt=https://raw.githubusercontent.com/kbsonlong/notes_statics/master/images/20230817112032.png title=20230817112032></p><p><img class=lazyload src=/sre/svg/loading.min.svg data-src=https://raw.githubusercontent.com/kbsonlong/notes_statics/master/images/20230817111955.png data-srcset="https://raw.githubusercontent.com/kbsonlong/notes_statics/master/images/20230817111955.png, https://raw.githubusercontent.com/kbsonlong/notes_statics/master/images/20230817111955.png 1.5x, https://raw.githubusercontent.com/kbsonlong/notes_statics/master/images/20230817111955.png 2x" data-sizes=auto alt=https://raw.githubusercontent.com/kbsonlong/notes_statics/master/images/20230817111955.png title=20230817111955></p><h2 id=按地域设置权重>按地域设置权重</h2><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span><span class=lnt>21
+</span><span class=lnt>22
+</span><span class=lnt>23
+</span><span class=lnt>24
+</span><span class=lnt>25
+</span><span class=lnt>26
+</span><span class=lnt>27
+</span><span class=lnt>28
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-yaml data-lang=yaml><span class=line><span class=cl><span class=l>kubectl  apply -n sample -f - &lt;&lt;EOF</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w></span><span class=nt>apiVersion</span><span class=p>:</span><span class=w> </span><span class=l>networking.istio.io/v1beta1</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w></span><span class=nt>kind</span><span class=p>:</span><span class=w> </span><span class=l>DestinationRule</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w></span><span class=nt>metadata</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>  </span><span class=nt>name</span><span class=p>:</span><span class=w> </span><span class=l>helloworld</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w></span><span class=nt>spec</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>  </span><span class=nt>host</span><span class=p>:</span><span class=w> </span><span class=l>helloworld.sample.svc.cluster.local</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>  </span><span class=nt>trafficPolicy</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=nt>connectionPool</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>      </span><span class=nt>http</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>        </span><span class=nt>maxRequestsPerConnection</span><span class=p>:</span><span class=w> </span><span class=m>1</span><span class=w>  </span><span class=c># 最大连接数量</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=nt>loadBalancer</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>      </span><span class=nt>localityLbSetting</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>        </span><span class=nt>enabled</span><span class=p>:</span><span class=w> </span><span class=kc>true</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>        </span><span class=nt>distribute</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>        </span>- <span class=nt>from</span><span class=p>:</span><span class=w> </span><span class=l>sg/az01/*</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>          </span><span class=nt>to</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>            </span><span class=nt>&#34;sg/az01/*&#34;: </span><span class=m>99</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>            </span><span class=nt>&#34;sg/az02/*&#34;: </span><span class=m>1</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>        </span>- <span class=nt>from</span><span class=p>:</span><span class=w> </span><span class=l>sg/az02/*</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>          </span><span class=nt>to</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>            </span><span class=nt>&#34;sg/az02/*&#34;: </span><span class=m>99</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>            </span><span class=nt>&#34;sg/az01/*&#34;: </span><span class=m>1</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=nt>outlierDetection</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>      </span><span class=nt>consecutive5xxErrors</span><span class=p>:</span><span class=w> </span><span class=m>100</span><span class=w> </span><span class=c># 连续错误数量</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>      </span><span class=nt>interval</span><span class=p>:</span><span class=w> </span><span class=l>1s </span><span class=w> </span><span class=c># 移除检测的时间间隔</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>      </span><span class=nt>baseEjectionTime</span><span class=p>:</span><span class=w> </span><span class=l>1m </span><span class=w> </span><span class=c># 最小的移除时间长度</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w></span><span class=l>EOF</span><span class=w>
+</span></span></span></code></pre></td></tr></table></div></div><h2 id=地域感知失效可能原因>地域感知失效可能原因</h2><h3 id=destinationrule-未配置-outlierdetection>DestinationRule 未配置 outlierDetection</h3><p>地域感知默认开启，但还需要配置 DestinationRule，且指定 outlierDetection 才可以生效，指定这个配置的作用主要是让 istio 感知 endpoints 是否异常，当前 locality 的 endpoints 发生异常时会 failover 到其它地方的 endpoints。</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-yaml data-lang=yaml><span class=line><span class=cl><span class=nt>apiVersion</span><span class=p>:</span><span class=w> </span><span class=l>networking.istio.io/v1beta1</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w></span><span class=nt>kind</span><span class=p>:</span><span class=w> </span><span class=l>DestinationRule</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w></span><span class=nt>metadata</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>  </span><span class=nt>name</span><span class=p>:</span><span class=w> </span><span class=l>nginx</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w></span><span class=nt>spec</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>  </span><span class=nt>host</span><span class=p>:</span><span class=w> </span><span class=l>nginx</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>  </span><span class=nt>trafficPolicy</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=nt>outlierDetection</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>      </span><span class=nt>consecutive5xxErrors</span><span class=p>:</span><span class=w> </span><span class=m>3</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>      </span><span class=nt>interval</span><span class=p>:</span><span class=w> </span><span class=l>30s</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>      </span><span class=nt>baseEjectionTime</span><span class=p>:</span><span class=w> </span><span class=l>30s</span><span class=w>
+</span></span></span></code></pre></td></tr></table></div></div><h3 id=client-没配置-service>client 没配置 service</h3><p>istio 控制面会为每个数据面单独下发 EDS，不同数据面实例(Envoy)的locality可能不一样，生成的 EDS 也就可能不一样。istio会获取数据面的locality信息，获取方式主要是找到数据面对应的 endpoint 上保存的 region、zone 等信息，如果 client 没有任何 service，也就不会有 endpoint，控制面也就无法获取 client 的 locality 信息，也就无法实现地域感知。</p><p>解决方案: 为 client 配置 service，selector 选中 client 的 label。如果 client 本身不对外提供服务，service 的 ports 也可以随便定义一个。</p><h3 id=使用了-headless-service>使用了 headless service</h3><p>如果是访问 headless service，本身是不支持地域感知的，因为 istio 会对 headless service 请求直接 passthrough，不做负载均衡，客户端会直接访问到 dns 解析出来的 pod ip。</p><p>解决方案: 单独再创建一个 service (非 headless)</p></div><div class=post-footer id=post-footer><div class=post-info><div class=post-info-line><div class=post-info-mod><span title="2023-08-17 09:50:13">更新于 2023-08-17</span></div><div class=post-info-license><span><a rel="license external nofollow noopener noreffer" href=https://creativecommons.org/licenses/by-nc/4.0/ target=_blank>CC BY-NC 4.0</a></span></div></div><div class=post-info-line><div class=post-info-md><span><a href=/sre/posts/b2138b/index.md title=阅读原始文档 class=link-to-markdown>阅读原始文档</a></span></div><div class=post-info-share><span><a href=javascript:void(0); title="分享到 Twitter" data-sharer=twitter data-url=https://kbsonlong.github.io/sre/posts/b2138b/ data-title=Istio多集群系列-单控制面跨AZ集群区域负载均衡 data-hashtags=istio,multicluster><i class="fa-brands fa-twitter fa-fw"></i></a>
 <a href=javascript:void(0); title="分享到 Facebook" data-sharer=facebook data-url=https://kbsonlong.github.io/sre/posts/b2138b/ data-hashtag=istio><i class="fa-brands fa-facebook-square fa-fw"></i></a>
 <a href=javascript:void(0); title="分享到 WhatsApp" data-sharer=whatsapp data-url=https://kbsonlong.github.io/sre/posts/b2138b/ data-title=Istio多集群系列-单控制面跨AZ集群区域负载均衡 data-web><i class="fa-brands fa-whatsapp fa-fw"></i></a>
 <a href=javascript:void(0); title="分享到 Line" data-sharer=line data-url=https://kbsonlong.github.io/sre/posts/b2138b/ data-title=Istio多集群系列-单控制面跨AZ集群区域负载均衡><i data-svg-src=/sre/lib/simple-icons/icons/line.min.svg></i></a>
