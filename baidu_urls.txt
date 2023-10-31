@@ -1,3 +1,4 @@
+https://kbsonlong.github.io/sre/posts/4fe3f9/
 https://kbsonlong.github.io/sre/posts/f269d7/
 https://kbsonlong.github.io/sre/posts/b2138b/
 https://kbsonlong.github.io/sre/posts/d09106/
@@ -78,4 +79,5 @@ https://kbsonlong.github.io/sre/posts/git%E5%9F%BA%E7%A1%80%E4%B8%8E%E5%91%BD%E4
 https://kbsonlong.github.io/sre/posts/%E5%B8%B8%E7%94%A8git%E5%91%BD%E4%BB%A4%E6%B8%85%E5%8D%95/
 https://kbsonlong.github.io/sre/posts/understand-kubernetes-affinity/
 https://kbsonlong.github.io/sre/offline/
+https://kbsonlong.github.io/sre/posts/
 https://kbsonlong.github.io/sre/posts/
