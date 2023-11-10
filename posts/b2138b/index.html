@@ -1,4 +1,4 @@
-<!doctype html><html lang=zh-CN><head><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1,maximum-scale=2"><meta name=robots content="noodp"><meta http-equiv=x-ua-compatible content="IE=edge, chrome=1"><title>Istio多集群系列-单控制面跨AZ集群区域负载均衡 - 蜷缩的蜗牛</title><meta name=author content="kbsonlong">
+<!doctype html><html lang=zh-CN><head><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1,maximum-scale=2"><meta name=robots content="noodp"><meta http-equiv=X-UA-Compatible content="IE=edge, chrome=1"><title>Istio多集群系列-单控制面跨AZ集群区域负载均衡 - 蜷缩的蜗牛</title><meta name=author content="kbsonlong">
 <meta name=author-link content><meta name=description content="基于安全容灾考虑，生产K8S集群是多可用区。多可用区集群必然涉及跨可用区调用，由于是海外业务，使用的是AWS云，AWS内部跨可用区流量不像国内云厂商跨可用区流量不收费，是需要收费而且特贵。
 基于成本和容灾考虑使用Istio的地域负载均衡功能，优先调度到同可用区，出现问题时调度到另一可用区。
 
