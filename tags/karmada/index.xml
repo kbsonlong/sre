@@ -25,4 +25,18 @@
   
   
   
->Karmada 多集群服务发现</a></p>]]></description></item></channel></rss>
+>Karmada 多集群服务发现</a></p>]]></description></item><item><title>karmada作为集群资源同步工具在灾备系统中的实践</title><link>https://kbsonlong.github.io/sre/posts/karmada%E4%BD%9C%E4%B8%BA%E9%9B%86%E7%BE%A4%E8%B5%84%E6%BA%90%E5%90%8C%E6%AD%A5%E5%B7%A5%E5%85%B7%E5%9C%A8%E7%81%BE%E5%A4%87%E7%B3%BB%E7%BB%9F%E4%B8%AD%E7%9A%84%E5%AE%9E%E8%B7%B5/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><author>kbsonlong</author><guid>https://kbsonlong.github.io/sre/posts/karmada%E4%BD%9C%E4%B8%BA%E9%9B%86%E7%BE%A4%E8%B5%84%E6%BA%90%E5%90%8C%E6%AD%A5%E5%B7%A5%E5%85%B7%E5%9C%A8%E7%81%BE%E5%A4%87%E7%B3%BB%E7%BB%9F%E4%B8%AD%E7%9A%84%E5%AE%9E%E8%B7%B5/</guid><description><![CDATA[<h2 id="karmada是什么">karmada是什么？</h2>
+<p>karmada是一个kubernetes多集群管理系统，它可以保持原有使用apiserver的方式，将资源分布到多个集群中。提供了跨云多集群多模式管理、多策略的多集群调度、应用的跨集群故障转移、全局统一资源视图、多集群的服务发现和FederatedHPA能力。它的设计思路继承了<a
+  href="https://github.com/kubernetes-sigs/kubefed"
+  
+  
+    
+    
+    target="_blank"
+  
+  
+    rel="external nofollow noopener noreferrer"
+  
+  
+  
+>集群联邦v2</a>，目前是cncf的sandbox开源项目。</p>]]></description></item></channel></rss>
