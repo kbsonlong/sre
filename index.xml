@@ -12,7 +12,7 @@
   
   
   
->集群联邦v2</a>，目前是cncf的sandbox开源项目。</p>]]></description></item><item><title>使用Fluent bit采集TIDB慢查询日志</title><link>https://kbsonlong.github.io/sre/posts/f017da/</link><pubDate>Fri, 10 Nov 2023 10:54:29 +0800</pubDate><author>kbsonlong</author><guid>https://kbsonlong.github.io/sre/posts/f017da/</guid><description>前言 说到 TIDB 慢查询日志采集真是令人头疼，不得不吐槽一翻。 日志格式仿 mysql 慢查询日志,都什么年代了，日志输出格式不能友好一些。即使希望对齐mysql</description></item><item><title>kubebuilder2.0学习笔记——进阶使用</title><link>https://kbsonlong.github.io/sre/posts/4fe3f9/</link><pubDate>Tue, 24 Oct 2023 14:41:48 +0800</pubDate><author>kbsonlong</author><guid>https://kbsonlong.github.io/sre/posts/4fe3f9/</guid><description>概述 本篇将继续深入学习kubebuilder开发，并介绍一些深入使用时遇到的问题。包括：finalizer、控制器对CRD的update st</description></item><item><title>Docker 运行 Android 云手机</title><link>https://kbsonlong.github.io/sre/posts/f269d7/</link><pubDate>Mon, 04 Sep 2023 15:55:39 +0800</pubDate><author>kbsonlong</author><guid>https://kbsonlong.github.io/sre/posts/f269d7/</guid><description>前言 市面上已经存在很多云手机厂商如多多云、雷电云、河马云手机等 但是如果自己有现成的服务器的话 可以直接搭建云手机 技术方案 Ubuntu 20.04 上运行docker</description></item><item><title>Istio多集群系列-单控制面跨AZ集群区域负载均衡</title><link>https://kbsonlong.github.io/sre/posts/b2138b/</link><pubDate>Thu, 17 Aug 2023 09:50:13 +0800</pubDate><author>kbsonlong</author><guid>https://kbsonlong.github.io/sre/posts/b2138b/</guid><description><![CDATA[<p>基于安全容灾考虑，生产K8S集群是多可用区。多可用区集群必然涉及跨可用区调用，由于是海外业务，使用的是AWS云，AWS内部跨可用区流量不像国内云厂商跨可用区流量不收费，是需要收费而且特贵。</p>
+>集群联邦v2</a>，目前是cncf的sandbox开源项目。</p>]]></description></item><item><title>使用Fluent bit采集TIDB慢查询日志</title><link>https://kbsonlong.github.io/sre/posts/f017da/</link><pubDate>Fri, 10 Nov 2023 10:54:29 +0800</pubDate><author>kbsonlong</author><guid>https://kbsonlong.github.io/sre/posts/f017da/</guid><description>前言 说到 TIDB 慢查询日志采集真是令人头疼，不得不吐槽一翻。 日志格式仿 mysql 慢查询日志,都什么年代了，日志输出格式不能友好一些。即使希望对齐mysql</description></item><item><title>Karmada多集群部署</title><link>https://kbsonlong.github.io/sre/posts/169f99/</link><pubDate>Tue, 31 Oct 2023 15:24:42 +0800</pubDate><author>kbsonlong</author><guid>https://kbsonlong.github.io/sre/posts/169f99/</guid><description><![CDATA[创建 Kind 集群 karmada 控制面 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 export LOCAL_IP=172.26.128.224 cat &lt;&lt; EOF | kind create cluster --name=karmada-controller --kubeconfig=karmada-controller --config=- kind: Cluster apiVersion: &#34;kind.x-k8s.io/v1alpha4&#34; networking: apiServerAddress: &#34;${LOCAL_IP}&#34; nodes: - role: control-plane image: registry.cn-hangzhou.aliyuncs.com/seam/node:v1.20.15 extraPortMappings: - containerPort: 5443 hostPort: 5443 protocol: TCP listenAddress: &#34;${LOCAL_IP}&#34; EOF 创建 karmada 成员集群 member1 1 2]]></description></item><item><title>kubebuilder2.0学习笔记——进阶使用</title><link>https://kbsonlong.github.io/sre/posts/4fe3f9/</link><pubDate>Tue, 24 Oct 2023 14:41:48 +0800</pubDate><author>kbsonlong</author><guid>https://kbsonlong.github.io/sre/posts/4fe3f9/</guid><description>概述 本篇将继续深入学习kubebuilder开发，并介绍一些深入使用时遇到的问题。包括：finalizer、控制器对CRD的update st</description></item><item><title>Docker 运行 Android 云手机</title><link>https://kbsonlong.github.io/sre/posts/f269d7/</link><pubDate>Mon, 04 Sep 2023 15:55:39 +0800</pubDate><author>kbsonlong</author><guid>https://kbsonlong.github.io/sre/posts/f269d7/</guid><description>前言 市面上已经存在很多云手机厂商如多多云、雷电云、河马云手机等 但是如果自己有现成的服务器的话 可以直接搭建云手机 技术方案 Ubuntu 20.04 上运行docker</description></item><item><title>Istio多集群系列-单控制面跨AZ集群区域负载均衡</title><link>https://kbsonlong.github.io/sre/posts/b2138b/</link><pubDate>Thu, 17 Aug 2023 09:50:13 +0800</pubDate><author>kbsonlong</author><guid>https://kbsonlong.github.io/sre/posts/b2138b/</guid><description><![CDATA[<p>基于安全容灾考虑，生产K8S集群是多可用区。多可用区集群必然涉及跨可用区调用，由于是海外业务，使用的是AWS云，AWS内部跨可用区流量不像国内云厂商跨可用区流量不收费，是需要收费而且特贵。</p>
 <p>基于成本和容灾考虑使用Istio的地域负载均衡功能，优先调度到同可用区，出现问题时调度到另一可用区。</p>
 <blockquote>
 <p>现使用 kind 在本地创建一套多节点集群，通过标签模拟多可用区场景。</p>
@@ -193,31 +193,4 @@
 </span></span><span class="line"><span class="cl">kubectl config rename-context kind-cluster2  cluster2 --kubeconfig istio-multicluster
 </span></span></code></pre></td></tr></table>
 </div>
-</div>]]></description></item><item><title>SLA、SLO 和 SLI 的关系</title><link>https://kbsonlong.github.io/sre/posts/a2ba6f/</link><pubDate>Tue, 15 Aug 2023 10:32:31 +0800</pubDate><author>kbsonlong</author><guid>https://kbsonlong.github.io/sre/posts/a2ba6f/</guid><description>SLO、SLA 和 SLI 的定义 什么是SLI SLI或服务水平指标是对所提供服务水平某些方面的可量化衡量标准。它是您收集的有关服务的主要数据，用于指示</description></item><item><title>基于Coredns多集群服务发现</title><link>https://kbsonlong.github.io/sre/posts/17feed/</link><pubDate>Tue, 01 Aug 2023 17:38:45 +0800</pubDate><author>kbsonlong</author><guid>https://kbsonlong.github.io/sre/posts/17feed/</guid><description><![CDATA[<p>在<a
-  href="https://kbsonlong.github.io/sre/posts/2296fc/"
-  
-  
-    
-    
-    target="_blank"
-  
-  
-    rel="external nofollow noopener noreferrer"
-  
-  
-  
->Karmada 多集群服务发现</a>一文中跨集群调用时有个派生的前缀  <code>derived-&lt;service name&gt;</code>, 对于应用调用上有感知，本文介绍如何让应用在调用本地集群或者跨集群都是用同一个service。</p>
-<p>基础环境 <a
-  href="https://kbsonlong.github.io/sre/posts/2296fc/"
-  
-  
-    
-    
-    target="_blank"
-  
-  
-    rel="external nofollow noopener noreferrer"
-  
-  
-  
->Karmada 多集群服务发现</a></p>]]></description></item></channel></rss>
+</div>]]></description></item><item><title>SLA、SLO 和 SLI 的关系</title><link>https://kbsonlong.github.io/sre/posts/a2ba6f/</link><pubDate>Tue, 15 Aug 2023 10:32:31 +0800</pubDate><author>kbsonlong</author><guid>https://kbsonlong.github.io/sre/posts/a2ba6f/</guid><description>SLO、SLA 和 SLI 的定义 什么是SLI SLI或服务水平指标是对所提供服务水平某些方面的可量化衡量标准。它是您收集的有关服务的主要数据，用于指示</description></item></channel></rss>
