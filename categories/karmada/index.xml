@@ -1,4 +1,31 @@
-<rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title>Karmada - 分类 - 蜷缩的蜗牛</title><link>https://kbsonlong.github.io/sre/categories/karmada/</link><description>Karmada - 分类 - 蜷缩的蜗牛</description><generator>Hugo -- gohugo.io</generator><language>zh-CN</language><managingEditor>kbsonlong@gmail.com (kbsonlong)</managingEditor><webMaster>kbsonlong@gmail.com (kbsonlong)</webMaster><copyright>This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.</copyright><lastBuildDate>Mon, 04 Mar 2024 12:45:55 +0800</lastBuildDate><atom:link href="https://kbsonlong.github.io/sre/categories/karmada/" rel="self" type="application/rss+xml"/><item><title>Karmada多集群管理高可用部署</title><link>https://kbsonlong.github.io/sre/posts/7779fb/</link><pubDate>Mon, 04 Mar 2024 12:45:55 +0800</pubDate><author>kbsonlong</author><guid>https://kbsonlong.github.io/sre/posts/7779fb/</guid><description>Karmada 多集群管理高可用部署 实验环境: kind 创建两套Kubernetes集群 docker 运行一套额外的 ETCD 集群 从图中可以看到整个 Karmada 集群的单点是ETCD,实验环境部</description></item><item><title>Karmada多集群管理方案</title><link>https://kbsonlong.github.io/sre/posts/327727/</link><pubDate>Mon, 27 Nov 2023 18:19:26 +0800</pubDate><author>kbsonlong</author><guid>https://kbsonlong.github.io/sre/posts/327727/</guid><description>Kubernetes 衍变 在云原生时代，Kubernetes 作为一项核心技术已成为现代应用程序架构的基础，越来越多的企业使用 Kubernetes 作为容器编排系统，其成为容器编排事</description></item><item><title>karmada作为集群资源同步工具在灾备系统中的实践</title><link>https://kbsonlong.github.io/sre/posts/1290000/</link><pubDate>Mon, 27 Nov 2023 15:57:25 +0800</pubDate><author>kbsonlong</author><guid>https://kbsonlong.github.io/sre/posts/1290000/</guid><description><![CDATA[<h2 id="karmada是什么">karmada是什么？</h2>
+<rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title>Karmada - 分类 - 蜷缩的蜗牛</title><link>https://kbsonlong.github.io/sre/categories/karmada/</link><description>Karmada - 分类 - 蜷缩的蜗牛</description><generator>Hugo -- gohugo.io</generator><language>zh-CN</language><managingEditor>kbsonlong@gmail.com (kbsonlong)</managingEditor><webMaster>kbsonlong@gmail.com (kbsonlong)</webMaster><copyright>This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.</copyright><lastBuildDate>Mon, 04 Mar 2024 12:45:55 +0800</lastBuildDate><atom:link href="https://kbsonlong.github.io/sre/categories/karmada/" rel="self" type="application/rss+xml"/><item><title>Karmada多集群管理高可用部署</title><link>https://kbsonlong.github.io/sre/posts/7779fb/</link><pubDate>Mon, 04 Mar 2024 12:45:55 +0800</pubDate><author>kbsonlong</author><guid>https://kbsonlong.github.io/sre/posts/7779fb/</guid><description><![CDATA[<h1 id="karmada-多集群管理高可用部署"><code>Karmada</code> 多集群管理高可用部署</h1>
+<p>实验环境:</p>
+<ul>
+<li><code>kind</code> 创建两套<code>Kubernetes</code>集群</li>
+<li><code>docker</code> 运行一套额外的 <code>ETCD</code> 集群</li>
+</ul>
+<p></p>
+<p>从图中可以看到整个 <code>Karmada</code> 集群的单点是<code>ETCD</code>,实验环境部署单节点<code>ETCD</code>集群模拟实验，实际生产环境部署跨多可用区的<code>ETCD</code>集群，以保证高可用。</p>
+<h2 id="环境准备">环境准备</h2>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">wget https://github.com/cloudflare/cfssl/releases/download/v1.6.4/cfssl_1.6.4_linux_amd64
+</span></span><span class="line"><span class="cl">wget https://github.com/cloudflare/cfssl/releases/download/v1.6.4/cfssljson_1.6.4_linux_amd64
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">chmod +x cfssl_1.6.4_linux_amd64 cfssljson_1.6.4_linux_amd64
+</span></span><span class="line"><span class="cl">mv cfssl_1.6.4_linux_amd64 /usr/local/bin/cfssl
+</span></span><span class="line"><span class="cl">mv cfssljson_1.6.4_linux_amd64 /usr/local/bin/cfssljson
+</span></span></code></pre></td></tr></table>
+</div>
+</div>]]></description></item><item><title>Karmada多集群管理方案</title><link>https://kbsonlong.github.io/sre/posts/327727/</link><pubDate>Mon, 27 Nov 2023 18:19:26 +0800</pubDate><author>kbsonlong</author><guid>https://kbsonlong.github.io/sre/posts/327727/</guid><description>Kubernetes 衍变 在云原生时代，Kubernetes 作为一项核心技术已成为现代应用程序架构的基础，越来越多的企业使用 Kubernetes 作为容器编排系统，其成为容器编排事</description></item><item><title>karmada作为集群资源同步工具在灾备系统中的实践</title><link>https://kbsonlong.github.io/sre/posts/1290000/</link><pubDate>Mon, 27 Nov 2023 15:57:25 +0800</pubDate><author>kbsonlong</author><guid>https://kbsonlong.github.io/sre/posts/1290000/</guid><description><![CDATA[<h2 id="karmada是什么">karmada是什么？</h2>
 <p>karmada是一个kubernetes多集群管理系统，它可以保持原有使用apiserver的方式，将资源分布到多个集群中。提供了跨云多集群多模式管理、多策略的多集群调度、应用的跨集群故障转移、全局统一资源视图、多集群的服务发现和FederatedHPA能力。它的设计思路继承了<a
   href="https://github.com/kubernetes-sigs/kubefed"
   
