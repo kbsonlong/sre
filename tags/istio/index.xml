@@ -514,7 +514,7 @@
 </div>
 </div><blockquote>
 <p>注意kind 安装的k8s版本大于等于 1.23</p>
-</blockquote>]]></description></item><item><title>深入Istio系列 - Envoy配置分析</title><link>https://www.kbsonlong.com/sre/posts/in-depth-istio-series-envoy-configuration-analysis/</link><pubDate>Tue, 28 Mar 2023 15:10:12 +0800</pubDate><author>kbsonlong</author><guid>https://www.kbsonlong.com/sre/posts/in-depth-istio-series-envoy-configuration-analysis/</guid><description><![CDATA[<h1 id="envoy-初始化配置文件">Envoy 初始化配置文件</h1>
+</blockquote>]]></description></item><item><title>深入Istio系列 - Envoy配置分析</title><link>https://www.kbsonlong.com/sre/posts/in--depth-istio-series--envoy-configuration-analysis/</link><pubDate>Tue, 28 Mar 2023 15:10:12 +0800</pubDate><author>kbsonlong</author><guid>https://www.kbsonlong.com/sre/posts/in--depth-istio-series--envoy-configuration-analysis/</guid><description><![CDATA[<h1 id="envoy-初始化配置文件">Envoy 初始化配置文件</h1>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
