@@ -19,6 +19,7 @@ https://www.kbsonlong.com/sre/posts/istio-multi-cluster-series-multi-control-pow
 https://www.kbsonlong.com/sre/posts/the-relationship-between-sla-slo-and-sli/
 https://www.kbsonlong.com/sre/posts/discovery-based-on-coredns-multi--cluster-service/
 https://www.kbsonlong.com/sre/posts/02-kube-controller-manager-source-code-analysis-main-process/
+https://www.kbsonlong.com/sre/posts/03-kube-controller-manager-source-code-analysis-deployment-controller/
 https://www.kbsonlong.com/sre/posts/common-problem/
 https://www.kbsonlong.com/sre/posts/istio-default-configuration/
 https://www.kbsonlong.com/sre/posts/01-use-vscode-and-kind-to-build-kubernetes-development-environment/
